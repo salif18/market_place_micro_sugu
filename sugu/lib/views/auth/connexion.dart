@@ -44,7 +44,7 @@ class _ConnexionViewState extends State<ConnexionView> {
           slivers: [
             SliverAppBar(
               elevation: 0.2,
-              toolbarHeight: 60.h,
+              toolbarHeight: 40.h,
               pinned: true,
               floating: true,
               backgroundColor: Colors.grey[100],
@@ -251,7 +251,7 @@ class _ConnexionViewState extends State<ConnexionView> {
                         );
                       },
                       child: Text(
-                        "Créer",
+                        "Créer un compte",
                         style: GoogleFonts.roboto(
                           fontSize: 14.sp,
                           fontWeight: FontWeight.bold,

@@ -11,7 +11,8 @@ void main() {
   SystemChrome.setSystemUIOverlayStyle(
     const SystemUiOverlayStyle(
       statusBarColor: Colors.white, // 👈 ta couleur de fond souhaitée
-      statusBarIconBrightness: Brightness.dark, // ou Brightness.dark si fond clair
+      statusBarIconBrightness:
+          Brightness.dark, // ou Brightness.dark si fond clair
     ),
   );
 

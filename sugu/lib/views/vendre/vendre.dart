@@ -25,7 +25,7 @@ class _AnnonceViewState extends State<AnnonceView> {
             SliverAppBar(
               backgroundColor: Colors.white, // Couleur opaque
               elevation: 0, // Supprime l'ombre si nécessaire
-              toolbarHeight: 50.h,
+              toolbarHeight: 40.h,
               pinned: true,
               floating: true,
               flexibleSpace: FlexibleSpaceBar(
@@ -172,7 +172,7 @@ class _AnnonceViewState extends State<AnnonceView> {
                   icon: Container(
                     padding: EdgeInsets.all(8.r),
                     decoration: BoxDecoration(
-                      color: Colors.grey,
+                      color: Colors.grey[300],
                       borderRadius: BorderRadius.circular(100.r),
                     ),
                     child: Icon(Mdi.shopping, size: 24.sp, color: Colors.black),
@@ -198,7 +198,7 @@ class _AnnonceViewState extends State<AnnonceView> {
                   icon: Container(
                     padding: EdgeInsets.all(8.r),
                     decoration: BoxDecoration(
-                      color: Colors.grey,
+                      color: Colors.grey[300],
                       borderRadius: BorderRadius.circular(100.r),
                     ),
                     child: Icon(Mdi.car, size: 24.sp, color: Colors.black),
@@ -224,7 +224,7 @@ class _AnnonceViewState extends State<AnnonceView> {
                   icon: Container(
                     padding: EdgeInsets.all(8.r),
                     decoration: BoxDecoration(
-                      color: Colors.grey,
+                      color: Colors.grey[300],
                       borderRadius: BorderRadius.circular(100.r),
                     ),
                     child: Icon(Mdi.home, size: 24.sp, color: Colors.black),

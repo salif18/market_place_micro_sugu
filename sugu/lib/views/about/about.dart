@@ -16,7 +16,7 @@ class AboutView extends StatelessWidget {
             SliverAppBar(
               backgroundColor: Colors.white, // Couleur opaque
               elevation: 0, // Supprime l'ombre si nécessaire
-              toolbarHeight: 50.h,
+              toolbarHeight: 40.h,
               pinned: true,
               floating: true,
               leading: IconButton(

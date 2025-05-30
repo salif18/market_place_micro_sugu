@@ -38,6 +38,7 @@ class _MyRootsState extends State<MyRoots> {
 
   Widget _buildBottomNavigation() {
     return Container(
+      height: 60.h,
       decoration: BoxDecoration( 
         border: Border( 
           top: BorderSide(width: 1,color: Colors.grey[100]!)
@@ -53,7 +54,7 @@ class _MyRootsState extends State<MyRoots> {
         },
         backgroundColor: Colors.white,
         elevation: 20,
-        selectedItemColor: Colors.black,
+        selectedItemColor: Colors.deepOrange,
         unselectedItemColor: Colors.grey[500],
         iconSize: 25.sp,
         selectedLabelStyle: GoogleFonts.roboto(fontSize: 12.sp),
@@ -75,11 +76,11 @@ class _MyRootsState extends State<MyRoots> {
                         top: 0,
                         child: Badge.count(
                           count: provider.getFavorites.length,
-                          largeSize: 25.sp / 2,
+                          // largeSize: 40.sp / 2,
                           backgroundColor: Colors.amber,
                           textColor: Colors.black,
                           textStyle: GoogleFonts.roboto(
-                            fontSize: 10.sp,
+                            fontSize: 14.sp,
                             fontWeight: FontWeight.w600,
                           ),
                         ),

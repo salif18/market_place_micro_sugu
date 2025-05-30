@@ -31,7 +31,7 @@ class _CategoriesViewState extends State<CategoriesView> {
             SliverAppBar(
               backgroundColor: Colors.white, // Couleur opaque
               elevation: 0, // Supprime l'ombre si nécessaire
-              toolbarHeight: 50.h,
+              toolbarHeight: 40.h,
               pinned: true,
               floating: true,
               leading: IconButton(
@@ -56,7 +56,7 @@ class _CategoriesViewState extends State<CategoriesView> {
               sliver: SliverGrid(
                 gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
                   crossAxisCount: 2,
-                  crossAxisSpacing: 4,
+                  crossAxisSpacing: 5,
                   mainAxisSpacing: 4,
                   childAspectRatio: 0.85,
                 ),
@@ -78,7 +78,7 @@ class _CategoriesViewState extends State<CategoriesView> {
                     child: Container(
                       width: 200.w,
                       height: 200.h,
-                      margin: EdgeInsets.all(8.r),
+                     // margin: EdgeInsets.all(8.r),
                       color: Colors.white,
                       alignment: Alignment.center,
                       child: Column(

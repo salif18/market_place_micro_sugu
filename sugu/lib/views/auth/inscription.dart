@@ -47,7 +47,7 @@ class _InscriptionViewState extends State<InscriptionView> {
           slivers: [
             SliverAppBar(
               elevation: 0.2,
-              toolbarHeight: 60.h,
+              toolbarHeight: 40.h,
               pinned: true,
               floating: true,
               backgroundColor: Colors.grey[100],
@@ -251,7 +251,7 @@ class _InscriptionViewState extends State<InscriptionView> {
                       minimumSize: Size(400.w, 40.h),
                     ),
                     child: Text(
-                      "S'inscrir",
+                      "Créer compte",
                       style: GoogleFonts.roboto(
                         fontSize: 14.sp,
                         fontWeight: FontWeight.bold,
@@ -287,7 +287,7 @@ class _InscriptionViewState extends State<InscriptionView> {
                         );
                       },
                       child: Text(
-                        "Connection",
+                        "Connexion",
                         style: GoogleFonts.roboto(
                           fontSize: 14.sp,
                           fontWeight: FontWeight.bold,

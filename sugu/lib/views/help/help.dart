@@ -20,7 +20,7 @@ class _AideViewState extends State<AideView> {
           slivers: [
             SliverAppBar(
               elevation: 0.2,
-              toolbarHeight: 60.h,
+              toolbarHeight: 40.h,
               pinned: true,
               floating: true,
               backgroundColor: Colors.white,

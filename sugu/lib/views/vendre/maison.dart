@@ -47,7 +47,7 @@ class _AddMaisonsState extends State<AddMaisons> {
     try {
       final List<XFile> pickedFiles = await _picker.pickMultiImage();
       if (pickedFiles.isNotEmpty) {
-        if (gallerieImages.length + pickedFiles.length <= 6) {
+        if (gallerieImages.length + pickedFiles.length <= 10) {
           setState(() {
             gallerieImages.addAll(pickedFiles);
           });
@@ -56,7 +56,7 @@ class _AddMaisonsState extends State<AddMaisons> {
             // ignore: use_build_context_synchronously
             context,
           ).showSnackBar(
-            SnackBar(content: Text("Limite de 6 images atteinte}")),
+            SnackBar(content: Text("Limite de 10 images atteinte}")),
           );
         }
       }
@@ -133,7 +133,7 @@ class _AddMaisonsState extends State<AddMaisons> {
           slivers: [
             SliverAppBar(
               backgroundColor: Colors.white,
-              toolbarHeight: 60.h,
+              toolbarHeight: 40.h,
               elevation: 0,
               pinned: true,
               floating: true,
@@ -191,7 +191,7 @@ class _AddMaisonsState extends State<AddMaisons> {
                                 ),
                                 SizedBox(height: 16.h),
                                 Text(
-                                  "Ajouter des photos au max 6",
+                                  "Ajouter des photos au maximum 10",
                                   style: GoogleFonts.roboto(fontSize: 12.sp),
                                 ),
                               ],
@@ -503,7 +503,7 @@ class _AddMaisonsState extends State<AddMaisons> {
                               icon: Container(
                                 padding: EdgeInsets.all(8.r),
                                 decoration: BoxDecoration(
-                                  color: Colors.grey,
+                                  color: Colors.grey[300],
                                   borderRadius: BorderRadius.circular(100.r),
                                 ),
                                 child: Icon(
@@ -588,7 +588,7 @@ class _AddMaisonsState extends State<AddMaisons> {
                             icon: Container(
                               padding: EdgeInsets.all(8.r),
                               decoration: BoxDecoration(
-                                color: Colors.grey,
+                                color: Colors.grey[300],
                                 borderRadius: BorderRadius.circular(100.r),
                               ),
                               child: Icon(

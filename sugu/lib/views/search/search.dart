@@ -110,7 +110,7 @@ class _SearchViewState extends State<SearchView> {
               elevation: 0,
               pinned: true,
               floating: true,
-              toolbarHeight: 70.h,
+              toolbarHeight: 65.h,
               flexibleSpace: FlexibleSpaceBar(
                  background: Container(color: Colors.white,),
                 centerTitle: true,
@@ -125,10 +125,10 @@ class _SearchViewState extends State<SearchView> {
                       prefixIcon: Icon(
                         Icons.search,
                         color: Colors.black,
-                        size: 24.sp,
+                        size: 30.sp,
                       ),
-                      hintText: "Rechercher",
-                      hintStyle: GoogleFonts.roboto(fontSize: 14.sp),
+                      hintText: "Que voulez-vous acheter ?",
+                      hintStyle: GoogleFonts.roboto(fontSize: 16.sp),
                       border: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(50.r),
                         borderSide: BorderSide.none

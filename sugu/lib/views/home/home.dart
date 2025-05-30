@@ -205,12 +205,12 @@ class _HomeViewState extends State<HomeView> {
               SliverAppBar(
                 backgroundColor: Colors.transparent, // Couleur opaque
                 elevation: 0, // Supprime l'ombre si nécessaire
-                toolbarHeight: 60.h,
+                toolbarHeight: 45.h,
                 pinned: true,
                 floating: true,
                 flexibleSpace: FlexibleSpaceBar(
-                  background: Container(color: Colors.white,),
-                  centerTitle: true,
+                  background: Container(color: Colors.white),
+                  // centerTitle: true,
                   titlePadding: EdgeInsets.zero,
                   title: Image.asset(
                     "assets/logos/logo.png",
@@ -240,6 +240,7 @@ class _HomeViewState extends State<HomeView> {
                         SizedBox(width: 10.w),
                         Expanded(
                           child: Container(
+                            alignment: Alignment.center,
                             height: 110.h,
                             decoration: BoxDecoration(
                               color: Colors.deepOrangeAccent,
@@ -264,7 +265,7 @@ class _HomeViewState extends State<HomeView> {
                   ),
                 ),
               ),
-          
+
               SliverPadding(
                 padding: EdgeInsets.symmetric(vertical: 8.r, horizontal: 16.r),
                 sliver: SliverToBoxAdapter(
@@ -287,20 +288,30 @@ class _HomeViewState extends State<HomeView> {
                             ),
                           );
                         },
-                        child: Text(
-                          "Voir tout ",
-                          style: GoogleFonts.roboto(
-                            color: Colors.deepOrange,
-                            fontSize: 14.sp,
-                            fontWeight: FontWeight.bold,
-                          ),
+                        child: Row(
+                          // mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Text(
+                              "Voir tout ",
+                              style: GoogleFonts.roboto(
+                                color: Colors.deepOrange,
+                                fontSize: 14.sp,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                            Icon(
+                              Icons.arrow_forward_rounded,
+                              color: Colors.deepOrange,
+                              size: 20.sp,
+                            ),
+                          ],
                         ),
                       ),
                     ],
                   ),
                 ),
               ),
-          
+
               SliverPadding(
                 padding: EdgeInsets.symmetric(vertical: 8.r, horizontal: 16.r),
                 sliver: SliverGrid(
@@ -350,7 +361,10 @@ class _HomeViewState extends State<HomeView> {
                             child: Text(
                               item["name"],
                               overflow: TextOverflow.ellipsis,
-                              style: GoogleFonts.roboto(fontSize: 12.sp,fontWeight: FontWeight.w600),
+                              style: GoogleFonts.roboto(
+                                fontSize: 12.sp,
+                                fontWeight: FontWeight.w600,
+                              ),
                             ),
                           ),
                         ],
@@ -359,7 +373,7 @@ class _HomeViewState extends State<HomeView> {
                   }, childCount: 8),
                 ),
               ),
-          
+
               SliverPadding(
                 padding: EdgeInsets.symmetric(vertical: 8.r, horizontal: 16.r),
                 sliver: SliverToBoxAdapter(
@@ -372,7 +386,7 @@ class _HomeViewState extends State<HomeView> {
                   ),
                 ),
               ),
-          
+
               SliverToBoxAdapter(
                 child: SizedBox(
                   height: 250.h, // important pour afficher correctement
@@ -393,7 +407,7 @@ class _HomeViewState extends State<HomeView> {
                         child: Container(
                           width: 160.w,
                           height: 200.h,
-                          margin: EdgeInsets.all(8.r),
+                          margin: EdgeInsets.all(4.r),
                           color: Colors.white,
                           alignment: Alignment.center,
                           child: Column(
@@ -421,11 +435,13 @@ class _HomeViewState extends State<HomeView> {
                                   ),
                                 ),
                               ),
-                               SizedBox(height: 5.h),
+                              SizedBox(height: 5.h),
                               Expanded(
                                 flex: 1,
                                 child: Padding(
-                                  padding: EdgeInsets.symmetric(horizontal: 5.r),
+                                  padding: EdgeInsets.symmetric(
+                                    horizontal: 5.r,
+                                  ),
                                   child: Text(
                                     item.prix + " " + "FCFA",
                                     style: GoogleFonts.roboto(
@@ -444,12 +460,12 @@ class _HomeViewState extends State<HomeView> {
                   ),
                 ),
               ),
-          
+
               SliverPadding(
                 padding: EdgeInsets.symmetric(vertical: 8.r, horizontal: 16.r),
                 sliver: SliverToBoxAdapter(
                   child: Text(
-                    "Au marché",
+                    "À vendre",
                     style: GoogleFonts.roboto(
                       fontSize: 14.sp,
                       fontWeight: FontWeight.bold,
@@ -457,13 +473,13 @@ class _HomeViewState extends State<HomeView> {
                   ),
                 ),
               ),
-          
+
               SliverPadding(
                 padding: EdgeInsets.symmetric(vertical: 8.r, horizontal: 16.r),
                 sliver: SliverGrid(
                   gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
                     crossAxisCount: 2,
-                    crossAxisSpacing: 4,
+                    crossAxisSpacing: 5,
                     mainAxisSpacing: 4,
                     childAspectRatio: 0.85,
                   ),
@@ -485,7 +501,7 @@ class _HomeViewState extends State<HomeView> {
                       child: Container(
                         width: 200.w,
                         height: 200.h,
-                        margin: EdgeInsets.all(8.r),
+                        // margin: EdgeInsets.all(8.r),
                         color: Colors.white,
                         alignment: Alignment.center,
                         child: Column(
@@ -513,7 +529,7 @@ class _HomeViewState extends State<HomeView> {
                                 ),
                               ),
                             ),
-                               SizedBox(height: 5.h),
+                            SizedBox(height: 5.h),
                             Expanded(
                               flex: 1,
                               child: Padding(

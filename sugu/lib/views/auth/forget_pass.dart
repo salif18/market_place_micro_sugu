@@ -42,7 +42,7 @@ class _ForgetPassWordViewState extends State<ForgetPassWordView> {
           slivers: [
             SliverAppBar(
               elevation: 0.2,
-              toolbarHeight: 60.h,
+              toolbarHeight: 40.h,
               pinned: true,
               floating: true,
               backgroundColor: Colors.grey[100],

@@ -44,7 +44,7 @@ class _InitializeVewState extends State<InitializeVew> {
           slivers: [
             SliverAppBar(
               elevation: 0.2,
-              toolbarHeight: 60.h,
+              toolbarHeight: 40.h,
               pinned: true,
               floating: true,
               backgroundColor: Colors.grey[100],
