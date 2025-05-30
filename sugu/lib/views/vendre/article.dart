@@ -95,6 +95,7 @@ class _AddArticlesState extends State<AddArticles> {
       'prix': _prixController.text,
       'description': _descriptionController.text,
       'localisation': _localisationController.text,
+      'groupe':"articles",
       'categorie': _selectedCategory,
       'etat': _selectedEtat,
       'images': gallerieImages.map((file) => file.path).toList(),

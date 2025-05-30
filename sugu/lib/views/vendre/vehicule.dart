@@ -93,6 +93,7 @@ class _AddVehiculesState extends State<AddVehicules> {
       'prix': _prixController.text,
       'description': _descriptionController.text,
       'localisation': _localisationController.text,
+      'groupe':"véhicules",
       'categorie': _selectedCategory,
       'etat': _selectedEtat,
       'images': gallerieImages.map((file) => file.path).toList(),

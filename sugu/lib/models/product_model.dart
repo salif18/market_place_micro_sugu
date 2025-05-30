@@ -4,6 +4,7 @@ class ProductModel {
   final String prix;
   final String description;
   final String localisation;
+  final String groupe;
   final String categorie;
   final String etat;
   final List<String> images;
@@ -20,6 +21,7 @@ class ProductModel {
     required this.prix,
     required this.description,
     required this.localisation,
+    required this.groupe,
     required this.categorie,
     required this.etat,
     required this.images,
@@ -38,15 +40,16 @@ class ProductModel {
       prix: json['prix'] ?? '',
       description: json['description'] ?? '',
       localisation: json['localisation'] ?? '',
+      groupe: json["groupe"] ?? "",
       categorie: json['categorie'] ?? '',
       etat: json['etat'] ?? '',
       images: List<String>.from(json['images'] ?? []),
-      modele:json['modele'],
+      modele: json['modele'],
       annee: json['annee'],
       kilometrage: json['kilometrage'],
       typeCarburant: json['typeCarburant'],
       transmission: json['transmission'],
-      numero:json['numero'] ?? '',
+      numero: json['numero'] ?? '',
     );
   }
 
@@ -57,6 +60,7 @@ class ProductModel {
       'prix': prix,
       'description': description,
       'localisation': localisation,
+      'groupe':groupe,
       'categorie': categorie,
       'etat': etat,
       'images': images,
@@ -72,11 +76,12 @@ class ProductModel {
   static List<ProductModel> getProducts() {
     return [
       ProductModel.fromJson({
-        "_id":"1",
-         'titre':'Toyota Corolla 2021',
+        "_id": "1",
+        'titre': 'Toyota Corolla 2021',
         'prix': '22500',
         'description': 'Voiture économique en excellent état, entretien à jour',
         'localisation': 'Lyon',
+        'groupe': "véhicules",
         'categorie': 'Automobiles et camions',
         'etat': 'Occasion - comme neuf',
         'images': [
@@ -89,7 +94,7 @@ class ProductModel {
         'typeCarburant': 'Hybride',
         'transmission': 'Automatique',
         "numero": "+22378303208",
-  }),
+      }),
       ProductModel.fromJson({
         '_id': "2",
         'titre': 'Perceuse visseuse Makita 18V',
@@ -97,6 +102,7 @@ class ProductModel {
         'description':
             'Comme neuve, utilisée 2 fois seulement avec 2 batteries',
         'localisation': 'Marseille',
+        'groupe': "articles",
         'categorie': 'Outils',
         'etat': 'Occasion - comme neuf',
         'images': [
@@ -116,6 +122,7 @@ class ProductModel {
         'description':
             'Canapé en cuir véritable, couleur cognac, très bon état',
         'localisation': 'Paris',
+        'groupe': "articles",
         'categorie': 'Meubles',
         'etat': 'Occasion - assez bon état',
         'images': [
@@ -135,6 +142,7 @@ class ProductModel {
         'prix': '45',
         'description': 'Manteau hiver taille L, porté 3 fois seulement',
         'localisation': 'Toulouse',
+        'groupe': "articles",
         'categorie': 'Vêtements',
         'etat': 'Occasion - comme neuf',
         'images': [
@@ -153,6 +161,7 @@ class ProductModel {
         'prix': '85',
         'description': 'Tondeuse Bosch 1500W, bac de ramassage 40L',
         'localisation': 'Bordeaux',
+        'groupe': "articles",
         'categorie': 'Jardin',
         'etat': 'Neuf',
         'images': [
@@ -171,6 +180,7 @@ class ProductModel {
         'prix': '750',
         'description': 'Comme neuf, avec facture et boîte originale',
         'localisation': 'Lille',
+        'groupe': "articles",
         'categorie': 'Téléphones et tablettes',
         'etat': 'Occasion - comme neuf',
         'images': [
@@ -190,6 +200,7 @@ class ProductModel {
         'prix': '120',
         'description': 'Boîte neuve jamais ouverte, édition collector',
         'localisation': 'Nantes',
+        'groupe': "articles",
         'categorie': 'Jouets',
         'etat': 'Neuf',
         'images': [
@@ -208,6 +219,7 @@ class ProductModel {
         'prix': '32000',
         'description': 'Pick-up robuste, idéal pour chantiers/loisirs',
         'localisation': 'Montpellier',
+        'groupe': "véhicules",
         'categorie': 'Automobiles et camions',
         'etat': 'Occasion - assez bon état',
         'images': [
@@ -227,6 +239,7 @@ class ProductModel {
         'prix': '18500',
         'description': 'Très bon état général, entretien chez Renault',
         'localisation': 'Strasbourg',
+        'groupe': "véhicules",
         'categorie': 'Automobiles et camions',
         'etat': 'Occasion - comme neuf',
         'images': [
@@ -245,6 +258,7 @@ class ProductModel {
         'prix': '48900',
         'description': 'Berline premium avec toutes les options',
         'localisation': 'Nice',
+        'groupe': "véhicules",
         'categorie': 'Automobiles et camions',
         'etat': 'Occasion - comme neuf',
         'images': [
@@ -264,6 +278,7 @@ class ProductModel {
         'description':
             'Superbe villa neuve de 180m2 sur terrain de 300m2. Comprend 4 chambres dont 1 suite parentale, 2 salons, cuisine équipée, terrasse et jardin clôturé. Quartier calme et sécurisé près des écoles.',
         'localisation': 'Nice',
+        'groupe': "maisons",
         'categorie': 'Ventes immobilières',
         'etat': 'Neuf',
         'images': [
@@ -285,6 +300,7 @@ class ProductModel {
         'description':
             'Superbe villa neuve de standing avec piscine, 4 chambres dont suite parentale, grand salon, cuisine américaine équipée et jardin paysagé. Quartier sécurisé avec école internationale à proximité.',
         'localisation': 'Diamniadio, Sénégal',
+        'groupe': "maisons",
         'categorie': 'Ventes immobilières',
         'etat': 'Neuf',
         'images': [
@@ -306,6 +322,7 @@ class ProductModel {
         'description':
             'Maison spacieuse meublée 3 chambres avec vue mer, climatisation, garage et gardien. Proximité ambassades et centres commerciaux.',
         'localisation': 'Almadies, Dakar',
+        'groupe': "maisons",
         'categorie': 'Locations immobilières',
         'etat': 'Occasion - très bon état',
         'images': [

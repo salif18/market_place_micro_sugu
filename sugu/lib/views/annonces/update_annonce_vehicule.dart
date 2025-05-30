@@ -5,20 +5,27 @@ import 'package:flutter_mdi_icons/flutter_mdi_icons.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:sugu/models/product_model.dart';
 
-class AddMaisons extends StatefulWidget {
-  const AddMaisons({super.key});
+class UpdateAnnonceVehicule extends StatefulWidget {
+  final ProductModel item;
+  const UpdateAnnonceVehicule({super.key, required this.item});
 
   @override
-  State<AddMaisons> createState() => _AddMaisonsState();
+  State<UpdateAnnonceVehicule> createState() => _UpdateAnnonceVehiculeState();
 }
 
-class _AddMaisonsState extends State<AddMaisons> {
+class _UpdateAnnonceVehiculeState extends State<UpdateAnnonceVehicule> {
   // Contrôleurs pour les champs de formulaire
   final TextEditingController _titreController = TextEditingController();
   final TextEditingController _prixController = TextEditingController();
   final TextEditingController _descriptionController = TextEditingController();
   final TextEditingController _localisationController = TextEditingController();
+  final TextEditingController _kmController = TextEditingController();
+  final TextEditingController _modelController = TextEditingController();
+  final TextEditingController _anneeController = TextEditingController();
+  final TextEditingController _transmissionController = TextEditingController();
+  final TextEditingController _carburantController = TextEditingController();
   final TextEditingController _numeroController = TextEditingController();
 
   // Variables pour les sélections
@@ -26,16 +33,14 @@ class _AddMaisonsState extends State<AddMaisons> {
   String? _selectedEtat;
 
   List<Map<String, dynamic>> categories = [
-    {
-      "id": 1,
-      "name": "Ventes immobilières",
-      "icon": Mdi.homeCityOutline, // Icône pour biens à vendre
-    },
-    {
-      "id": 2,
-      "name": "Locations immobilières",
-      "icon": Mdi.homeRoof, // Icône pour locations
-    },
+    {"id": 1, "name": "Automobiles et camions", "icon": Mdi.car},
+    {"id": 2, "name": "Motos", "icon": Mdi.motorbike},
+    {"id": 3, "name": "Sports mécaniques", "icon": Mdi.carSports},
+    {"id": 4, "name": "Camping-cars", "icon": Mdi.rvTruck},
+    {"id": 5, "name": "Bateaux", "icon": Mdi.sailBoat},
+    {"id": 6, "name": "Commercial et industriel", "icon": Mdi.truckDelivery},
+    {"id": 7, "name": "Remorques", "icon": Mdi.truckTrailer},
+    {"id": 8, "name": "Autres", "icon": Mdi.flagOutline},
   ];
 
   // configuration de selection image depuis gallerie
@@ -89,15 +94,15 @@ class _AddMaisonsState extends State<AddMaisons> {
       'prix': _prixController.text,
       'description': _descriptionController.text,
       'localisation': _localisationController.text,
-       'groupe':"maisons",
+      'groupe':"véhicules",
       'categorie': _selectedCategory,
       'etat': _selectedEtat,
       'images': gallerieImages.map((file) => file.path).toList(),
-      "modele": null,
-      "annee": null,
-      "kilometrage": null,
-      "typeCarburant": null,
-      "transmission": null,
+      "modele": _modelController.text,
+      "annee": _anneeController.text,
+      "kilometrage": _kmController.text,
+      "typeCarburant": _carburantController.text,
+      "transmission": _transmissionController.text,
       "numero": _numeroController.text,
     };
 
@@ -120,6 +125,11 @@ class _AddMaisonsState extends State<AddMaisons> {
     _prixController.dispose();
     _descriptionController.dispose();
     _localisationController.dispose();
+    _kmController.dispose();
+    _modelController.dispose();
+    _anneeController.dispose();
+    _carburantController.dispose();
+    _transmissionController.dispose();
     _numeroController.dispose();
     super.dispose();
   }
@@ -144,9 +154,8 @@ class _AddMaisonsState extends State<AddMaisons> {
               ),
               flexibleSpace: FlexibleSpaceBar(
                  background: Container(color: Colors.white,),
-                centerTitle: true,
                 title: Text(
-                  "Ajouter une maison",
+                  "Modifier le véhicule",
                   style: GoogleFonts.roboto(
                     fontSize: 18.sp,
                     fontWeight: FontWeight.bold,
@@ -259,6 +268,56 @@ class _AddMaisonsState extends State<AddMaisons> {
                           vertical: 8.r,
                         ),
                         child: TextFormField(
+                          keyboardType: TextInputType.text,
+                          controller: _modelController,
+                          validator: null,
+                          decoration: InputDecoration(
+                            hintText: "Modèle",
+                            hintStyle: GoogleFonts.roboto(fontSize: 16.sp),
+                            filled: true,
+                            fillColor: Colors.grey[100],
+                            // isDense: true,
+                            contentPadding: EdgeInsets.symmetric(
+                              horizontal: 16.r,
+                            ),
+                            border: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(10.r),
+                              borderSide: BorderSide.none,
+                            ),
+                          ),
+                        ),
+                      ),
+                      Padding(
+                        padding: EdgeInsets.symmetric(
+                          horizontal: 16.r,
+                          vertical: 8.r,
+                        ),
+                        child: TextFormField(
+                          keyboardType: TextInputType.text,
+                          controller: _anneeController,
+                          validator: null,
+                          decoration: InputDecoration(
+                            hintText: "Année",
+                            hintStyle: GoogleFonts.roboto(fontSize: 16.sp),
+                            filled: true,
+                            fillColor: Colors.grey[100],
+                            // isDense: true,
+                            contentPadding: EdgeInsets.symmetric(
+                              horizontal: 16.r,
+                            ),
+                            border: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(10.r),
+                              borderSide: BorderSide.none,
+                            ),
+                          ),
+                        ),
+                      ),
+                      Padding(
+                        padding: EdgeInsets.symmetric(
+                          horizontal: 16.r,
+                          vertical: 8.r,
+                        ),
+                        child: TextFormField(
                           keyboardType: TextInputType.number,
                           controller: _prixController,
                           validator: null,
@@ -345,6 +404,81 @@ class _AddMaisonsState extends State<AddMaisons> {
                         ),
                         child: TextFormField(
                           keyboardType: TextInputType.text,
+                          controller: _kmController,
+                          validator: null,
+                          decoration: InputDecoration(
+                            hintText: "Kilometrage",
+                            hintStyle: GoogleFonts.roboto(fontSize: 16.sp),
+                            filled: true,
+                            fillColor: Colors.grey[100],
+                            // isDense: true,
+                            contentPadding: EdgeInsets.symmetric(
+                              horizontal: 16.sp,
+                            ),
+                            border: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(10.r),
+                              borderSide: BorderSide.none,
+                            ),
+                          ),
+                        ),
+                      ),
+                      Padding(
+                        padding: EdgeInsets.symmetric(
+                          horizontal: 16.r,
+                          vertical: 8.r,
+                        ),
+                        child: TextFormField(
+                          keyboardType: TextInputType.text,
+                          controller: _carburantController,
+                          validator: null,
+                          decoration: InputDecoration(
+                            hintText: "Carburant",
+                            hintStyle: GoogleFonts.roboto(fontSize: 16.sp),
+                            filled: true,
+                            fillColor: Colors.grey[100],
+                            // isDense: true,
+                            contentPadding: EdgeInsets.symmetric(
+                              horizontal: 16.r,
+                            ),
+                            border: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(10.r),
+                              borderSide: BorderSide.none,
+                            ),
+                          ),
+                        ),
+                      ),
+                      Padding(
+                        padding: EdgeInsets.symmetric(
+                          horizontal: 16.r,
+                          vertical: 8.r,
+                        ),
+                        child: TextFormField(
+                          keyboardType: TextInputType.text,
+                          controller: _transmissionController,
+                          validator: null,
+                          decoration: InputDecoration(
+                            hintText: "Transmission",
+                            hintStyle: GoogleFonts.roboto(fontSize: 16.sp),
+                            filled: true,
+                            fillColor: Colors.grey[100],
+                            // isDense: true,
+                            contentPadding: EdgeInsets.symmetric(
+                              horizontal: 16.r,
+                            ),
+                            border: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(10.r),
+                              borderSide: BorderSide.none,
+                            ),
+                          ),
+                        ),
+                      ),
+                      Padding(
+                        padding: EdgeInsets.symmetric(
+                          horizontal: 16.r,
+                          vertical: 8.r,
+                        ),
+                        child: TextFormField(
+                          keyboardType: TextInputType.text,
                           controller: _descriptionController,
                           validator: null,
                           decoration: InputDecoration(
@@ -382,7 +516,7 @@ class _AddMaisonsState extends State<AddMaisons> {
                               horizontal: 16.r,
                             ),
                             border: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(10.r),
+                              borderRadius: BorderRadius.circular(10),
                               borderSide: BorderSide.none,
                             ),
                           ),
@@ -404,7 +538,7 @@ class _AddMaisonsState extends State<AddMaisons> {
                             fillColor: Colors.grey[100],
                             // isDense: true,
                             contentPadding: EdgeInsets.symmetric(
-                              horizontal: 16.sp,
+                              horizontal: 16.r,
                             ),
                             border: OutlineInputBorder(
                               borderRadius: BorderRadius.circular(10.r),
@@ -462,8 +596,10 @@ class _AddMaisonsState extends State<AddMaisons> {
           child: Container(
             padding: EdgeInsets.symmetric(horizontal: 16.r, vertical: 8.r),
             width: double.infinity,
-            height: 200.h,
+            height: 500.h,
             child: Column(
+              mainAxisSize: MainAxisSize.min,
+              mainAxisAlignment: MainAxisAlignment.start,
               children: [
                 Container(
                   padding: EdgeInsets.symmetric(
@@ -481,11 +617,10 @@ class _AddMaisonsState extends State<AddMaisons> {
                 Expanded(
                   child: SingleChildScrollView(
                     child: Column(
-                      mainAxisSize: MainAxisSize.min,
                       mainAxisAlignment: MainAxisAlignment.start,
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children:
-                          categories.map((item) {
+                          categories.map((Map<String, dynamic> item) {
                             return TextButton.icon(
                               onPressed: () {
                                 setState(() {

@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_fonts/google_fonts.dart';
-
+import 'package:sugu/models/product_model.dart';
+import 'package:sugu/views/annonces/update_annonce_article.dart';
+import 'package:sugu/views/annonces/update_annonce_maison.dart';
+import 'package:sugu/views/annonces/update_annonce_vehicule.dart';
 
 class VosAnnonceView extends StatefulWidget {
   const VosAnnonceView({super.key});
@@ -11,6 +14,7 @@ class VosAnnonceView extends StatefulWidget {
 }
 
 class _VosAnnonceViewState extends State<VosAnnonceView> {
+  List<ProductModel> fakeVehiculeData = ProductModel.getProducts();
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -30,7 +34,7 @@ class _VosAnnonceViewState extends State<VosAnnonceView> {
                 icon: Icon(Icons.arrow_back_ios_rounded, size: 18.sp),
               ),
               flexibleSpace: FlexibleSpaceBar(
-                background: Container(color: Colors.white,),
+                background: Container(color: Colors.white),
                 centerTitle: true,
                 title: Text(
                   "Vos annonces",
@@ -39,6 +43,100 @@ class _VosAnnonceViewState extends State<VosAnnonceView> {
                     fontWeight: FontWeight.bold,
                   ),
                 ),
+              ),
+            ),
+            SliverPadding(
+              padding: EdgeInsets.symmetric(vertical: 8.r, horizontal: 16.r),
+              sliver: SliverGrid(
+                gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                  crossAxisCount: 2,
+                  crossAxisSpacing: 5,
+                  mainAxisSpacing: 4,
+                  childAspectRatio: 0.85,
+                ),
+                delegate: SliverChildBuilderDelegate((
+                  BuildContext context,
+                  int index,
+                ) {
+                  ProductModel item = fakeVehiculeData[index];
+                  return GestureDetector(
+                    onTap: () {
+                      // Action on product tap
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) {
+                            switch (item.groupe) {
+                              case "maisons":
+                                return UpdateAnnonceMaison(item: item);
+                              case "articles":
+                                return UpdateAnnonceArticle(item: item);
+                              case "véhicules":
+                                return UpdateAnnonceVehicule(item: item);
+                              default:
+                                // Affiche une page vide ou une erreur gentille
+                                return Scaffold(
+                                  appBar: AppBar(title: Text("Erreur")),
+                                  body: Center(
+                                    child: Text("Type d'annonce non reconnu"),
+                                  ),
+                                );
+                            }
+                          },
+                        ),
+                      );
+                    },
+                    child: Container(
+                      width: 200.w,
+                      height: 200.h,
+                      // margin: EdgeInsets.all(8.r),
+                      color: Colors.white,
+                      alignment: Alignment.center,
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Expanded(
+                            flex: 4,
+                            child: Image.network(
+                              item.images[0],
+                              fit: BoxFit.cover,
+                              width: double.infinity,
+                            ),
+                          ),
+                          SizedBox(height: 10.r),
+                          Padding(
+                            padding: EdgeInsets.symmetric(horizontal: 5.r),
+                            child: Text(
+                              item.titre,
+                              overflow: TextOverflow.ellipsis,
+                              style: GoogleFonts.roboto(
+                                fontSize: 14.sp,
+                                fontWeight: FontWeight.w500,
+                                color: Colors.black,
+                              ),
+                            ),
+                          ),
+                          SizedBox(height: 5.h),
+                          Expanded(
+                            flex: 1,
+                            child: Padding(
+                              padding: EdgeInsets.symmetric(horizontal: 5.r),
+                              child: Text(
+                                item.prix + " " + "FCFA",
+                                style: GoogleFonts.roboto(
+                                  fontSize: 14.sp,
+                                  fontWeight: FontWeight.bold,
+                                  color: Colors.black,
+                                ),
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  );
+                }, childCount: fakeVehiculeData.length),
               ),
             ),
           ],

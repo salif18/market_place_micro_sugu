@@ -5,15 +5,17 @@ import 'package:flutter_mdi_icons/flutter_mdi_icons.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:sugu/models/product_model.dart';
 
-class AddMaisons extends StatefulWidget {
-  const AddMaisons({super.key});
+class UpdateAnnonceMaison extends StatefulWidget {
+  final ProductModel item ;
+  const UpdateAnnonceMaison({super.key, required this.item });
 
   @override
-  State<AddMaisons> createState() => _AddMaisonsState();
+  State<UpdateAnnonceMaison> createState() => _UpdateAnnonceMaisonState();
 }
 
-class _AddMaisonsState extends State<AddMaisons> {
+class _UpdateAnnonceMaisonState extends State<UpdateAnnonceMaison> {
   // Contrôleurs pour les champs de formulaire
   final TextEditingController _titreController = TextEditingController();
   final TextEditingController _prixController = TextEditingController();
@@ -146,7 +148,7 @@ class _AddMaisonsState extends State<AddMaisons> {
                  background: Container(color: Colors.white,),
                 centerTitle: true,
                 title: Text(
-                  "Ajouter une maison",
+                  "Modifier la maison",
                   style: GoogleFonts.roboto(
                     fontSize: 18.sp,
                     fontWeight: FontWeight.bold,

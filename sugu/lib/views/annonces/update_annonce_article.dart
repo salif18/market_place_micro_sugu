@@ -5,39 +5,47 @@ import 'package:flutter_mdi_icons/flutter_mdi_icons.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:sugu/models/product_model.dart';
 
-class AddMaisons extends StatefulWidget {
-  const AddMaisons({super.key});
+class UpdateAnnonceArticle extends StatefulWidget {
+  final ProductModel item ;
+  const UpdateAnnonceArticle({super.key, required this.item});
 
   @override
-  State<AddMaisons> createState() => _AddMaisonsState();
+  State<UpdateAnnonceArticle> createState() => _UpdateAnnonceArticleState();
 }
 
-class _AddMaisonsState extends State<AddMaisons> {
+class _UpdateAnnonceArticleState extends State<UpdateAnnonceArticle> {
   // Contrôleurs pour les champs de formulaire
   final TextEditingController _titreController = TextEditingController();
   final TextEditingController _prixController = TextEditingController();
   final TextEditingController _descriptionController = TextEditingController();
   final TextEditingController _localisationController = TextEditingController();
   final TextEditingController _numeroController = TextEditingController();
-
   // Variables pour les sélections
   Map<String, dynamic>? _selectedCategory;
   String? _selectedEtat;
 
   List<Map<String, dynamic>> categories = [
-    {
-      "id": 1,
-      "name": "Ventes immobilières",
-      "icon": Mdi.homeCityOutline, // Icône pour biens à vendre
-    },
-    {
-      "id": 2,
-      "name": "Locations immobilières",
-      "icon": Mdi.homeRoof, // Icône pour locations
-    },
+    {"id": 1, "name": "Outils", "icon": Mdi.tools},
+    {"id": 2, "name": "Meubles", "icon": Mdi.tableFurniture},
+    {"id": 3, "name": "Jardin", "icon": Mdi.gradientHorizontal},
+    {"id": 4, "name": "Electroménager", "icon": Mdi.toasterOven},
+    {"id": 5, "name": "Pour la maison", "icon": Mdi.homeVariantOutline},
+    {"id": 6, "name": "Livres", "icon": Mdi.bookOpenVariant},
+    {"id": 7, "name": "Jeux vidéos", "icon": Mdi.controllerClassicOutline},
+    {"id": 8, "name": "Bijoux accessoires", "icon": Mdi.diamondStone},
+    {"id": 9, "name": "sacs", "icon": Mdi.bagPersonalOutline},
+    {"id": 10, "name": "Vetements", "icon": Mdi.tshirtCrewOutline},
+    {"id": 11, "name": "Chaussures", "icon": Mdi.shoeFormal},
+    {"id": 12, "name": "Jouets", "icon": Mdi.toyBrickOutline},
+    {"id": 13, "name": "Produits pour animaux", "icon": Mdi.pawOutline},
+    {"id": 14, "name": "Santé et beauté", "icon": Mdi.lotionPlusOutline},
+    {"id": 15, "name": "Téléphones et tablettes", "icon": Mdi.cellphone},
+    {"id": 16, "name": "Electronique et ordinateurs", "icon": Mdi.desktopTower},
+    {"id": 17, "name": "Artisanat d'art", "icon": Mdi.paletteOutline},
+    {"id": 18, "name": "Pièces automobiles", "icon": Mdi.carWrench},
   ];
-
   // configuration de selection image depuis gallerie
   final ImagePicker _picker = ImagePicker();
   List<XFile> gallerieImages = [];
@@ -89,7 +97,7 @@ class _AddMaisonsState extends State<AddMaisons> {
       'prix': _prixController.text,
       'description': _descriptionController.text,
       'localisation': _localisationController.text,
-       'groupe':"maisons",
+      'groupe':"articles",
       'categorie': _selectedCategory,
       'etat': _selectedEtat,
       'images': gallerieImages.map((file) => file.path).toList(),
@@ -146,7 +154,7 @@ class _AddMaisonsState extends State<AddMaisons> {
                  background: Container(color: Colors.white,),
                 centerTitle: true,
                 title: Text(
-                  "Ajouter une maison",
+                  "Modifier l'article",
                   style: GoogleFonts.roboto(
                     fontSize: 18.sp,
                     fontWeight: FontWeight.bold,
@@ -293,7 +301,7 @@ class _AddMaisonsState extends State<AddMaisons> {
                             decoration: BoxDecoration(
                               color: Colors.grey[100],
                               borderRadius: BorderRadius.circular(10.r),
-                              border: Border.all(color: Colors.grey[100]!),
+                              border: Border.all(color: Colors.grey[100]!,width: 0),
                             ),
                             child: Row(
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -404,7 +412,7 @@ class _AddMaisonsState extends State<AddMaisons> {
                             fillColor: Colors.grey[100],
                             // isDense: true,
                             contentPadding: EdgeInsets.symmetric(
-                              horizontal: 16.sp,
+                              horizontal: 16.r,
                             ),
                             border: OutlineInputBorder(
                               borderRadius: BorderRadius.circular(10.r),
@@ -462,13 +470,13 @@ class _AddMaisonsState extends State<AddMaisons> {
           child: Container(
             padding: EdgeInsets.symmetric(horizontal: 16.r, vertical: 8.r),
             width: double.infinity,
-            height: 200.h,
+            height: 500.h,
             child: Column(
               children: [
                 Container(
                   padding: EdgeInsets.symmetric(
                     horizontal: 16.r,
-                    vertical: 20.r,
+                    vertical: 16.r,
                   ),
                   child: Text(
                     "Séléctionner une catégorie",
@@ -481,7 +489,6 @@ class _AddMaisonsState extends State<AddMaisons> {
                 Expanded(
                   child: SingleChildScrollView(
                     child: Column(
-                      mainAxisSize: MainAxisSize.min,
                       mainAxisAlignment: MainAxisAlignment.start,
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children:
