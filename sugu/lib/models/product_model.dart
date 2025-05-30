@@ -1,0 +1,324 @@
+class ProductModel {
+  final String? id;
+  final String titre;
+  final String prix;
+  final String description;
+  final String localisation;
+  final String categorie;
+  final String etat;
+  final List<String> images;
+  final String? modele;
+  final String? annee;
+  final String? kilometrage;
+  final String? typeCarburant;
+  final String? transmission;
+  final String numero;
+
+  ProductModel({
+    required this.id,
+    required this.titre,
+    required this.prix,
+    required this.description,
+    required this.localisation,
+    required this.categorie,
+    required this.etat,
+    required this.images,
+    this.modele,
+    this.annee,
+    this.kilometrage,
+    this.typeCarburant,
+    this.transmission,
+    required this.numero,
+  });
+
+  factory ProductModel.fromJson(Map<String, dynamic> json) {
+    return ProductModel(
+      id: json["_id"],
+      titre: json['titre'] ?? '',
+      prix: json['prix'] ?? '',
+      description: json['description'] ?? '',
+      localisation: json['localisation'] ?? '',
+      categorie: json['categorie'] ?? '',
+      etat: json['etat'] ?? '',
+      images: List<String>.from(json['images'] ?? []),
+      modele:json['modele'],
+      annee: json['annee'],
+      kilometrage: json['kilometrage'],
+      typeCarburant: json['typeCarburant'],
+      transmission: json['transmission'],
+      numero:json['numero'] ?? '',
+    );
+  }
+
+  Map<String, dynamic> toJson() {
+    return {
+      '_id': id,
+      'titre': titre,
+      'prix': prix,
+      'description': description,
+      'localisation': localisation,
+      'categorie': categorie,
+      'etat': etat,
+      'images': images,
+      'modele': modele,
+      'annee': annee,
+      'kilometrage': kilometrage,
+      'typeCarburant': typeCarburant,
+      'transmission': transmission,
+      'numero': numero,
+    };
+  }
+
+  static List<ProductModel> getProducts() {
+    return [
+      ProductModel.fromJson({
+        "_id":"1",
+         'titre':'Toyota Corolla 2021',
+        'prix': '22500',
+        'description': 'Voiture économique en excellent état, entretien à jour',
+        'localisation': 'Lyon',
+        'categorie': 'Automobiles et camions',
+        'etat': 'Occasion - comme neuf',
+        'images': [
+          'https://images.unsplash.com/photo-1580273916550-e323be2ae537?ixlib=rb-4.0.3',
+          'https://images.unsplash.com/photo-1581235720704-06d3acfcb36f?ixlib=rb-4.0.3',
+        ],
+        'modele': 'Corolla',
+        'annee': '2021',
+        'kilometrage': '28000',
+        'typeCarburant': 'Hybride',
+        'transmission': 'Automatique',
+        "numero": "+22378303208",
+  }),
+      ProductModel.fromJson({
+        '_id': "2",
+        'titre': 'Perceuse visseuse Makita 18V',
+        'prix': '129',
+        'description':
+            'Comme neuve, utilisée 2 fois seulement avec 2 batteries',
+        'localisation': 'Marseille',
+        'categorie': 'Outils',
+        'etat': 'Occasion - comme neuf',
+        'images': [
+          'https://images.unsplash.com/photo-1596462502278-27bfdc403348?ixlib=rb-4.0.3',
+        ],
+        'modele': 'DHP485',
+        'annee': '2022',
+        'kilometrage': null,
+        'typeCarburant': null,
+        'transmission': null,
+        "numero": "+22378303208",
+      }),
+      ProductModel.fromJson({
+        '_id': "3",
+        'titre': 'Canapé 3 places en cuir',
+        'prix': '450',
+        'description':
+            'Canapé en cuir véritable, couleur cognac, très bon état',
+        'localisation': 'Paris',
+        'categorie': 'Meubles',
+        'etat': 'Occasion - assez bon état',
+        'images': [
+          'https://images.unsplash.com/photo-1555041469-a586c61ea9bc?ixlib=rb-4.0.3',
+          'https://images.unsplash.com/photo-1583845112202-9e27c5d1c170?ixlib=rb-4.0.3',
+        ],
+        'modele': null,
+        'annee': '2020',
+        'kilometrage': null,
+        'typeCarburant': null,
+        'transmission': null,
+        "numero": "+22378303208",
+      }),
+      ProductModel.fromJson({
+        '_id': "4",
+        'titre': 'Manteau en laine homme Zara',
+        'prix': '45',
+        'description': 'Manteau hiver taille L, porté 3 fois seulement',
+        'localisation': 'Toulouse',
+        'categorie': 'Vêtements',
+        'etat': 'Occasion - comme neuf',
+        'images': [
+          'https://images.unsplash.com/photo-1591047139829-d91aecb6caea?ixlib=rb-4.0.3',
+        ],
+        'modele': null,
+        'annee': '2023',
+        'kilometrage': null,
+        'typeCarburant': null,
+        'transmission': null,
+        "numero": "+22378303208",
+      }),
+      ProductModel.fromJson({
+        '_id': "5",
+        'titre': 'Tondeuse à gazon électrique',
+        'prix': '85',
+        'description': 'Tondeuse Bosch 1500W, bac de ramassage 40L',
+        'localisation': 'Bordeaux',
+        'categorie': 'Jardin',
+        'etat': 'Neuf',
+        'images': [
+          'https://images.unsplash.com/photo-1606813907291-d86efa9b94db?ixlib=rb-4.0.3',
+        ],
+        'modele': 'ARM 34',
+        'annee': '2023',
+        'kilometrage': null,
+        'typeCarburant': null,
+        'transmission': null,
+        "numero": "+22378303208",
+      }),
+      ProductModel.fromJson({
+        '_id': "6",
+        'titre': 'iPhone 13 Pro 128GB',
+        'prix': '750',
+        'description': 'Comme neuf, avec facture et boîte originale',
+        'localisation': 'Lille',
+        'categorie': 'Téléphones et tablettes',
+        'etat': 'Occasion - comme neuf',
+        'images': [
+          'https://images.unsplash.com/photo-1603921326210-6edd2d60ca68?ixlib=rb-4.0.3',
+          'https://images.unsplash.com/photo-1601784551446-20c9e07cdbdb?ixlib=rb-4.0.3',
+        ],
+        'modele': 'iPhone 13 Pro',
+        'annee': '2022',
+        'kilometrage': null,
+        'typeCarburant': null,
+        'transmission': null,
+        "numero": "+22378303208",
+      }),
+      ProductModel.fromJson({
+        '_id': "7",
+        'titre': 'Lego Star Wars Millenium Falcon',
+        'prix': '120',
+        'description': 'Boîte neuve jamais ouverte, édition collector',
+        'localisation': 'Nantes',
+        'categorie': 'Jouets',
+        'etat': 'Neuf',
+        'images': [
+          'https://images.unsplash.com/photo-1608889825205-eebdb9fc5806?ixlib=rb-4.0.3',
+        ],
+        'modele': '75192',
+        'annee': '2023',
+        'kilometrage': null,
+        'typeCarburant': null,
+        'transmission': null,
+        "numero": "+22378303208",
+      }),
+      ProductModel.fromJson({
+        '_id': "8",
+        'titre': 'Toyota Hilux 4x4 Diesel',
+        'prix': '32000',
+        'description': 'Pick-up robuste, idéal pour chantiers/loisirs',
+        'localisation': 'Montpellier',
+        'categorie': 'Automobiles et camions',
+        'etat': 'Occasion - assez bon état',
+        'images': [
+          'https://images.unsplash.com/photo-1601362840469-51e4d8d58785?ixlib=rb-4.0.3',
+          'https://images.unsplash.com/photo-1601362840425-48f0a5c16317?ixlib=rb-4.0.3',
+        ],
+        'modele': 'Hilux',
+        'annee': '2019',
+        'kilometrage': '85000',
+        'typeCarburant': 'Diesel',
+        'transmission': 'Manuelle',
+        "numero": "+22378303208",
+      }),
+      ProductModel.fromJson({
+        '_id': "9",
+        'titre': 'Renault Clio 5 Intens',
+        'prix': '18500',
+        'description': 'Très bon état général, entretien chez Renault',
+        'localisation': 'Strasbourg',
+        'categorie': 'Automobiles et camions',
+        'etat': 'Occasion - comme neuf',
+        'images': [
+          'https://images.unsplash.com/photo-1605559424843-9e4c228bf1c2?ixlib=rb-4.0.3',
+        ],
+        'modele': 'Clio V Intens',
+        'annee': '2020',
+        'kilometrage': '42500',
+        'typeCarburant': 'Essence',
+        'transmission': 'Manuelle',
+        "numero": "+22378303208",
+      }),
+      ProductModel.fromJson({
+        '_id': "10",
+        'titre': 'Mercedes Classe E 220d',
+        'prix': '48900',
+        'description': 'Berline premium avec toutes les options',
+        'localisation': 'Nice',
+        'categorie': 'Automobiles et camions',
+        'etat': 'Occasion - comme neuf',
+        'images': [
+          'https://images.unsplash.com/photo-1555215695-3004980ad54e?ixlib=rb-4.0.3',
+        ],
+        'modele': 'Classe E 220d',
+        'annee': '2021',
+        'kilometrage': '36500',
+        'typeCarburant': 'Diesel',
+        'transmission': 'Automatique',
+        "numero": "+22378303208",
+      }),
+      ProductModel.fromJson({
+        '_id': "11",
+        'titre': 'Belle villa moderne 4 chambres',
+        'prix': "75000000",
+        'description':
+            'Superbe villa neuve de 180m2 sur terrain de 300m2. Comprend 4 chambres dont 1 suite parentale, 2 salons, cuisine équipée, terrasse et jardin clôturé. Quartier calme et sécurisé près des écoles.',
+        'localisation': 'Nice',
+        'categorie': 'Ventes immobilières',
+        'etat': 'Neuf',
+        'images': [
+          'https://images.unsplash.com/photo-1564013799919-ab600027ffc6',
+          'https://images.unsplash.com/photo-1600585154340-be6161a56a0c',
+          'https://images.unsplash.com/photo-1605276374104-dee2a0ed3cd6',
+        ],
+        'modele': 'Villa moderne',
+        'annee': '2021',
+        'kilometrage': null,
+        'typeCarburant': null,
+        'transmission': null,
+        'numero': '+22378303208',
+      }),
+      ProductModel.fromJson({
+        '_id': "12",
+        'titre': 'Villa moderne 4 chambres',
+        'prix': "85000000",
+        'description':
+            'Superbe villa neuve de standing avec piscine, 4 chambres dont suite parentale, grand salon, cuisine américaine équipée et jardin paysagé. Quartier sécurisé avec école internationale à proximité.',
+        'localisation': 'Diamniadio, Sénégal',
+        'categorie': 'Ventes immobilières',
+        'etat': 'Neuf',
+        'images': [
+          'https://images.unsplash.com/photo-1600585154340-be6161a56a0c',
+          'https://images.unsplash.com/photo-1605276374104-dee2a0ed3cd6',
+          'https://images.unsplash.com/photo-1600607687920-4e2a09cf159d',
+        ],
+        'modele': 'Villa Luxe 4.0',
+        'annee': '2023',
+        'kilometrage': null,
+        'typeCarburant': null,
+        'transmission': null,
+        'numero': '+22378303208',
+      }),
+      ProductModel.fromJson({
+        '_id': "13",
+        'titre': 'Maison meublée à louer',
+        'prix': "1200000",
+        'description':
+            'Maison spacieuse meublée 3 chambres avec vue mer, climatisation, garage et gardien. Proximité ambassades et centres commerciaux.',
+        'localisation': 'Almadies, Dakar',
+        'categorie': 'Locations immobilières',
+        'etat': 'Occasion - très bon état',
+        'images': [
+          'https://images.unsplash.com/photo-1564013799919-ab600027ffc6',
+          'https://images.unsplash.com/photo-1522708323590-d24dbb6b0267',
+        ],
+        'modele': null,
+        'annee': '2020',
+        'kilometrage': null,
+        'typeCarburant': null,
+        'transmission': null,
+        'numero': '+22378303208',
+      }),
+    ];
+  }
+}
