@@ -53,7 +53,7 @@ class _ConnexionViewState extends State<ConnexionView> {
                 icon: Icon(Icons.arrow_back_ios_rounded, size: 18.sp),
               ),
               flexibleSpace: FlexibleSpaceBar(
-                 background: Container(color: Colors.grey[100]),
+                background: Container(color: Colors.grey[100]),
                 centerTitle: true,
                 title: Text(
                   "Connexion",
@@ -78,7 +78,7 @@ class _ConnexionViewState extends State<ConnexionView> {
                           "assets/logos/logo.png",
                           fit: BoxFit.cover,
                           width: 200.w,
-                          height: 200.h,
+                          height: 150.h,
                         ),
                       ),
                       Text(
@@ -197,7 +197,7 @@ class _ConnexionViewState extends State<ConnexionView> {
               ),
             ),
             SliverPadding(
-              padding: EdgeInsets.symmetric(horizontal: 16.r, vertical: 20.r),
+              padding: EdgeInsets.symmetric(horizontal: 16.r, vertical: 10.r),
               sliver: SliverToBoxAdapter(
                 child: Container(
                   decoration: BoxDecoration(
@@ -208,10 +208,10 @@ class _ConnexionViewState extends State<ConnexionView> {
                     onPressed: () {
                       _submitForm();
                     },
-        
+
                     style: ElevatedButton.styleFrom(
                       backgroundColor: Colors.deepOrangeAccent,
-        
+
                       minimumSize: Size(400.w, 40.h),
                     ),
                     child: Text(
@@ -226,7 +226,64 @@ class _ConnexionViewState extends State<ConnexionView> {
                 ),
               ),
             ),
-        
+            SliverPadding(
+              padding: EdgeInsets.symmetric(horizontal: 16.r, vertical: 20.r),
+              sliver: SliverToBoxAdapter(
+                child: Row(
+                  children: [
+                    Expanded(child: Divider(color: Colors.black, thickness: 1)),
+                    Padding(
+                      padding: EdgeInsets.symmetric(horizontal: 8.w),
+                      child: Text(
+                        "Ou continuer avec",
+                        style: GoogleFonts.roboto(
+                          fontSize: 12.sp,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.black,
+                        ),
+                      ),
+                    ),
+                    Expanded(child: Divider(color: Colors.black, thickness: 1)),
+                  ],
+                ),
+              ),
+            ),
+            SliverPadding(
+              padding: EdgeInsets.symmetric(horizontal: 16.r, vertical: 0.r),
+              sliver: SliverToBoxAdapter(
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Container(
+                      width: 80.w,
+                      height: 40.h,
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(10),
+                        border: Border.all(width: 1.sp, color: Colors.black54),
+                      ),
+                      child: IconButton(
+                        onPressed: () {},
+                        icon: Icon(Icons.g_mobiledata, size: 28.sp),
+                      ),
+                    ),
+                    SizedBox(width: 20.w),
+                    Container(
+                      width: 80.w,
+                      height: 40.h,
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(10),
+                        border: Border.all(width: 1.sp, color: Colors.black54),
+                      ),
+                      child: IconButton(
+                        onPressed: () {},
+                        icon: Icon(Icons.apple_outlined, size: 28.sp),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+
             SliverPadding(
               padding: EdgeInsets.symmetric(horizontal: 16.r, vertical: 20.r),
               sliver: SliverToBoxAdapter(

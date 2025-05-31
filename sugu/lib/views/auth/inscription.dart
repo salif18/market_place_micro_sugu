@@ -3,6 +3,8 @@ import 'package:flutter_mdi_icons/flutter_mdi_icons.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:sugu/views/auth/connexion.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 
 class InscriptionView extends StatefulWidget {
   const InscriptionView({super.key});
@@ -20,11 +22,47 @@ class _InscriptionViewState extends State<InscriptionView> {
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
 
-  void _submitForm() {
+  Future<void> _submitForm() async {
     // Vérification des champs obligatoires
-    if (_globalKey.currentState!.validate()) {
-      return;
-    } else {}
+    FirebaseFirestore db = FirebaseFirestore.instance;
+    try {
+      if (_globalKey.currentState!.validate()) {
+        // Étape 1 : créer l'utilisateur
+        final credential = await FirebaseAuth.instance
+            .createUserWithEmailAndPassword(
+              email: _emailController.text,
+              password: _passwordController.text,
+            );
+        final uid = credential.user!.uid;
+
+        // Étape 2 : enregistrer les infos dans Firestore
+        await db.collection('users').doc(uid).set({
+          'userId': uid,
+          // 'nom': _nameController.text,
+          'numero': _numeroController.text,
+          'email': _emailController.text,
+          'createdAt': Timestamp.now(),
+        });
+
+        ScaffoldMessenger.of(
+          context,
+        ).showSnackBar(SnackBar(content: Text('Inscription réussie')));
+        return;
+      } else {}
+    } on FirebaseAuthException catch (e) {
+      String message = 'Erreur inconnue';
+      if (e.code == 'weak-password') message = 'Mot de passe trop faible';
+      if (e.code == 'email-already-in-use') message = 'Email déjà utilisé';
+      if (e.code == 'invalid-email') message = 'Email invalide';
+
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(SnackBar(content: Text(message)));
+    } catch (e) {
+      print('Erreur: $e');
+    } finally {
+      // setState(() => isLoading = false);
+    }
   }
 
   @override
@@ -56,7 +94,7 @@ class _InscriptionViewState extends State<InscriptionView> {
                 icon: Icon(Icons.arrow_back_ios_rounded, size: 18.sp),
               ),
               flexibleSpace: FlexibleSpaceBar(
-                 background: Container(color: Colors.grey[100]),
+                background: Container(color: Colors.grey[100]),
                 centerTitle: true,
                 title: Text(
                   "Inscription",
@@ -104,36 +142,36 @@ class _InscriptionViewState extends State<InscriptionView> {
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      Padding(
-                        padding: EdgeInsets.symmetric(
-                          horizontal: 16.r,
-                          vertical: 8.r,
-                        ),
-                        child: TextFormField(
-                          keyboardType: TextInputType.text,
-                          controller: _nameController,
-                          validator: (value) {
-                            if (value!.isEmpty) {
-                              return 'Veuillez entrer un nom';
-                            }
-                            return null;
-                          },
-                          decoration: InputDecoration(
-                            hintText: "Nom",
-                            hintStyle: GoogleFonts.roboto(fontSize: 16.sp),
-                            filled: true,
-                            fillColor: Colors.white,
-                            contentPadding: EdgeInsets.symmetric(
-                              horizontal: 16.r,
-                              vertical: 10.r,
-                            ),
-                            border: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(10.r),
-                              borderSide: BorderSide.none,
-                            ),
-                          ),
-                        ),
-                      ),
+                      // Padding(
+                      //   padding: EdgeInsets.symmetric(
+                      //     horizontal: 16.r,
+                      //     vertical: 8.r,
+                      //   ),
+                      //   child: TextFormField(
+                      //     keyboardType: TextInputType.text,
+                      //     controller: _nameController,
+                      //     validator: (value) {
+                      //       if (value!.isEmpty) {
+                      //         return 'Veuillez entrer un nom';
+                      //       }
+                      //       return null;
+                      //     },
+                      //     decoration: InputDecoration(
+                      //       hintText: "Nom",
+                      //       hintStyle: GoogleFonts.roboto(fontSize: 16.sp),
+                      //       filled: true,
+                      //       fillColor: Colors.white,
+                      //       contentPadding: EdgeInsets.symmetric(
+                      //         horizontal: 16.r,
+                      //         vertical: 10.r,
+                      //       ),
+                      //       border: OutlineInputBorder(
+                      //         borderRadius: BorderRadius.circular(10.r),
+                      //         borderSide: BorderSide.none,
+                      //       ),
+                      //     ),
+                      //   ),
+                      // ),
                       Padding(
                         padding: EdgeInsets.symmetric(
                           horizontal: 16.r,
@@ -231,7 +269,7 @@ class _InscriptionViewState extends State<InscriptionView> {
                 ),
               ),
             ),
-        
+
             SliverPadding(
               padding: EdgeInsets.symmetric(horizontal: 16.r, vertical: 20.r),
               sliver: SliverToBoxAdapter(
@@ -244,10 +282,10 @@ class _InscriptionViewState extends State<InscriptionView> {
                     onPressed: () {
                       _submitForm();
                     },
-        
+
                     style: ElevatedButton.styleFrom(
                       backgroundColor: Colors.deepOrangeAccent,
-        
+
                       minimumSize: Size(400.w, 40.h),
                     ),
                     child: Text(
@@ -262,7 +300,65 @@ class _InscriptionViewState extends State<InscriptionView> {
                 ),
               ),
             ),
-        
+
+            SliverPadding(
+              padding: EdgeInsets.symmetric(horizontal: 16.r, vertical: 20.r),
+              sliver: SliverToBoxAdapter(
+                child: Row(
+                  children: [
+                    Expanded(child: Divider(color: Colors.black, thickness: 1)),
+                    Padding(
+                      padding: EdgeInsets.symmetric(horizontal: 8.w),
+                      child: Text(
+                        "Ou continuer avec",
+                        style: GoogleFonts.roboto(
+                          fontSize: 12.sp,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.black,
+                        ),
+                      ),
+                    ),
+                    Expanded(child: Divider(color: Colors.black, thickness: 1)),
+                  ],
+                ),
+              ),
+            ),
+            SliverPadding(
+              padding: EdgeInsets.symmetric(horizontal: 16.r, vertical: 0.r),
+              sliver: SliverToBoxAdapter(
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Container(
+                      width: 80.w,
+                      height: 40.h,
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(10),
+                        border: Border.all(width: 1.sp, color: Colors.black54),
+                      ),
+                      child: IconButton(
+                        onPressed: () {},
+                        icon: Icon(Mdi.google, size: 24.sp),
+                      ),
+                    ),
+                    SizedBox(width: 20.w),
+                    Container(
+                      width: 80.w,
+                      height: 40.h,
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(10),
+                        border: Border.all(width: 1.sp, color: Colors.black54),
+                      ),
+                      child: IconButton(
+                        onPressed: () {},
+                        icon: Icon(Icons.apple_outlined, size: 28.sp),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+
             SliverPadding(
               padding: EdgeInsets.symmetric(horizontal: 16.r, vertical: 20.r),
               sliver: SliverToBoxAdapter(
