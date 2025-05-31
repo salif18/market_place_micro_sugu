@@ -52,11 +52,21 @@ class _AideViewState extends State<AideView> {
                     ),
                   ),
                   SizedBox(height: 8.h),
-                  Text(
-                    'MicroSugu est une plateforme dédiée aux petits commerçants, artisans, vendeurs de quartier et auto-entrepreneurs du Mali. '
-                    'L’application vous permet de publier vos produits, gérer vos ventes et atteindre une clientèle plus large, en toute simplicité, depuis votre téléphone.\n\n'
-                    'Que vous vendiez du tissu, de la nourriture, des accessoires ou des services, MicroSugu vous aide à rendre votre commerce plus visible et plus accessible.',
-                    style: GoogleFonts.lato(fontSize: 14.sp),
+                  Container(
+                    padding: EdgeInsets.symmetric(
+                      vertical: 8.r,
+                      horizontal: 10.r,
+                    ),
+                    decoration: BoxDecoration(
+                      color: Colors.amber[100],
+                      borderRadius: BorderRadius.circular(16.r),
+                    ),
+                    child: Text(
+                      'MicroSugu est une plateforme dédiée aux petits commerçants, artisans, vendeurs de quartier et auto-entrepreneurs du Mali. '
+                      'L’application vous permet de publier vos produits, gérer vos ventes et atteindre une clientèle plus large, en toute simplicité, depuis votre téléphone.\n\n'
+                      'Que vous vendiez du tissu, de la nourriture, des accessoires ou des services, MicroSugu vous aide à rendre votre commerce plus visible et plus accessible.',
+                      style: GoogleFonts.lato(fontSize: 14.sp),
+                    ),
                   ),
                   SizedBox(height: 16.h),
                   Text(
@@ -67,10 +77,20 @@ class _AideViewState extends State<AideView> {
                     ),
                   ),
                   SizedBox(height: 8.h),
-                  Text(
-                    'Nous voulons digitaliser les petits marchés du Mali et donner aux commerçants locaux les outils pour évoluer dans un monde connecté. '
-                    'MicroSugu valorise l’économie locale, l’inclusion numérique et l’entrepreneuriat de proximité.',
-                    style: GoogleFonts.lato(fontSize: 14.sp),
+                  Container(
+                    padding: EdgeInsets.symmetric(
+                      vertical: 8.r,
+                      horizontal: 10.r,
+                    ),
+                    decoration: BoxDecoration(
+                      color: Colors.grey[100],
+                      borderRadius: BorderRadius.circular(16.r),
+                    ),
+                    child: Text(
+                      'Nous voulons digitaliser les petits marchés du Mali et donner aux commerçants locaux les outils pour évoluer dans un monde connecté. '
+                      'MicroSugu valorise l’économie locale, l’inclusion numérique et l’entrepreneuriat de proximité.',
+                      style: GoogleFonts.lato(fontSize: 14.sp),
+                    ),
                   ),
                   SizedBox(height: 16.h),
                   Text(
@@ -142,17 +162,27 @@ class BulletList extends StatelessWidget {
               .map(
                 (item) => Padding(
                   padding: EdgeInsets.symmetric(vertical: 2.r),
-                  child: Row(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text("• ", style: TextStyle(fontSize: 16.sp)),
-                      Expanded(
-                        child: Text(
-                          item,
-                          style: GoogleFonts.lato(fontSize: 14.sp),
+                  child: Container(
+                    padding: EdgeInsets.symmetric(
+                      vertical: 8.r,
+                      horizontal: 10.r,
+                    ),
+                    decoration: BoxDecoration(
+                      color: Colors.amber[100],
+                      borderRadius: BorderRadius.circular(16.r),
+                    ),
+                    child: Row(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text("• ", style: TextStyle(fontSize: 16.sp)),
+                        Expanded(
+                          child: Text(
+                            item,
+                            style: GoogleFonts.lato(fontSize: 14.sp),
+                          ),
                         ),
-                      ),
-                    ],
+                      ],
+                    ),
                   ),
                 ),
               )

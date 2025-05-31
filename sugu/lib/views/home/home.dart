@@ -389,7 +389,7 @@ class _HomeViewState extends State<HomeView> {
 
               SliverToBoxAdapter(
                 child: SizedBox(
-                  height: 250.h, // important pour afficher correctement
+                  height: 200.h, // important pour afficher correctement
                   child: ListView.builder(
                     scrollDirection: Axis.horizontal,
                     itemCount: fakeVehiculeData.length,
@@ -481,7 +481,7 @@ class _HomeViewState extends State<HomeView> {
                     crossAxisCount: 2,
                     crossAxisSpacing: 5,
                     mainAxisSpacing: 4,
-                    childAspectRatio: 0.85,
+                    childAspectRatio: 0.77,
                   ),
                   delegate: SliverChildBuilderDelegate((
                     BuildContext context,

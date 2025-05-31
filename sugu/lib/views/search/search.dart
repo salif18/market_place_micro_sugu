@@ -128,7 +128,7 @@ class _SearchViewState extends State<SearchView> {
                         size: 30.sp,
                       ),
                       hintText: "Que voulez-vous acheter ?",
-                      hintStyle: GoogleFonts.roboto(fontSize: 16.sp),
+                      hintStyle: GoogleFonts.roboto(fontSize: 15.sp),
                       border: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(50.r),
                         borderSide: BorderSide.none

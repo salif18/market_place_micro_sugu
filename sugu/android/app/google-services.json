@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "71240326158",
+    "project_id": "micro-sugu",
+    "storage_bucket": "micro-sugu.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:71240326158:android:5d23e4a875c16fa4d6705f",
+        "android_client_info": {
+          "package_name": "com.example.sugu"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDSW1inbVAAi5MB-OjlZBvVZV-uWR5gXbE"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

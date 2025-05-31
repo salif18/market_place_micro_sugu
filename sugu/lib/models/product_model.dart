@@ -14,6 +14,8 @@ class ProductModel {
   final String? typeCarburant;
   final String? transmission;
   final String numero;
+  final int views;
+  final List<String> viewsUserId;
 
   ProductModel({
     required this.id,
@@ -31,6 +33,8 @@ class ProductModel {
     this.typeCarburant,
     this.transmission,
     required this.numero,
+    required this.views,
+    required this.viewsUserId
   });
 
   factory ProductModel.fromJson(Map<String, dynamic> json) {
@@ -50,6 +54,8 @@ class ProductModel {
       typeCarburant: json['typeCarburant'],
       transmission: json['transmission'],
       numero: json['numero'] ?? '',
+      views: json["views" ] ?? 0,
+      viewsUserId:  List<String>.from(json['viewsUserId'] ?? []),
     );
   }
 
@@ -70,6 +76,8 @@ class ProductModel {
       'typeCarburant': typeCarburant,
       'transmission': transmission,
       'numero': numero,
+      'views':views,
+      'viewsUserId':viewsUserId
     };
   }
 
@@ -94,6 +102,8 @@ class ProductModel {
         'typeCarburant': 'Hybride',
         'transmission': 'Automatique',
         "numero": "+22378303208",
+        'views':100,
+        'viewsUserId':[]
       }),
       ProductModel.fromJson({
         '_id': "2",
@@ -114,6 +124,8 @@ class ProductModel {
         'typeCarburant': null,
         'transmission': null,
         "numero": "+22378303208",
+           'views':55,
+        'viewsUserId':[]
       }),
       ProductModel.fromJson({
         '_id': "3",
@@ -135,6 +147,8 @@ class ProductModel {
         'typeCarburant': null,
         'transmission': null,
         "numero": "+22378303208",
+           'views':820,
+        'viewsUserId':[]
       }),
       ProductModel.fromJson({
         '_id': "4",
@@ -154,6 +168,8 @@ class ProductModel {
         'typeCarburant': null,
         'transmission': null,
         "numero": "+22378303208",
+           'views':182,
+        'viewsUserId':[]
       }),
       ProductModel.fromJson({
         '_id': "5",
@@ -173,6 +189,8 @@ class ProductModel {
         'typeCarburant': null,
         'transmission': null,
         "numero": "+22378303208",
+           'views':10,
+        'viewsUserId':[]
       }),
       ProductModel.fromJson({
         '_id': "6",
@@ -193,6 +211,8 @@ class ProductModel {
         'typeCarburant': null,
         'transmission': null,
         "numero": "+22378303208",
+           'views':1820,
+        'viewsUserId':[]
       }),
       ProductModel.fromJson({
         '_id': "7",
@@ -212,6 +232,8 @@ class ProductModel {
         'typeCarburant': null,
         'transmission': null,
         "numero": "+22378303208",
+           'views':300,
+        'viewsUserId':[]
       }),
       ProductModel.fromJson({
         '_id': "8",
@@ -232,6 +254,8 @@ class ProductModel {
         'typeCarburant': 'Diesel',
         'transmission': 'Manuelle',
         "numero": "+22378303208",
+           'views':100,
+        'viewsUserId':[]
       }),
       ProductModel.fromJson({
         '_id': "9",
@@ -251,6 +275,8 @@ class ProductModel {
         'typeCarburant': 'Essence',
         'transmission': 'Manuelle',
         "numero": "+22378303208",
+           'views':11,
+        'viewsUserId':[]
       }),
       ProductModel.fromJson({
         '_id': "10",
@@ -270,6 +296,8 @@ class ProductModel {
         'typeCarburant': 'Diesel',
         'transmission': 'Automatique',
         "numero": "+22378303208",
+           'views':170,
+        'viewsUserId':[]
       }),
       ProductModel.fromJson({
         '_id': "11",
@@ -292,6 +320,8 @@ class ProductModel {
         'typeCarburant': null,
         'transmission': null,
         'numero': '+22378303208',
+           'views':100,
+        'viewsUserId':[]
       }),
       ProductModel.fromJson({
         '_id': "12",
@@ -314,6 +344,8 @@ class ProductModel {
         'typeCarburant': null,
         'transmission': null,
         'numero': '+22378303208',
+           'views':9,
+        'viewsUserId':[]
       }),
       ProductModel.fromJson({
         '_id': "13",
@@ -335,6 +367,8 @@ class ProductModel {
         'typeCarburant': null,
         'transmission': null,
         'numero': '+22378303208',
+        'views':100,
+        'viewsUserId':[]
       }),
     ];
   }

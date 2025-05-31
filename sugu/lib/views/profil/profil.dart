@@ -346,55 +346,60 @@ class _ProfilViewState extends State<ProfilView> {
                   padding: EdgeInsets.all(16.r),
                   child: Container(
                     padding: EdgeInsets.symmetric(horizontal: 8.r),
-                    height: 100.h,
+                   height: 100.h,
                     color: Colors.grey[200],
-                    child: Row(
+                    child: Column(
                       mainAxisAlignment: MainAxisAlignment.center,
-        
                       children: [
                         Expanded(
-                          flex: 2,
-                          child: Text(
-                            "Copyright ",
-                            style: GoogleFonts.roboto(
-                              fontSize: 14.sp,
-                              color: Colors.black,
-                            ),
-                          ),
-                        ),
-                        Expanded(
                           flex: 1,
-                          child: Icon(Mdi.copyright, size: 14.sp),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                                  
+                            children: [
+                              Expanded(
+                                flex: 2,
+                                child: Text(
+                                  "Copyright ",
+                                  style: GoogleFonts.roboto(
+                                    fontSize: 14.sp,
+                                    color: Colors.black,
+                                  ),
+                                ),
+                              ),
+                              Expanded(
+                                flex: 1,
+                                child: Icon(Mdi.copyright, size: 14.sp),
+                              ),
+                              Expanded(
+                                flex: 2,
+                                child: Text(
+                                  "2025",
+                                  style: GoogleFonts.roboto(
+                                    fontSize: 14.sp,
+                                    color: Colors.black,
+                                  ),
+                                ),
+                              ),
+                              Expanded(
+                                flex: 2,
+                                child: Image.asset(
+                                  "assets/logos/logo.png",
+                                  width: 80.w,
+                                  height: 100.h,
+                                  fit: BoxFit.cover,
+                                ),
+                              ),
+                                  
+                             
+                            ],
+                          ),
                         ),
                         Expanded(
-                          flex: 2,
-                          child: Text(
-                            "2025",
-                            style: GoogleFonts.roboto(
-                              fontSize: 14.sp,
-                              color: Colors.black,
+                          child: Center(
+                            child: Text("Développer par Salif Moctar")
                             ),
-                          ),
-                        ),
-                        Expanded(
-                          flex: 2,
-                          child: Image.asset(
-                            "assets/logos/logo.png",
-                            width: 80.w,
-                            height: 100.h,
-                            fit: BoxFit.cover,
-                          ),
-                        ),
-        
-                        // Expanded(
-                        //   flex: 2,
-                        //   child: Text("by kDev",  style: GoogleFonts.roboto(
-                        //         fontSize:
-                        //             constraints.maxWidth *
-                        //             min(AppSizes.responsiveValue(context, 14), 14),
-                        //         color: Colors.black,
-                        //       ),),
-                        // ),
+                        )
                       ],
                     ),
                   ),

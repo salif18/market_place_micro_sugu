@@ -53,12 +53,19 @@ class AboutView extends StatelessWidget {
             SliverPadding(
               padding: EdgeInsets.symmetric(horizontal: 16.r, vertical: 8.r),
               sliver: SliverToBoxAdapter(
-                child: Text(
-                  "Est une application mobile conçue pour les petits commerçants, vendeurs de quartier, artisans et entrepreneurs du Mali. Dans un monde où tout devient numérique, beaucoup de vendeurs locaux n’ont ni boutique en ligne, ni vitrine digitale. Micro Sugu leur offre un espace simple, gratuit et accessible pour présenter leurs produits, toucher plus de clients et développer leur activité. Inspirée du concept Micro Sugu, la plateforme allie modernité et ancrage culturel, en valorisant les acteurs du commerce de proximité tout en leur donnant les outils du digital. Avec Micro Sugu, le marché de chez nous devient connecté.",
-                  style: GoogleFonts.roboto(
-                    fontSize: 14.sp,
-                    fontWeight: FontWeight.w400,
-                    color: Colors.black,
+                child: Container(
+                    padding: EdgeInsets.symmetric(vertical: 8.r ,horizontal: 10.r),
+                    decoration: BoxDecoration(
+                       color: Colors.amber[100],
+                       borderRadius: BorderRadius.circular(16.r)
+                    ),
+                  child: Text(
+                    "Est une application mobile conçue pour les petits commerçants, vendeurs de quartier, artisans et entrepreneurs du Mali. Dans un monde où tout devient numérique, beaucoup de vendeurs locaux n’ont ni boutique en ligne, ni vitrine digitale. Micro Sugu leur offre un espace simple, gratuit et accessible pour présenter leurs produits, toucher plus de clients et développer leur activité. Inspirée du concept Micro Sugu, la plateforme allie modernité et ancrage culturel, en valorisant les acteurs du commerce de proximité tout en leur donnant les outils du digital. Avec Micro Sugu, le marché de chez nous devient connecté.",
+                    style: GoogleFonts.roboto(
+                      fontSize: 14.sp,
+                      fontWeight: FontWeight.w400,
+                      color: Colors.black,
+                    ),
                   ),
                 ),
               ),

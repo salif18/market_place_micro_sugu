@@ -111,7 +111,7 @@ class _CategorieViewState extends State<CategorieListView> {
     },
     {
       "id": 17,
-      "name": "sacs",
+      "name": "Sacs",
       "icon": Mdi.bagPersonalOutline,
       "color": Colors.red.shade300,
     },

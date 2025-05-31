@@ -161,6 +161,21 @@ class _SingleViewState extends State<SingleView> {
 
   List<ProductModel> fakeVehiculeData = ProductModel.getProducts();
 
+   @override
+  void initState() {
+    super.initState();
+    _incrementView(widget.item.id ?? "");
+  }
+
+  Future<void> _incrementView(String id) async {
+    try {
+       
+    } catch (e) {
+      print('Erreur: $e');
+    }
+  }
+
+
   @override
   Widget build(BuildContext context) {
     final fakeOtherData =
@@ -464,7 +479,7 @@ class _SingleViewState extends State<SingleView> {
                   crossAxisCount: 2,
                   crossAxisSpacing: 5,
                   mainAxisSpacing: 4,
-                  childAspectRatio: 0.85,
+                  childAspectRatio: 0.77,
                 ),
                 delegate: SliverChildBuilderDelegate((
                   BuildContext context,

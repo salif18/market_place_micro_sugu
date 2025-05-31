@@ -58,7 +58,7 @@ class _CategoriesViewState extends State<CategoriesView> {
                   crossAxisCount: 2,
                   crossAxisSpacing: 5,
                   mainAxisSpacing: 4,
-                  childAspectRatio: 0.85,
+                  childAspectRatio: 0.77,
                 ),
                 delegate: SliverChildBuilderDelegate((
                   BuildContext context,
