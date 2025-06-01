@@ -1,5 +1,8 @@
 import 'dart:io';
 
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mdi_icons/flutter_mdi_icons.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -21,7 +24,7 @@ class _AddArticlesState extends State<AddArticles> {
   final TextEditingController _localisationController = TextEditingController();
   final TextEditingController _numeroController = TextEditingController();
   // Variables pour les sélections
-  Map<String, dynamic>? _selectedCategory;
+  String? _selectedCategory;
   String? _selectedEtat;
 
   List<Map<String, dynamic>> categories = [
@@ -75,49 +78,73 @@ class _AddArticlesState extends State<AddArticles> {
     }
   }
 
-  void _submitForm() {
-    // Vérification des champs obligatoires
-    if (_titreController.text.isEmpty ||
-        _prixController.text.isEmpty ||
-        _selectedCategory == null ||
-        _selectedEtat == null) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text("Veuillez remplir tous les champs obligatoires"),
-        ),
-      );
-      return;
-    }
+  Future<List<String>> uploadImagesToFirebase(List<XFile> images) async {
+  final storage = FirebaseStorage.instance;
+  List<String> downloadUrls = [];
 
-    // Création de l'objet avec les données du formulaire
+  for (var image in images) {
+    final fileName = DateTime.now().millisecondsSinceEpoch.toString();
+    final ref = storage.ref().child('articles_images/$fileName.jpg');
+    await ref.putFile(File(image.path));
+    final url = await ref.getDownloadURL();
+    downloadUrls.add(url);
+  }
+
+  return downloadUrls;
+}
+
+
+  void _submitForm() async {
+  if (_titreController.text.isEmpty ||
+      _prixController.text.isEmpty ||
+      _selectedCategory == null ||
+      _selectedEtat == null) {
+    ScaffoldMessenger.of(context).showSnackBar(
+      const SnackBar(content: Text("Veuillez remplir tous les champs obligatoires")),
+    );
+    return;
+  }
+
+  try {
+    // Upload des images
+    List<String> imageUrls = await uploadImagesToFirebase(gallerieImages);
+
+    // Création du document Firestore
     final vehiculeData = {
       'titre': _titreController.text,
       'prix': _prixController.text,
       'description': _descriptionController.text,
       'localisation': _localisationController.text,
-      'groupe':"articles",
+      'groupe': "articles",
       'categorie': _selectedCategory,
       'etat': _selectedEtat,
-      'images': gallerieImages.map((file) => file.path).toList(),
-      "modele": null,
-      "annee": null,
-      "kilometrage": null,
-      "typeCarburant": null,
-      "transmission": null,
-      "numero": _numeroController.text,
+      'images': imageUrls,
+      'modele': null,
+      'annee': null,
+      'kilometrage': null,
+      'typeCarburant': null,
+      'transmission': null,
+      'numero': _numeroController.text,
+      'createdAt': FieldValue.serverTimestamp(),
+      'userId': FirebaseAuth.instance.currentUser?.uid,
     };
 
-    // Ici vous pouvez traiter les données (envoi à une API, sauvegarde locale, etc.)
-    print(vehiculeData);
+    await FirebaseFirestore.instance.collection('articles').add(vehiculeData);
 
-    // Affichage d'un message de succès
     ScaffoldMessenger.of(context).showSnackBar(
-      const SnackBar(content: Text("Véhicule publié avec succès")),
+      const SnackBar(content: Text("Article publié avec succès")),
     );
 
-    // Optionnel: Redirection ou reset du formulaire
-    // Navigator.pop(context);
+    // Réinitialiser ou rediriger
+    Navigator.pop(context);
+  } catch (e) {
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(content: Text("Erreur lors de la publication : $e")),
+    );
+    print("Erreur lors de la publication : $e");
   }
+}
+
 
   @override
   void dispose() {
@@ -305,7 +332,7 @@ class _AddArticlesState extends State<AddArticles> {
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
                                 Text(
-                                  _selectedCategory?['name'] ?? "Catégorie",
+                                  _selectedCategory ?? "Catégorie",
                                   style: GoogleFonts.roboto(fontSize: 16.sp),
                                 ),
                                 Icon(Icons.arrow_drop_down_outlined, size: 24.sp),
@@ -494,12 +521,12 @@ class _AddArticlesState extends State<AddArticles> {
                             return TextButton.icon(
                               onPressed: () {
                                 setState(() {
-                                  _selectedCategory = item;
+                                  _selectedCategory = item["name"];
                                 });
                                 Navigator.pop(context);
                               },
                               label: Text(
-                                item["name"],
+                                item["name"].toString(),
                                 style: GoogleFonts.roboto(
                                   fontSize: 16.sp,
                                   fontWeight: FontWeight.w600,

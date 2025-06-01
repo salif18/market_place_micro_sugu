@@ -1,9 +1,13 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mdi_icons/flutter_mdi_icons.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 import 'package:sugu/views/auth/forget_pass.dart';
 import 'package:sugu/views/auth/inscription.dart';
+import 'package:sugu/views/profil/profil.dart';
 
 class ConnexionView extends StatefulWidget {
   const ConnexionView({super.key});
@@ -15,15 +19,99 @@ class ConnexionView extends StatefulWidget {
 class _ConnexionViewState extends State<ConnexionView> {
   // CLE KEY POUR LE FORMULAIRE
   final GlobalKey<FormState> _globalKey = GlobalKey<FormState>();
+  final _auth = FirebaseAuth.instance;
+  final _firestore = FirebaseFirestore.instance;
+
   // Contrôleurs pour les champs de formulaire
   final TextEditingController _contactController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
 
-  void _submitForm() {
-    // Vérification des champs obligatoires
-    if (_globalKey.currentState!.validate()) {
-      return;
-    } else {}
+  void _signInWithEmailAndPassword() async {
+  if (_globalKey.currentState!.validate()) {
+    try {
+      UserCredential userCredential = await _auth.signInWithEmailAndPassword(
+        email: _contactController.text.trim(),
+        password: _passwordController.text.trim(),
+      );
+
+      final user = userCredential.user;
+      if (user != null) {
+        print("Connecté : ${user.email}");
+        Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(builder: (_) => ProfilView()),
+        );
+      }
+    } on FirebaseAuthException catch (e) {
+      String message = '';
+      if (e.code == 'user-not-found') {
+        message = 'Aucun utilisateur trouvé pour cet e-mail.';
+      } else if (e.code == 'wrong-password') {
+        message = 'Mot de passe incorrect.';
+      } else {
+        message = 'Erreur : ${e.message}';
+      }
+
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text(message)),
+      );
+    }
+  }
+}
+
+
+  Future<void> signInWithGoogle() async {
+    try {
+      // Déclencher la fenêtre de connexion Google
+      final GoogleSignInAccount? googleUser = await GoogleSignIn().signIn();
+
+      if (googleUser == null) {
+        print('Connexion annulée par l’utilisateur.');
+        return;
+      }
+
+      // Récupérer les infos d'authentification
+      final GoogleSignInAuthentication googleAuth =
+          await googleUser.authentication;
+
+      final AuthCredential credential = GoogleAuthProvider.credential(
+        accessToken: googleAuth.accessToken,
+        idToken: googleAuth.idToken,
+      );
+
+      // Connexion Firebase avec l'identifiant Google
+      UserCredential userCredential = await _auth.signInWithCredential(
+        credential,
+      );
+
+      // Récupérer l'utilisateur
+      final user = userCredential.user;
+
+      // Vérifier si c'est un nouvel utilisateur
+      if (userCredential.additionalUserInfo!.isNewUser) {
+        await _firestore.collection('users').doc(user!.uid).set({
+          "userId": user.uid,
+          'name': user.displayName,
+          'email': user.email,
+          'numero': user.phoneNumber ?? "",
+          'photo': user.photoURL ?? "",
+          'createdAt': Timestamp.now(),
+          'provider': 'google',
+        });
+      }
+
+       if (user != null) {
+        print("Connecté : ${user.email}");
+        Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(builder: (_) => ProfilView()),
+        );
+      }
+
+      print('Connexion réussie avec Google : ${user?.email}');
+    } catch (e) {
+      print('Erreur Google Sign-In : $e');
+    }
   }
 
   @override
@@ -73,7 +161,7 @@ class _ConnexionViewState extends State<ConnexionView> {
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       Container(
-                        height: 150.h,
+                        height: 100.h,
                         child: Image.asset(
                           "assets/logos/logo.png",
                           fit: BoxFit.cover,
@@ -206,7 +294,7 @@ class _ConnexionViewState extends State<ConnexionView> {
                   padding: EdgeInsets.symmetric(horizontal: 14.r),
                   child: ElevatedButton(
                     onPressed: () {
-                      _submitForm();
+                    _signInWithEmailAndPassword();
                     },
 
                     style: ElevatedButton.styleFrom(
@@ -254,31 +342,33 @@ class _ConnexionViewState extends State<ConnexionView> {
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    Container(
-                      width: 80.w,
+                     Container(
+                      width: 300.w,
                       height: 40.h,
                       decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(10),
-                        border: Border.all(width: 1.sp, color: Colors.black54),
+                        borderRadius: BorderRadius.circular(50.r),
+                        border: Border.all(width: 2.2.sp, color: Colors.white),
                       ),
                       child: IconButton(
-                        onPressed: () {},
-                        icon: Icon(Icons.g_mobiledata, size: 28.sp),
+                        onPressed: () {
+                          signInWithGoogle();
+                        },
+                        icon: Image.asset("assets/images/google.jpg",width: 40.w , height: 40.h,fit:  BoxFit.cover,),
                       ),
                     ),
-                    SizedBox(width: 20.w),
-                    Container(
-                      width: 80.w,
-                      height: 40.h,
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(10),
-                        border: Border.all(width: 1.sp, color: Colors.black54),
-                      ),
-                      child: IconButton(
-                        onPressed: () {},
-                        icon: Icon(Icons.apple_outlined, size: 28.sp),
-                      ),
-                    ),
+                    // SizedBox(width: 20.w),
+                    // Container(
+                    //   width: 80.w,
+                    //   height: 40.h,
+                    //   decoration: BoxDecoration(
+                    //     borderRadius: BorderRadius.circular(10),
+                    //     border: Border.all(width: 1.sp, color: Colors.black54),
+                    //   ),
+                    //   child: IconButton(
+                    //     onPressed: () {},
+                    //     icon: Icon(Icons.apple_outlined, size: 28.sp),
+                    //   ),
+                    // ),
                   ],
                 ),
               ),

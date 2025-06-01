@@ -417,7 +417,7 @@ class _HomeViewState extends State<HomeView> {
                               Expanded(
                                 flex: 4,
                                 child: Image.network(
-                                  item.images[0],
+                                  item.images[0] ?? "",
                                   fit: BoxFit.cover,
                                   width: double.infinity,
                                 ),
@@ -511,7 +511,7 @@ class _HomeViewState extends State<HomeView> {
                             Expanded(
                               flex: 4,
                               child: Image.network(
-                                item.images[0],
+                                item.images[0] ?? "",
                                 fit: BoxFit.cover,
                                 width: double.infinity,
                               ),

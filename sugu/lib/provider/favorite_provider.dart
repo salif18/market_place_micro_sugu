@@ -45,7 +45,7 @@ class FavoriteProvider extends ChangeNotifier {
     if (favoritesJsonString != null) {
       final favoritesJson = jsonDecode(favoritesJsonString) as List;
       _favoriteArray = favoritesJson
-          .map((item) => ProductModel.fromJson(item as Map<String, dynamic>))
+          .map((item) => ProductModel.fromJson(item as Map<String, dynamic>, item["id"]))
           .toList();
        
     }

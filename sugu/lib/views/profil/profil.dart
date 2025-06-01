@@ -1,3 +1,4 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mdi_icons/flutter_mdi_icons.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -17,6 +18,50 @@ class ProfilView extends StatefulWidget {
 }
 
 class _ProfilViewState extends State<ProfilView> {
+
+  Future<void> signOut(BuildContext context) async {
+  try {
+    await FirebaseAuth.instance.signOut();
+    print("Utilisateur déconnecté avec succès.");
+
+    // Optionnel : rediriger vers la page de login ou d'accueil non connecté
+    Navigator.pushReplacement(
+      context,
+      MaterialPageRoute(builder: (_) => ConnexionView()), // remplace par ta page login
+    );
+  } catch (e) {
+    print("Erreur lors de la déconnexion : $e");
+  }
+}
+
+Future<void> deleteUserAccount(BuildContext context) async {
+  try {
+    User? user = FirebaseAuth.instance.currentUser;
+    if (user == null) {
+      print("Aucun utilisateur connecté.");
+      return;
+    }
+
+    await user.delete();
+    print("Compte supprimé avec succès.");
+
+    // Optionnel : rediriger vers la page de connexion ou accueil
+    Navigator.pushReplacement(
+      context,
+      MaterialPageRoute(builder: (_) => ConnexionView()), // remplace par ta page login
+    );
+  } on FirebaseAuthException catch (e) {
+    if (e.code == 'requires-recent-login') {
+      print("Action sensible : veuillez vous reconnecter avant de supprimer le compte.");
+      // Ici, tu peux demander à l'utilisateur de se reconnecter (email/mdp, google, etc.)
+    } else {
+      print("Erreur lors de la suppression : ${e.message}");
+    }
+  } catch (e) {
+    print("Erreur inattendue : $e");
+  }
+}
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -85,43 +130,43 @@ class _ProfilViewState extends State<ProfilView> {
                   ),
                 ),
                 SizedBox(height: 10.h),
-                Padding(
-                  padding: EdgeInsets.symmetric(horizontal: 16.r),
-                  child: Container(
-                    decoration: BoxDecoration(
-                      color: Colors.white,
-                      borderRadius: BorderRadius.circular(10.r),
-                      border: Border(
-                        bottom: BorderSide(width: 1, color: Colors.grey[200]!),
-                      ),
-                    ),
-                    child: ListTile(
-                      leading: Icon(
-                        Icons.mode_edit_outline_outlined,
-                        size: 20.sp,
-                      ),
-                      title: Text(
-                        "Modifier profil",
-                        style: GoogleFonts.roboto(
-                          fontSize: 16.sp,
-                          fontWeight: FontWeight.w400,
-                          color: Colors.black,
-                        ),
-                      ),
-                      trailing: Icon(
-                        Icons.arrow_forward_ios_rounded,
-                        size: 18.sp,
-                      ),
-                      onTap:
-                          () => Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => const ConnexionView(),
-                            ),
-                          ),
-                    ),
-                  ),
-                ),
+                // Padding(
+                //   padding: EdgeInsets.symmetric(horizontal: 16.r),
+                //   child: Container(
+                //     decoration: BoxDecoration(
+                //       color: Colors.white,
+                //       borderRadius: BorderRadius.circular(10.r),
+                //       border: Border(
+                //         bottom: BorderSide(width: 1, color: Colors.grey[200]!),
+                //       ),
+                //     ),
+                //     child: ListTile(
+                //       leading: Icon(
+                //         Icons.mode_edit_outline_outlined,
+                //         size: 20.sp,
+                //       ),
+                //       title: Text(
+                //         "Modifier profil",
+                //         style: GoogleFonts.roboto(
+                //           fontSize: 16.sp,
+                //           fontWeight: FontWeight.w400,
+                //           color: Colors.black,
+                //         ),
+                //       ),
+                //       trailing: Icon(
+                //         Icons.arrow_forward_ios_rounded,
+                //         size: 18.sp,
+                //       ),
+                //       onTap:
+                //           () => Navigator.push(
+                //             context,
+                //             MaterialPageRoute(
+                //               builder: (context) => const ConnexionView(),
+                //             ),
+                //           ),
+                //     ),
+                //   ),
+                // ),
                 Padding(
                   padding: EdgeInsets.symmetric(horizontal: 16.r),
                   child: Container(
@@ -484,7 +529,7 @@ class _ProfilViewState extends State<ProfilView> {
                             backgroundColor: Colors.red[700],
                             padding: EdgeInsets.symmetric(vertical: 16.r),
                           ),
-                          onPressed: () => Navigator.pop(context, true),
+                          onPressed: () => deleteUserAccount(context),
                           child: Text(
                             "Supprimer",
                             style: GoogleFonts.roboto(
@@ -568,7 +613,7 @@ class _ProfilViewState extends State<ProfilView> {
                             backgroundColor: Colors.deepOrange[700],
                             padding: EdgeInsets.symmetric(vertical: 14.r),
                           ),
-                          onPressed: () => Navigator.pop(context, true),
+                          onPressed: () => signOut(context),
                           child: Text(
                             "Oui",
                             style: GoogleFonts.roboto(

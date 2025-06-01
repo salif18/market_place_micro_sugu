@@ -251,7 +251,7 @@ class _SingleViewState extends State<SingleView> {
                   itemCount: widget.item.images.length,
                   itemBuilder: (context, index) {
                     return Image.network(
-                      widget.item.images[index],
+                      widget.item.images[index] ?? "",
                       width: double.infinity,
                       fit: BoxFit.cover,
                     );
@@ -509,7 +509,7 @@ class _SingleViewState extends State<SingleView> {
                           Expanded(
                             flex: 4,
                             child: Image.network(
-                              item.images[0],
+                              item.images[0] ?? "",
                               fit: BoxFit.cover,
                               width: double.infinity,
                             ),

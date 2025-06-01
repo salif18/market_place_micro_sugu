@@ -1,8 +1,10 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 import 'package:sugu/provider/favorite_provider.dart';
+import 'package:sugu/views/auth/connexion.dart';
 
 import 'package:sugu/views/favorites/favorite.dart';
 import 'package:sugu/views/home/home.dart';
@@ -29,8 +31,38 @@ class _MyRootsState extends State<MyRoots> {
             HomeView(),
             FavoriteView(),
             SearchView(),
-            AnnonceView(),
-            ProfilView(),
+            StreamBuilder<User?>(
+              stream: FirebaseAuth.instance.authStateChanges(),
+              builder: (context, snapshot) {
+                if (snapshot.connectionState == ConnectionState.waiting) {
+                  return CircularProgressIndicator();
+                }
+
+                if (snapshot.hasData) {
+                  // L'utilisateur est connecté
+                  return AnnonceView(); // ou HomePage, etc.
+                } else {
+                  // L'utilisateur n'est pas connecté
+                  return ConnexionView(); // ou autre page de connexion
+                }
+              },
+            ),
+            StreamBuilder<User?>(
+              stream: FirebaseAuth.instance.authStateChanges(),
+              builder: (context, snapshot) {
+                if (snapshot.connectionState == ConnectionState.waiting) {
+                  return CircularProgressIndicator();
+                }
+
+                if (snapshot.hasData) {
+                  // L'utilisateur est connecté
+                  return ProfilView(); // ou HomePage, etc.
+                } else {
+                  // L'utilisateur n'est pas connecté
+                  return ConnexionView(); // ou autre page de connexion
+                }
+              },
+            ),
           ][_currentIndex],
       bottomNavigationBar: _buildBottomNavigation(),
     );
@@ -39,10 +71,8 @@ class _MyRootsState extends State<MyRoots> {
   Widget _buildBottomNavigation() {
     return Container(
       height: 60.h,
-      decoration: BoxDecoration( 
-        border: Border( 
-          top: BorderSide(width: 1,color: Colors.grey[100]!)
-        )
+      decoration: BoxDecoration(
+        border: Border(top: BorderSide(width: 1, color: Colors.grey[100]!)),
       ),
       child: BottomNavigationBar(
         type: BottomNavigationBarType.fixed,

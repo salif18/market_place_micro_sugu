@@ -1,5 +1,6 @@
 class ProductModel {
   final String? id;
+  final String? userId;
   final String titre;
   final String prix;
   final String description;
@@ -14,11 +15,12 @@ class ProductModel {
   final String? typeCarburant;
   final String? transmission;
   final String numero;
-  final int views;
-  final List<String> viewsUserId;
+  final int? views;
+  final List<String?> viewsUserId;
 
   ProductModel({
     required this.id,
+    required this.userId,
     required this.titre,
     required this.prix,
     required this.description,
@@ -37,9 +39,10 @@ class ProductModel {
     required this.viewsUserId
   });
 
-  factory ProductModel.fromJson(Map<String, dynamic> json) {
+  factory ProductModel.fromJson(Map<String, dynamic> json,String id) {
     return ProductModel(
-      id: json["_id"],
+      id: id,
+      userId: json["userId"],
       titre: json['titre'] ?? '',
       prix: json['prix'] ?? '',
       description: json['description'] ?? '',
@@ -61,7 +64,8 @@ class ProductModel {
 
   Map<String, dynamic> toJson() {
     return {
-      '_id': id,
+      'id': id,
+      "userId":userId,
       'titre': titre,
       'prix': prix,
       'description': description,
@@ -84,7 +88,7 @@ class ProductModel {
   static List<ProductModel> getProducts() {
     return [
       ProductModel.fromJson({
-        "_id": "1",
+        "id": "1",
         'titre': 'Toyota Corolla 2021',
         'prix': '22500',
         'description': 'Voiture économique en excellent état, entretien à jour',
@@ -104,7 +108,7 @@ class ProductModel {
         "numero": "+22378303208",
         'views':100,
         'viewsUserId':[]
-      }),
+      },"1"),
       ProductModel.fromJson({
         '_id': "2",
         'titre': 'Perceuse visseuse Makita 18V',
@@ -126,7 +130,7 @@ class ProductModel {
         "numero": "+22378303208",
            'views':55,
         'viewsUserId':[]
-      }),
+      },"2"),
       ProductModel.fromJson({
         '_id': "3",
         'titre': 'Canapé 3 places en cuir',
@@ -149,7 +153,7 @@ class ProductModel {
         "numero": "+22378303208",
            'views':820,
         'viewsUserId':[]
-      }),
+      },"3"),
       ProductModel.fromJson({
         '_id': "4",
         'titre': 'Manteau en laine homme Zara',
@@ -170,7 +174,7 @@ class ProductModel {
         "numero": "+22378303208",
            'views':182,
         'viewsUserId':[]
-      }),
+      },"4"),
       ProductModel.fromJson({
         '_id': "5",
         'titre': 'Tondeuse à gazon électrique',
@@ -191,7 +195,7 @@ class ProductModel {
         "numero": "+22378303208",
            'views':10,
         'viewsUserId':[]
-      }),
+      },"5"),
       ProductModel.fromJson({
         '_id': "6",
         'titre': 'iPhone 13 Pro 128GB',
@@ -213,7 +217,7 @@ class ProductModel {
         "numero": "+22378303208",
            'views':1820,
         'viewsUserId':[]
-      }),
+      },"6"),
       ProductModel.fromJson({
         '_id': "7",
         'titre': 'Lego Star Wars Millenium Falcon',
@@ -234,7 +238,7 @@ class ProductModel {
         "numero": "+22378303208",
            'views':300,
         'viewsUserId':[]
-      }),
+      },"7"),
       ProductModel.fromJson({
         '_id': "8",
         'titre': 'Toyota Hilux 4x4 Diesel',
@@ -256,7 +260,7 @@ class ProductModel {
         "numero": "+22378303208",
            'views':100,
         'viewsUserId':[]
-      }),
+      },"8"),
       ProductModel.fromJson({
         '_id': "9",
         'titre': 'Renault Clio 5 Intens',
@@ -277,7 +281,7 @@ class ProductModel {
         "numero": "+22378303208",
            'views':11,
         'viewsUserId':[]
-      }),
+      },"9"),
       ProductModel.fromJson({
         '_id': "10",
         'titre': 'Mercedes Classe E 220d',
@@ -298,7 +302,7 @@ class ProductModel {
         "numero": "+22378303208",
            'views':170,
         'viewsUserId':[]
-      }),
+      },"10"),
       ProductModel.fromJson({
         '_id': "11",
         'titre': 'Belle villa moderne 4 chambres',
@@ -322,7 +326,7 @@ class ProductModel {
         'numero': '+22378303208',
            'views':100,
         'viewsUserId':[]
-      }),
+      },"11"),
       ProductModel.fromJson({
         '_id': "12",
         'titre': 'Villa moderne 4 chambres',
@@ -346,7 +350,7 @@ class ProductModel {
         'numero': '+22378303208',
            'views':9,
         'viewsUserId':[]
-      }),
+      },"12"),
       ProductModel.fromJson({
         '_id': "13",
         'titre': 'Maison meublée à louer',
@@ -369,7 +373,7 @@ class ProductModel {
         'numero': '+22378303208',
         'views':100,
         'viewsUserId':[]
-      }),
+      },"13"),
     ];
   }
 }

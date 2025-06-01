@@ -2,9 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_mdi_icons/flutter_mdi_icons.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 import 'package:sugu/views/auth/connexion.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:sugu/views/profil/profil.dart';
 
 class InscriptionView extends StatefulWidget {
   const InscriptionView({super.key});
@@ -16,39 +18,50 @@ class InscriptionView extends StatefulWidget {
 class _InscriptionViewState extends State<InscriptionView> {
   // CLE KEY POUR LE FORMULAIRE
   final GlobalKey<FormState> _globalKey = GlobalKey<FormState>();
+  final _auth = FirebaseAuth.instance;
+  final _firestore = FirebaseFirestore.instance;
+
   // Contrôleurs pour les champs de formulaire
   final TextEditingController _nameController = TextEditingController();
   final TextEditingController _numeroController = TextEditingController();
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
 
-  Future<void> _submitForm() async {
+  Future<void> _singInWithEmailAndPassword() async {
     // Vérification des champs obligatoires
-    FirebaseFirestore db = FirebaseFirestore.instance;
     try {
       if (_globalKey.currentState!.validate()) {
         // Étape 1 : créer l'utilisateur
-        final credential = await FirebaseAuth.instance
-            .createUserWithEmailAndPassword(
-              email: _emailController.text,
-              password: _passwordController.text,
-            );
-        final uid = credential.user!.uid;
+        UserCredential userCred = await _auth.createUserWithEmailAndPassword(
+          email: _emailController.text.trim(),
+          password: _passwordController.text.trim(),
+        );
+        final uid = userCred.user!.uid;
 
         // Étape 2 : enregistrer les infos dans Firestore
-        await db.collection('users').doc(uid).set({
+        await _firestore.collection('users').doc(uid).set({
           'userId': uid,
-          // 'nom': _nameController.text,
+          'name': _nameController.text,
           'numero': _numeroController.text,
           'email': _emailController.text,
+          "photo": '',
           'createdAt': Timestamp.now(),
         });
 
         ScaffoldMessenger.of(
           context,
         ).showSnackBar(SnackBar(content: Text('Inscription réussie')));
+        
+         if (userCred.user != null) {
+        print("Connecté : ${userCred.user!.email}");
+        Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(builder: (_) => ProfilView()),
+        );
+      }
+      } else {
         return;
-      } else {}
+      }
     } on FirebaseAuthException catch (e) {
       String message = 'Erreur inconnue';
       if (e.code == 'weak-password') message = 'Mot de passe trop faible';
@@ -62,6 +75,59 @@ class _InscriptionViewState extends State<InscriptionView> {
       print('Erreur: $e');
     } finally {
       // setState(() => isLoading = false);
+    }
+  }
+
+  Future<void> signInWithGoogle() async {
+    try {
+      // Déclencher la fenêtre de connexion Google
+      final GoogleSignInAccount? googleUser = await GoogleSignIn().signIn();
+
+      if (googleUser == null) {
+        print('Connexion annulée par l’utilisateur.');
+        return;
+      }
+
+      // Récupérer les infos d'authentification
+      final GoogleSignInAuthentication googleAuth =
+          await googleUser.authentication;
+
+      final AuthCredential credential = GoogleAuthProvider.credential(
+        accessToken: googleAuth.accessToken,
+        idToken: googleAuth.idToken,
+      );
+
+      // Connexion Firebase avec l'identifiant Google
+      UserCredential userCredential = await _auth.signInWithCredential(
+        credential,
+      );
+
+      // Récupérer l'utilisateur
+      final user = userCredential.user;
+
+      // Vérifier si c'est un nouvel utilisateur
+      if (userCredential.additionalUserInfo!.isNewUser) {
+        await _firestore.collection('users').doc(user!.uid).set({
+          "userId": user.uid,
+          'name': user.displayName,
+          'email': user.email,
+          'numero': user.phoneNumber ?? "",
+          'photo': user.photoURL ?? "",
+          'createdAt': Timestamp.now(),
+          'provider': 'google',
+        });
+      }
+        if (user != null) {
+        print("Connecté : ${user.email}");
+        Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(builder: (_) => ProfilView()),
+        );
+      }
+
+      print('Connexion réussie avec Google : ${user?.email}');
+    } catch (e) {
+      print('Erreur Google Sign-In : $e');
     }
   }
 
@@ -114,7 +180,7 @@ class _InscriptionViewState extends State<InscriptionView> {
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       Container(
-                        height: 150.h,
+                        height: 100.h,
                         child: Image.asset(
                           "assets/logos/logo.png",
                           fit: BoxFit.cover,
@@ -142,36 +208,36 @@ class _InscriptionViewState extends State<InscriptionView> {
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      // Padding(
-                      //   padding: EdgeInsets.symmetric(
-                      //     horizontal: 16.r,
-                      //     vertical: 8.r,
-                      //   ),
-                      //   child: TextFormField(
-                      //     keyboardType: TextInputType.text,
-                      //     controller: _nameController,
-                      //     validator: (value) {
-                      //       if (value!.isEmpty) {
-                      //         return 'Veuillez entrer un nom';
-                      //       }
-                      //       return null;
-                      //     },
-                      //     decoration: InputDecoration(
-                      //       hintText: "Nom",
-                      //       hintStyle: GoogleFonts.roboto(fontSize: 16.sp),
-                      //       filled: true,
-                      //       fillColor: Colors.white,
-                      //       contentPadding: EdgeInsets.symmetric(
-                      //         horizontal: 16.r,
-                      //         vertical: 10.r,
-                      //       ),
-                      //       border: OutlineInputBorder(
-                      //         borderRadius: BorderRadius.circular(10.r),
-                      //         borderSide: BorderSide.none,
-                      //       ),
-                      //     ),
-                      //   ),
-                      // ),
+                      Padding(
+                        padding: EdgeInsets.symmetric(
+                          horizontal: 16.r,
+                          vertical: 8.r,
+                        ),
+                        child: TextFormField(
+                          keyboardType: TextInputType.text,
+                          controller: _nameController,
+                          validator: (value) {
+                            if (value!.isEmpty) {
+                              return 'Veuillez entrer un nom';
+                            }
+                            return null;
+                          },
+                          decoration: InputDecoration(
+                            hintText: "Nom",
+                            hintStyle: GoogleFonts.roboto(fontSize: 16.sp),
+                            filled: true,
+                            fillColor: Colors.white,
+                            contentPadding: EdgeInsets.symmetric(
+                              horizontal: 16.r,
+                              vertical: 10.r,
+                            ),
+                            border: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(10.r),
+                              borderSide: BorderSide.none,
+                            ),
+                          ),
+                        ),
+                      ),
                       Padding(
                         padding: EdgeInsets.symmetric(
                           horizontal: 16.r,
@@ -280,7 +346,7 @@ class _InscriptionViewState extends State<InscriptionView> {
                   padding: EdgeInsets.symmetric(horizontal: 14.r),
                   child: ElevatedButton(
                     onPressed: () {
-                      _submitForm();
+                      _singInWithEmailAndPassword();
                     },
 
                     style: ElevatedButton.styleFrom(
@@ -328,32 +394,35 @@ class _InscriptionViewState extends State<InscriptionView> {
               sliver: SliverToBoxAdapter(
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.center,
+                 
                   children: [
                     Container(
-                      width: 80.w,
+                      width: 300.w,
                       height: 40.h,
                       decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(10),
-                        border: Border.all(width: 1.sp, color: Colors.black54),
+                        borderRadius: BorderRadius.circular(50.r),
+                        border: Border.all(width: 2.2.sp, color: Colors.white),
                       ),
                       child: IconButton(
-                        onPressed: () {},
-                        icon: Icon(Mdi.google, size: 24.sp),
+                        onPressed: () {
+                          signInWithGoogle();
+                        },
+                        icon: Image.asset("assets/images/google.jpg",width: 40.w , height: 40.h,fit:  BoxFit.cover,),
                       ),
                     ),
-                    SizedBox(width: 20.w),
-                    Container(
-                      width: 80.w,
-                      height: 40.h,
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(10),
-                        border: Border.all(width: 1.sp, color: Colors.black54),
-                      ),
-                      child: IconButton(
-                        onPressed: () {},
-                        icon: Icon(Icons.apple_outlined, size: 28.sp),
-                      ),
-                    ),
+                    // SizedBox(width: 20.w),
+                    // Container(
+                    //   width: 80.w,
+                    //   height: 40.h,
+                    //   decoration: BoxDecoration(
+                    //     borderRadius: BorderRadius.circular(10),
+                    //     border: Border.all(width: 1.sp, color: Colors.black54),
+                    //   ),
+                    //   child: IconButton(
+                    //     onPressed: () {},
+                    //     icon: Icon(Icons.apple_outlined, size: 28.sp),
+                    //   ),
+                    // ),
                   ],
                 ),
               ),
