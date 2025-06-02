@@ -391,6 +391,7 @@ class _HomeViewState extends State<HomeView> {
                     FirebaseFirestore.instance
                         .collection('articles')
                         .orderBy('createdAt', descending: true)
+                        .limit(10)
                         .snapshots(),
 
                 builder: (context, snapshot) {

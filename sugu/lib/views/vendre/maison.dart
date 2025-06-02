@@ -46,7 +46,6 @@ class _AddMaisonsState extends State<AddMaisons> {
   final ImagePicker _picker = ImagePicker();
   List<XFile> gallerieImages = [];
 
-
   // ✅ 1. Sélectionner plusieurs images
   Future<void> _selectMultiImageGallery() async {
     try {
@@ -63,9 +62,9 @@ class _AddMaisonsState extends State<AddMaisons> {
         }
       }
     } catch (e) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text("Erreur: ${e.toString()}")),
-      );
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(SnackBar(content: Text("Erreur: ${e.toString()}")));
     }
   }
 
@@ -73,15 +72,18 @@ class _AddMaisonsState extends State<AddMaisons> {
   Future<List<String>> uploadImagesToCloudinary(List<XFile> images) async {
     List<String> uploadedUrls = [];
 
-    const cloudName = 'dm4qhqazr'; 
+    const cloudName = 'dm4qhqazr';
     const uploadPreset = 'flutter_sugu_signed';
 
     for (var image in images) {
-      final url = Uri.parse('https://api.cloudinary.com/v1_1/$cloudName/image/upload');
+      final url = Uri.parse(
+        'https://api.cloudinary.com/v1_1/$cloudName/image/upload',
+      );
 
-      final request = http.MultipartRequest('POST', url)
-        ..fields['upload_preset'] = uploadPreset
-        ..files.add(await http.MultipartFile.fromPath('file', image.path));
+      final request =
+          http.MultipartRequest('POST', url)
+            ..fields['upload_preset'] = uploadPreset
+            ..files.add(await http.MultipartFile.fromPath('file', image.path));
 
       final response = await request.send();
       final resBody = await response.stream.bytesToString();
@@ -104,7 +106,9 @@ class _AddMaisonsState extends State<AddMaisons> {
         _selectedCategory == null ||
         _selectedEtat == null) {
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text("Veuillez remplir tous les champs obligatoires")),
+        const SnackBar(
+          content: Text("Veuillez remplir tous les champs obligatoires"),
+        ),
       );
       return;
     }
@@ -120,7 +124,7 @@ class _AddMaisonsState extends State<AddMaisons> {
         'prix': _prixController.text,
         'description': _descriptionController.text,
         'localisation': _localisationController.text,
-        'groupe': "articles",
+        'groupe': "maisons",
         'categorie': _selectedCategory,
         'etat': _selectedEtat,
         'images': imageUrls,
@@ -132,7 +136,7 @@ class _AddMaisonsState extends State<AddMaisons> {
         'numero': _numeroController.text,
         'createdAt': FieldValue.serverTimestamp(),
         'userId': FirebaseAuth.instance.currentUser?.uid,
-        "views":0
+        "views": 0,
       };
 
       await FirebaseFirestore.instance.collection('articles').add(vehiculeData);
@@ -180,7 +184,7 @@ class _AddMaisonsState extends State<AddMaisons> {
                 icon: Icon(Icons.arrow_back_ios_rounded, size: 18.sp),
               ),
               flexibleSpace: FlexibleSpaceBar(
-                 background: Container(color: Colors.white,),
+                background: Container(color: Colors.white),
                 centerTitle: true,
                 title: Text(
                   "Ajouter une maison",
@@ -339,7 +343,10 @@ class _AddMaisonsState extends State<AddMaisons> {
                                   _selectedCategory ?? "Catégorie",
                                   style: GoogleFonts.roboto(fontSize: 16.sp),
                                 ),
-                                Icon(Icons.arrow_drop_down_outlined, size: 24.sp),
+                                Icon(
+                                  Icons.arrow_drop_down_outlined,
+                                  size: 24.sp,
+                                ),
                               ],
                             ),
                           ),
@@ -369,7 +376,10 @@ class _AddMaisonsState extends State<AddMaisons> {
                                   _selectedEtat ?? "Etat",
                                   style: GoogleFonts.roboto(fontSize: 16.sp),
                                 ),
-                                Icon(Icons.arrow_drop_down_outlined, size: 24.sp),
+                                Icon(
+                                  Icons.arrow_drop_down_outlined,
+                                  size: 24.sp,
+                                ),
                               ],
                             ),
                           ),

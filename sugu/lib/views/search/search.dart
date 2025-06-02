@@ -14,33 +14,31 @@ class SearchView extends StatefulWidget {
 }
 
 class _SearchViewState extends State<SearchView> {
- 
   TextEditingController searchValue = TextEditingController();
   List resultOfSearch = [];
   List<String> recentSearches = [];
- List<ProductModel> store_data = [];
+  List<ProductModel> store_data = [];
 
- void fetchProducts() async {
-  try {
-    final snapshot = await FirebaseFirestore.instance
-        .collection('articles')
-        .orderBy('createdAt', descending: true)
-        .get();
+  void fetchProducts() async {
+    try {
+      final snapshot =
+          await FirebaseFirestore.instance
+              .collection('articles')
+              .orderBy('createdAt', descending: true)
+              .get();
 
-    List<ProductModel> _data = snapshot.docs.map((doc) {
-      return ProductModel.fromJson(doc.data(), doc.id);
-    }).toList();
+      List<ProductModel> _data =
+          snapshot.docs.map((doc) {
+            return ProductModel.fromJson(doc.data(), doc.id);
+          }).toList();
 
-    setState(() {
-      store_data.addAll(_data); // ✅ Ajoute tous les articles à la liste
-    });
-  } catch (e) {
-    print('Erreur lors de la récupération des articles: $e');
+      setState(() {
+        store_data.addAll(_data); // ✅ Ajoute tous les articles à la liste
+      });
+    } catch (e) {
+      print('Erreur lors de la récupération des articles: $e');
+    }
   }
-}
-
-
-
 
   @override
   void initState() {
@@ -57,9 +55,16 @@ class _SearchViewState extends State<SearchView> {
           resultOfSearch =
               store_data
                   .where(
-                    (item) => item.titre.toLowerCase().contains(
-                      searchValue.text.toLowerCase(),
-                    ),
+                    (item) =>
+                        item.titre.toLowerCase().contains(
+                          searchValue.text.toLowerCase(),
+                        ) ||
+                        item.categorie.toLowerCase().contains(
+                          searchValue.text.toLowerCase(),
+                        ) ||
+                        item.groupe.toLowerCase().contains(
+                          searchValue.text.toLowerCase(),
+                        ),
                   )
                   .toList();
         }
@@ -108,7 +113,11 @@ class _SearchViewState extends State<SearchView> {
           store_data
               .where(
                 (item) =>
-                    item.titre.toLowerCase().contains(value.toLowerCase()),
+                    item.titre.toLowerCase().contains(value.toLowerCase()) ||
+                    item.categorie.toLowerCase().contains(
+                      value.toLowerCase(),
+                    ) ||
+                    item.groupe.toLowerCase().contains(value.toLowerCase()),
               )
               .toList();
     });
@@ -136,7 +145,7 @@ class _SearchViewState extends State<SearchView> {
               floating: true,
               toolbarHeight: 65.h,
               flexibleSpace: FlexibleSpaceBar(
-                 background: Container(color: Colors.white,),
+                background: Container(color: Colors.white),
                 centerTitle: true,
                 title: Padding(
                   padding: EdgeInsets.symmetric(horizontal: 16.sp),
@@ -155,7 +164,7 @@ class _SearchViewState extends State<SearchView> {
                       hintStyle: GoogleFonts.roboto(fontSize: 15.sp),
                       border: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(50.r),
-                        borderSide: BorderSide.none
+                        borderSide: BorderSide.none,
                       ),
                     ),
                     onFieldSubmitted: _handleSearch,
@@ -209,7 +218,10 @@ class _SearchViewState extends State<SearchView> {
                       decoration: BoxDecoration(
                         color: Colors.white,
                         border: Border(
-                          bottom: BorderSide(color: Colors.grey[300]!, width: 1),
+                          bottom: BorderSide(
+                            color: Colors.grey[300]!,
+                            width: 1,
+                          ),
                         ),
                       ),
                       child: ListTile(

@@ -10,7 +10,6 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:http/http.dart' as http;
 import 'package:image_picker/image_picker.dart';
 
-
 class AddVehicules extends StatefulWidget {
   const AddVehicules({super.key});
 
@@ -50,7 +49,6 @@ class _AddVehiculesState extends State<AddVehicules> {
   final ImagePicker _picker = ImagePicker();
   List<XFile> gallerieImages = [];
 
-
   // ✅ 1. Sélectionner plusieurs images
   Future<void> _selectMultiImageGallery() async {
     try {
@@ -67,9 +65,9 @@ class _AddVehiculesState extends State<AddVehicules> {
         }
       }
     } catch (e) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text("Erreur: ${e.toString()}")),
-      );
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(SnackBar(content: Text("Erreur: ${e.toString()}")));
     }
   }
 
@@ -78,14 +76,18 @@ class _AddVehiculesState extends State<AddVehicules> {
     List<String> uploadedUrls = [];
 
     const cloudName = 'dm4qhqazr'; // ← remplace par ton cloud name
-    const uploadPreset = 'flutter_sugu_signed'; // ← remplace par ton preset non signé
+    const uploadPreset =
+        'flutter_sugu_signed'; // ← remplace par ton preset non signé
 
     for (var image in images) {
-      final url = Uri.parse('https://api.cloudinary.com/v1_1/$cloudName/image/upload');
+      final url = Uri.parse(
+        'https://api.cloudinary.com/v1_1/$cloudName/image/upload',
+      );
 
-      final request = http.MultipartRequest('POST', url)
-        ..fields['upload_preset'] = uploadPreset
-        ..files.add(await http.MultipartFile.fromPath('file', image.path));
+      final request =
+          http.MultipartRequest('POST', url)
+            ..fields['upload_preset'] = uploadPreset
+            ..files.add(await http.MultipartFile.fromPath('file', image.path));
 
       final response = await request.send();
       final resBody = await response.stream.bytesToString();
@@ -102,56 +104,58 @@ class _AddVehiculesState extends State<AddVehicules> {
   }
 
   void _submitForm() async {
-  if (_titreController.text.isEmpty ||
-      _prixController.text.isEmpty ||
-      _selectedCategory == null ||
-      _selectedEtat == null) {
-    ScaffoldMessenger.of(context).showSnackBar(
-      const SnackBar(content: Text("Veuillez remplir tous les champs obligatoires")),
-    );
-    return;
-  }
+    if (_titreController.text.isEmpty ||
+        _prixController.text.isEmpty ||
+        _selectedCategory == null ||
+        _selectedEtat == null) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text("Veuillez remplir tous les champs obligatoires"),
+        ),
+      );
+      return;
+    }
 
-  try {
-    // Upload vers Cloudinary
+    try {
+      // Upload vers Cloudinary
       List<String> imageUrls = await uploadImagesToCloudinary(gallerieImages);
 
-    // Création du document Firestore
-    final vehiculeData = {
-      'titre': _titreController.text,
-      'prix': _prixController.text,
-      'description': _descriptionController.text,
-      'localisation': _localisationController.text,
-      'groupe': "articles",
-      'categorie': _selectedCategory,
-      'etat': _selectedEtat,
-      'images': imageUrls,
-      'modele': _modelController.text,
-      'annee': _anneeController.text,
-      'kilometrage': _kmController.text,
-      'typeCarburant': _carburantController.text,
-      'transmission': _transmissionController.text,
-      'numero': _numeroController.text,
-      'createdAt': FieldValue.serverTimestamp(),
-      'userId': FirebaseAuth.instance.currentUser?.uid,
-       "views":0
-    };
+      // Création du document Firestore
+      final vehiculeData = {
+        'titre': _titreController.text,
+        'prix': _prixController.text,
+        'description': _descriptionController.text,
+        'localisation': _localisationController.text,
+        'groupe': "véhicules, voitures",
+        'categorie': _selectedCategory,
+        'etat': _selectedEtat,
+        'images': imageUrls,
+        'modele': _modelController.text,
+        'annee': _anneeController.text,
+        'kilometrage': _kmController.text,
+        'typeCarburant': _carburantController.text,
+        'transmission': _transmissionController.text,
+        'numero': _numeroController.text,
+        'createdAt': FieldValue.serverTimestamp(),
+        'userId': FirebaseAuth.instance.currentUser?.uid,
+        "views": 0,
+      };
 
-    await FirebaseFirestore.instance.collection('articles').add(vehiculeData);
+      await FirebaseFirestore.instance.collection('articles').add(vehiculeData);
 
-    ScaffoldMessenger.of(context).showSnackBar(
-      const SnackBar(content: Text("Article publié avec succès")),
-    );
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text("Article publié avec succès")),
+      );
 
-    // Réinitialiser ou rediriger
-    Navigator.pop(context);
-  } catch (e) {
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(content: Text("Erreur lors de la publication : $e")),
-    );
-    print("Erreur lors de la publication : $e");
+      // Réinitialiser ou rediriger
+      Navigator.pop(context);
+    } catch (e) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text("Erreur lors de la publication : $e")),
+      );
+      print("Erreur lors de la publication : $e");
+    }
   }
-}
 
   @override
   void dispose() {
@@ -188,7 +192,7 @@ class _AddVehiculesState extends State<AddVehicules> {
                 icon: Icon(Icons.arrow_back_ios_rounded, size: 18.sp),
               ),
               flexibleSpace: FlexibleSpaceBar(
-                 background: Container(color: Colors.white,),
+                background: Container(color: Colors.white),
                 title: Text(
                   "Ajouter un véhicule",
                   style: GoogleFonts.roboto(
@@ -396,7 +400,10 @@ class _AddVehiculesState extends State<AddVehicules> {
                                   _selectedCategory ?? "Catégorie",
                                   style: GoogleFonts.roboto(fontSize: 16.sp),
                                 ),
-                                Icon(Icons.arrow_drop_down_outlined, size: 24.sp),
+                                Icon(
+                                  Icons.arrow_drop_down_outlined,
+                                  size: 24.sp,
+                                ),
                               ],
                             ),
                           ),
@@ -426,7 +433,10 @@ class _AddVehiculesState extends State<AddVehicules> {
                                   _selectedEtat ?? "Etat",
                                   style: GoogleFonts.roboto(fontSize: 16.sp),
                                 ),
-                                Icon(Icons.arrow_drop_down_outlined, size: 24.sp),
+                                Icon(
+                                  Icons.arrow_drop_down_outlined,
+                                  size: 24.sp,
+                                ),
                               ],
                             ),
                           ),

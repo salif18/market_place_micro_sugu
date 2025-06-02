@@ -186,15 +186,9 @@ class _VosAnnonceViewState extends State<VosAnnonceView> {
                                       mainAxisAlignment: MainAxisAlignment.start,
                                       children: [
                                         Icon(Mdi.eye, size: 14.sp,),
-                                         SizedBox(width: 5.h),
-                                        Text(
-                                          item.views.toString() ,
-                                          style: GoogleFonts.roboto(
-                                            fontSize: 12.sp,
-                                            fontWeight: FontWeight.bold,
-                                            color: Colors.black,
-                                          ),
-                                        ),
+                                         SizedBox(width: 5.w),
+                                         Text(item.views.toString() +" " + "vues",
+                        style: GoogleFonts.roboto(fontSize: 12.sp, color: Colors.grey,fontWeight: FontWeight.w400),)
                                       ],
                                     ),
                                   ),
