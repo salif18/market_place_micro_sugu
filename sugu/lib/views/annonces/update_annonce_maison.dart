@@ -429,7 +429,32 @@ class _UpdateAnnonceMaisonState extends State<UpdateAnnonceMaison> {
                             minimumSize: Size(400.w, 40.h),
                           ),
                           child: Text(
-                            "Publier",
+                            "Modifier",
+                            style: GoogleFonts.roboto(
+                              color: Colors.white,
+                              fontWeight: FontWeight.normal,
+                              fontSize: 16.sp,
+                            ),
+                          ),
+                        ),
+                      ),
+                       Padding(
+                        padding: EdgeInsets.only(
+                        bottom:40.r,
+                        left: 16.r,
+                        right: 16.r
+                          
+                        ),
+                        child: ElevatedButton(
+                          onPressed: () {
+                            _submitForm();
+                          },
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: Colors.redAccent,
+                            minimumSize: Size(400.w, 40.h),
+                          ),
+                          child: Text(
+                            "suprimer",
                             style: GoogleFonts.roboto(
                               color: Colors.white,
                               fontWeight: FontWeight.normal,

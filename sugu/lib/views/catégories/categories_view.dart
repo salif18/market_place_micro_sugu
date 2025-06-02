@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -18,10 +19,6 @@ class _CategoriesViewState extends State<CategoriesView> {
 
   @override
   Widget build(BuildContext context) {
-    final filteredData =
-        fakeVehiculeData.where((item) {
-          return item.categorie == widget.categoryName;
-        }).toList();
     return Scaffold(
       resizeToAvoidBottomInset: true,
       backgroundColor: Colors.white,
@@ -51,82 +48,123 @@ class _CategoriesViewState extends State<CategoriesView> {
                 ),
               ),
             ),
-            SliverPadding(
-              padding: EdgeInsets.symmetric(vertical: 8.r, horizontal: 16.r),
-              sliver: SliverGrid(
-                gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                  crossAxisCount: 2,
-                  crossAxisSpacing: 5,
-                  mainAxisSpacing: 4,
-                  childAspectRatio: 0.77,
-                ),
-                delegate: SliverChildBuilderDelegate((
-                  BuildContext context,
-                  int index,
-                ) {
-                  ProductModel item = filteredData[index];
-                  return GestureDetector(
-                    onTap: () {
-                      // Action on product tap
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => SingleView(item: item),
-                        ),
-                      );
-                    },
-                    child: Container(
-                      width: 200.w,
-                      height: 200.h,
-                     // margin: EdgeInsets.all(8.r),
-                      color: Colors.white,
-                      alignment: Alignment.center,
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Expanded(
-                            flex: 4,
-                            child: Image.network(
-                              item.images[0] ?? "",
-                              fit: BoxFit.cover,
-                              width: double.infinity,
-                            ),
-                          ),
-                          SizedBox(height: 10.r),
-                          Padding(
-                            padding: EdgeInsets.symmetric(horizontal: 5.r),
-                            child: Text(
-                              item.titre,
-                              overflow: TextOverflow.ellipsis,
-                              style: GoogleFonts.roboto(
-                                fontSize: 14.sp,
-                                fontWeight: FontWeight.w500,
-                                color: Colors.black,
-                              ),
-                            ),
-                          ),
-                             SizedBox(height: 5.h),
-                          Expanded(
-                            flex: 1,
-                            child: Padding(
-                              padding: EdgeInsets.symmetric(horizontal: 5.r),
-                              child: Text(
-                                item.prix + " " + "FCFA",
-                                style: GoogleFonts.roboto(
-                                  fontSize: 14.sp,
-                                  fontWeight: FontWeight.bold,
-                                  color: Colors.black,
-                                ),
-                              ),
-                            ),
-                          ),
-                        ],
-                      ),
+             StreamBuilder(
+              stream:
+                  FirebaseFirestore.instance
+                      .collection('articles')
+                      .where('categorie', isEqualTo: widget.categoryName)          
+                      // .orderBy('createdAt', descending: true)
+                      .snapshots(),
+              builder: (context, snapshot) {
+                if (snapshot.connectionState == ConnectionState.waiting) {
+                  return SliverFillRemaining(
+                    child: const Center(child: CircularProgressIndicator()),
+                  );
+                } else if (snapshot.hasError) {
+                  return SliverFillRemaining(
+                    child: const Center(
+                      child: Text("Une erreur s'est produite"),
                     ),
                   );
-                }, childCount: filteredData.length),
-              ),
+                } else if (!snapshot.hasData || snapshot.data!.docs.isEmpty) {
+                  return SliverFillRemaining(
+                    child: const Center(
+                      child: Text("Aucun donnés disponibles"),
+                    ),
+                  );
+                } else {
+                  List<ProductModel> articles =
+                      snapshot.data!.docs.map((doc) {
+                        return ProductModel.fromJson(doc.data(), doc.id);
+                      }).toList();
+                  return SliverPadding(
+                    padding: EdgeInsets.symmetric(
+                      vertical: 8.r,
+                      horizontal: 16.r,
+                    ),
+                    sliver: SliverGrid(
+                      gridDelegate:
+                          const SliverGridDelegateWithFixedCrossAxisCount(
+                            crossAxisCount: 2,
+                            crossAxisSpacing: 5,
+                            mainAxisSpacing: 4,
+                            childAspectRatio: 0.77,
+                          ),
+                      delegate: SliverChildBuilderDelegate((
+                        BuildContext context,
+                        int index,
+                      ) {
+                        ProductModel item = articles[index];
+
+                        return GestureDetector(
+                          onTap: () {
+                            // Action on product tap
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => SingleView(item: item),
+                              ),
+                            );
+                          },
+                          child: Container(
+                            width: 200.w,
+                            height: 200.h,
+                            // margin: EdgeInsets.all(8.r),
+                            color: Colors.white,
+                            alignment: Alignment.center,
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.start,
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Expanded(
+                                  flex: 4,
+                                  child: Image.network(
+                                     item.images.isNotEmpty ? item.images[0] : '',
+                                    fit: BoxFit.cover,
+                                    width: double.infinity,
+                                  ),
+                                ),
+                                SizedBox(height: 10.r),
+                                Padding(
+                                  padding: EdgeInsets.symmetric(
+                                    horizontal: 5.r,
+                                  ),
+                                  child: Text(
+                                    item.titre,
+                                    overflow: TextOverflow.ellipsis,
+                                    style: GoogleFonts.roboto(
+                                      fontSize: 14.sp,
+                                      fontWeight: FontWeight.w500,
+                                      color: Colors.black,
+                                    ),
+                                  ),
+                                ),
+                                SizedBox(height: 5.h),
+                                Expanded(
+                                  flex: 1,
+                                  child: Padding(
+                                    padding: EdgeInsets.symmetric(
+                                      horizontal: 5.r,
+                                    ),
+                                    child: Text(
+                                      item.prix + " " + "FCFA",
+                                      style: GoogleFonts.roboto(
+                                        fontSize: 14.sp,
+                                        fontWeight: FontWeight.bold,
+                                        color: Colors.black,
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                        );
+                      }, childCount: articles.length),
+                    ),
+                  );
+                }
+              },
             ),
           ],
         ),

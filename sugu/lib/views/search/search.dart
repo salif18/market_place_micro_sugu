@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -13,15 +14,38 @@ class SearchView extends StatefulWidget {
 }
 
 class _SearchViewState extends State<SearchView> {
-  List<ProductModel> fakeVehiculeData = ProductModel.getProducts();
+ 
   TextEditingController searchValue = TextEditingController();
   List resultOfSearch = [];
   List<String> recentSearches = [];
+ List<ProductModel> store_data = [];
+
+ void fetchProducts() async {
+  try {
+    final snapshot = await FirebaseFirestore.instance
+        .collection('articles')
+        .orderBy('createdAt', descending: true)
+        .get();
+
+    List<ProductModel> _data = snapshot.docs.map((doc) {
+      return ProductModel.fromJson(doc.data(), doc.id);
+    }).toList();
+
+    setState(() {
+      store_data.addAll(_data); // ✅ Ajoute tous les articles à la liste
+    });
+  } catch (e) {
+    print('Erreur lors de la récupération des articles: $e');
+  }
+}
+
+
+
 
   @override
   void initState() {
     super.initState();
-
+    fetchProducts();
     _loadRecentSearches();
 
     // Ajouter un écouteur pour le champ de recherche
@@ -31,7 +55,7 @@ class _SearchViewState extends State<SearchView> {
           resultOfSearch = [];
         } else {
           resultOfSearch =
-              fakeVehiculeData
+              store_data
                   .where(
                     (item) => item.titre.toLowerCase().contains(
                       searchValue.text.toLowerCase(),
@@ -81,7 +105,7 @@ class _SearchViewState extends State<SearchView> {
     }
     setState(() {
       resultOfSearch =
-          fakeVehiculeData
+          store_data
               .where(
                 (item) =>
                     item.titre.toLowerCase().contains(value.toLowerCase()),
@@ -192,7 +216,7 @@ class _SearchViewState extends State<SearchView> {
                         leading:
                             item.images.isNotEmpty
                                 ? Image.network(
-                                  item.images[0] ?? "",
+                                  item.images[0],
                                   width: 50.w,
                                   height: 50.h,
                                   fit: BoxFit.cover,

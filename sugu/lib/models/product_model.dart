@@ -16,7 +16,7 @@ class ProductModel {
   final String? transmission;
   final String numero;
   final int? views;
-  final List<String?> viewsUserId;
+
 
   ProductModel({
     required this.id,
@@ -36,7 +36,6 @@ class ProductModel {
     this.transmission,
     required this.numero,
     required this.views,
-    required this.viewsUserId
   });
 
   factory ProductModel.fromJson(Map<String, dynamic> json,String id) {
@@ -58,7 +57,7 @@ class ProductModel {
       transmission: json['transmission'],
       numero: json['numero'] ?? '',
       views: json["views" ] ?? 0,
-      viewsUserId:  List<String>.from(json['viewsUserId'] ?? []),
+      // viewsUserId:  List<String>.from(json['viewsUserId'] ?? []),
     );
   }
 
@@ -81,7 +80,7 @@ class ProductModel {
       'transmission': transmission,
       'numero': numero,
       'views':views,
-      'viewsUserId':viewsUserId
+      // 'viewsUserId':viewsUserId
     };
   }
 

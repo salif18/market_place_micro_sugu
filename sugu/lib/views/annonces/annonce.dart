@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_mdi_icons/flutter_mdi_icons.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:sugu/models/product_model.dart';
@@ -16,8 +17,7 @@ class VosAnnonceView extends StatefulWidget {
 }
 
 class _VosAnnonceViewState extends State<VosAnnonceView> {
-  List<ProductModel> fakeVehiculeData = ProductModel.getProducts();
-  final String userId = FirebaseAuth.instance.currentUser!.uid;
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -52,8 +52,8 @@ class _VosAnnonceViewState extends State<VosAnnonceView> {
               stream:
                   FirebaseFirestore.instance
                       .collection('articles')
-                      .where('userId', isEqualTo: userId)
-                      .orderBy('createdAt', descending: true)
+                      .where('userId', isEqualTo: FirebaseAuth.instance.currentUser!.uid)
+                      // .orderBy('createdAt', descending: true)
                       .snapshots(),
               builder: (context, snapshot) {
                 if (snapshot.connectionState == ConnectionState.waiting) {
@@ -88,7 +88,7 @@ class _VosAnnonceViewState extends State<VosAnnonceView> {
                             crossAxisCount: 2,
                             crossAxisSpacing: 5,
                             mainAxisSpacing: 4,
-                            childAspectRatio: 0.85,
+                            childAspectRatio: 0.77,
                           ),
                       delegate: SliverChildBuilderDelegate((
                         BuildContext context,
@@ -158,7 +158,7 @@ class _VosAnnonceViewState extends State<VosAnnonceView> {
                                     ),
                                   ),
                                 ),
-                                SizedBox(height: 5.h),
+                                SizedBox(height: 2.h),
                                 Expanded(
                                   flex: 1,
                                   child: Padding(
@@ -172,6 +172,30 @@ class _VosAnnonceViewState extends State<VosAnnonceView> {
                                         fontWeight: FontWeight.bold,
                                         color: Colors.black,
                                       ),
+                                    ),
+                                  ),
+                                ),
+                                
+                                Expanded(
+                                  flex: 1,
+                                  child: Padding(
+                                    padding: EdgeInsets.symmetric(
+                                      horizontal: 5.r,
+                                    ),
+                                    child: Row(
+                                      mainAxisAlignment: MainAxisAlignment.start,
+                                      children: [
+                                        Icon(Mdi.eye, size: 14.sp,),
+                                         SizedBox(width: 5.h),
+                                        Text(
+                                          item.views.toString() ,
+                                          style: GoogleFonts.roboto(
+                                            fontSize: 12.sp,
+                                            fontWeight: FontWeight.bold,
+                                            color: Colors.black,
+                                          ),
+                                        ),
+                                      ],
                                     ),
                                   ),
                                 ),

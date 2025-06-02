@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mdi_icons/flutter_mdi_icons.dart';
@@ -162,27 +163,26 @@ class _SingleViewState extends State<SingleView> {
   List<ProductModel> fakeVehiculeData = ProductModel.getProducts();
 
    @override
-  void initState() {
-    super.initState();
-    _incrementView(widget.item.id ?? "");
-  }
+void initState() {
+  super.initState();
+  _incrementView(widget.item.id ?? "");
+}
 
-  Future<void> _incrementView(String id) async {
-    try {
-       
-    } catch (e) {
-      print('Erreur: $e');
-    }
+Future<void> _incrementView(String id) async {
+  try {
+    FirebaseFirestore _firestore = FirebaseFirestore.instance;
+    await _firestore.collection("articles")
+    .doc(id)
+    .update({
+      "views": FieldValue.increment(1), // ✅ Incrémentation de 1
+    });
+  } catch (e) {
+    print('Erreur: $e');
   }
-
+}
 
   @override
   Widget build(BuildContext context) {
-    final fakeOtherData =
-        fakeVehiculeData.where((item) {
-          return item.categorie == widget.item.categorie ||
-              item.titre == widget.item.titre;
-        }).toList();
     return Scaffold(
       resizeToAvoidBottomInset: true,
       backgroundColor: Colors.white,
@@ -251,7 +251,7 @@ class _SingleViewState extends State<SingleView> {
                   itemCount: widget.item.images.length,
                   itemBuilder: (context, index) {
                     return Image.network(
-                      widget.item.images[index] ?? "",
+                      widget.item.images[index],
                       width: double.infinity,
                       fit: BoxFit.cover,
                     );
@@ -273,12 +273,22 @@ class _SingleViewState extends State<SingleView> {
                         fontWeight: FontWeight.bold,
                       ),
                     ),
+                    
                     Text(
                       widget.item.prix + " " + "FCFA",
                       style: GoogleFonts.roboto(
                         fontSize: 20.sp,
                         fontWeight: FontWeight.bold,
                       ),
+                    ),
+                    if(widget.item.views! > 0)
+                    Row(
+                      children: [
+                        Icon(Icons.remove_red_eye_outlined, size: 18.sp,),
+                        SizedBox(width: 8.w,),
+                        Text(widget.item.views.toString() +" " + "vues",
+                        style: GoogleFonts.roboto(fontSize: 12.sp, color: Colors.grey,fontWeight: FontWeight.w400),)
+                      ],
                     ),
                   ],
                 ),
@@ -471,83 +481,127 @@ class _SingleViewState extends State<SingleView> {
                 ),
               ),
             ),
-        
-            SliverPadding(
-              padding: EdgeInsets.symmetric(vertical: 8.r, horizontal: 16.r),
-              sliver: SliverGrid(
-                gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                  crossAxisCount: 2,
-                  crossAxisSpacing: 5,
-                  mainAxisSpacing: 4,
-                  childAspectRatio: 0.77,
-                ),
-                delegate: SliverChildBuilderDelegate((
-                  BuildContext context,
-                  int index,
-                ) {
-                  ProductModel item = fakeOtherData[index];
-                  return GestureDetector(
-                    onTap: () {
-                      // Action on product tap
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => SingleView(item: item),
-                        ),
-                      );
-                    },
-                    child: Container(
-                      width: 200.w,
-                      height: 200.h,
-                     // margin: EdgeInsets.all(8.r),
-                      color: Colors.white,
-                      alignment: Alignment.center,
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Expanded(
-                            flex: 4,
-                            child: Image.network(
-                              item.images[0] ?? "",
-                              fit: BoxFit.cover,
-                              width: double.infinity,
-                            ),
-                          ),
-                          SizedBox(height: 10.h),
-                          Padding(
-                            padding: EdgeInsets.symmetric(horizontal: 5.r),
-                            child: Text(
-                              item.titre,
-                              overflow: TextOverflow.ellipsis,
-                              style: GoogleFonts.roboto(
-                                fontSize: 14.sp,
-                                fontWeight: FontWeight.w500,
-                                color: Colors.black,
-                              ),
-                            ),
-                          ),
-                             SizedBox(height: 5.h),
-                          Expanded(
-                            flex: 1,
-                            child: Padding(
-                              padding: EdgeInsets.symmetric(horizontal: 5.r),
-                              child: Text(
-                                item.prix + " " + "FCFA",
-                                style: GoogleFonts.roboto(
-                                  fontSize: 14.sp,
-                                  fontWeight: FontWeight.bold,
-                                  color: Colors.black,
-                                ),
-                              ),
-                            ),
-                          ),
-                        ],
-                      ),
+
+              StreamBuilder(
+              stream:
+                  FirebaseFirestore.instance
+                      .collection('articles')
+                      .where('categorie', isEqualTo: widget.item.categorie)
+                      .where('titre', isEqualTo: widget.item.titre)
+                      // .orderBy('createdAt', descending: true)
+                      .snapshots(),
+                   
+              builder: (context, snapshot) {
+                if (snapshot.connectionState == ConnectionState.waiting) {
+                  return SliverFillRemaining(
+                    child: const Center(child: CircularProgressIndicator()),
+                  );
+                } else if (snapshot.hasError) {
+                  return SliverFillRemaining(
+                    child: const Center(
+                      child: Text("Une erreur s'est produite"),
                     ),
                   );
-                }, childCount: fakeOtherData.length),
-              ),
+                } else if (!snapshot.hasData || snapshot.data!.docs.isEmpty) {
+                  return SliverFillRemaining(
+                    child: const Center(
+                      child: Text("Aucun donnés disponibles"),
+                    ),
+                  );
+                } else {
+                  List<ProductModel> articles =
+                      snapshot.data!.docs.map((doc) {
+                        return ProductModel.fromJson(doc.data(), doc.id);
+                      }).toList();
+                         print(snapshot.data!.docs);
+                  return SliverPadding(
+                    padding: EdgeInsets.symmetric(
+                      vertical: 8.r,
+                      horizontal: 16.r,
+                    ),
+                    sliver: SliverGrid(
+                      gridDelegate:
+                          const SliverGridDelegateWithFixedCrossAxisCount(
+                            crossAxisCount: 2,
+                            crossAxisSpacing: 5,
+                            mainAxisSpacing: 4,
+                            childAspectRatio: 0.77,
+                          ),
+                      delegate: SliverChildBuilderDelegate((
+                        BuildContext context,
+                        int index,
+                      ) {
+                        ProductModel item = articles[index];
+
+                        return GestureDetector(
+                          onTap: () {
+                            // Action on product tap
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => SingleView(item: item),
+                              ),
+                            );
+                          },
+                          child: Container(
+                            width: 200.w,
+                            height: 200.h,
+                            // margin: EdgeInsets.all(8.r),
+                            color: Colors.white,
+                            alignment: Alignment.center,
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.start,
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Expanded(
+                                  flex: 4,
+                                  child: Image.network(
+                                     item.images.isNotEmpty ? item.images[0] : '',
+                                    fit: BoxFit.cover,
+                                    width: double.infinity,
+                                  ),
+                                ),
+                                SizedBox(height: 10.r),
+                                Padding(
+                                  padding: EdgeInsets.symmetric(
+                                    horizontal: 5.r,
+                                  ),
+                                  child: Text(
+                                    item.titre,
+                                    overflow: TextOverflow.ellipsis,
+                                    style: GoogleFonts.roboto(
+                                      fontSize: 14.sp,
+                                      fontWeight: FontWeight.w500,
+                                      color: Colors.black,
+                                    ),
+                                  ),
+                                ),
+                                SizedBox(height: 5.h),
+                                Expanded(
+                                  flex: 1,
+                                  child: Padding(
+                                    padding: EdgeInsets.symmetric(
+                                      horizontal: 5.r,
+                                    ),
+                                    child: Text(
+                                      item.prix + " " + "FCFA",
+                                      style: GoogleFonts.roboto(
+                                        fontSize: 14.sp,
+                                        fontWeight: FontWeight.bold,
+                                        color: Colors.black,
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                        );
+                      }, childCount: articles.length),
+                    ),
+                  );
+                }
+              },
             ),
           ],
         ),

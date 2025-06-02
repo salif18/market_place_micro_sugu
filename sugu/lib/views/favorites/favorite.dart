@@ -92,7 +92,7 @@ class _FavoriteViewState extends State<FavoriteView> {
                               leading:
                                   item.images.isNotEmpty
                                       ? Image.network(
-                                        item.images[0] ?? "",
+                                        item.images[0],
                                         width: 50.w,
                                         height: 50.h,
                                         fit: BoxFit.cover,

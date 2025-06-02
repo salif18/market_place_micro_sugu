@@ -1,12 +1,14 @@
+import 'dart:convert';
 import 'dart:io';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:firebase_storage/firebase_storage.dart';
+// import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mdi_icons/flutter_mdi_icons.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:http/http.dart' as http;
 import 'package:image_picker/image_picker.dart';
 
 class AddArticles extends StatefulWidget {
@@ -51,7 +53,8 @@ class _AddArticlesState extends State<AddArticles> {
   final ImagePicker _picker = ImagePicker();
   List<XFile> gallerieImages = [];
 
-  // selectionner plusieur images depuis gallerie du telephone
+
+  // ✅ 1. Sélectionner plusieurs images
   Future<void> _selectMultiImageGallery() async {
     try {
       final List<XFile> pickedFiles = await _picker.pickMultiImage();
@@ -61,89 +64,98 @@ class _AddArticlesState extends State<AddArticles> {
             gallerieImages.addAll(pickedFiles);
           });
         } else {
-          ScaffoldMessenger.of(
-            // ignore: use_build_context_synchronously
-            context,
-          ).showSnackBar(
-            SnackBar(content: Text("Limite de 10 images atteinte}")),
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(content: Text("Limite de 10 images atteinte")),
           );
         }
       }
     } catch (e) {
-      // ignore: use_build_context_synchronously
-      ScaffoldMessenger.of(
-        // ignore: use_build_context_synchronously
-        context,
-      ).showSnackBar(SnackBar(content: Text("Erreur: ${e.toString()}")));
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text("Erreur: ${e.toString()}")),
+      );
     }
   }
 
-  Future<List<String>> uploadImagesToFirebase(List<XFile> images) async {
-  final storage = FirebaseStorage.instance;
-  List<String> downloadUrls = [];
+  // ✅ 2. Upload des images sur Cloudinary
+  Future<List<String>> uploadImagesToCloudinary(List<XFile> images) async {
+    List<String> uploadedUrls = [];
 
-  for (var image in images) {
-    final fileName = DateTime.now().millisecondsSinceEpoch.toString();
-    final ref = storage.ref().child('articles_images/$fileName.jpg');
-    await ref.putFile(File(image.path));
-    final url = await ref.getDownloadURL();
-    downloadUrls.add(url);
+    const cloudName = 'dm4qhqazr'; // ← remplace par ton cloud name
+    const uploadPreset = 'flutter_sugu_signed'; // ← remplace par ton preset non signé
+
+    for (var image in images) {
+      final url = Uri.parse('https://api.cloudinary.com/v1_1/$cloudName/image/upload');
+
+      final request = http.MultipartRequest('POST', url)
+        ..fields['upload_preset'] = uploadPreset
+        ..files.add(await http.MultipartFile.fromPath('file', image.path));
+
+      final response = await request.send();
+      final resBody = await response.stream.bytesToString();
+
+      if (response.statusCode == 200) {
+        final data = jsonDecode(resBody);
+        uploadedUrls.add(data['secure_url']);
+      } else {
+        print('Erreur Cloudinary (${response.statusCode}): $resBody');
+      }
+    }
+
+    return uploadedUrls;
   }
 
-  return downloadUrls;
-}
-
-
+  // ✅ 3. Soumettre le formulaire
   void _submitForm() async {
-  if (_titreController.text.isEmpty ||
-      _prixController.text.isEmpty ||
-      _selectedCategory == null ||
-      _selectedEtat == null) {
-    ScaffoldMessenger.of(context).showSnackBar(
-      const SnackBar(content: Text("Veuillez remplir tous les champs obligatoires")),
-    );
-    return;
+    if (_titreController.text.isEmpty ||
+        _prixController.text.isEmpty ||
+        _selectedCategory == null ||
+        _selectedEtat == null) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text("Veuillez remplir tous les champs obligatoires")),
+      );
+      return;
+    }
+
+    try {
+      // Upload vers Cloudinary
+      List<String> imageUrls = await uploadImagesToCloudinary(gallerieImages);
+      print(imageUrls);
+
+      // Création du document Firestore
+      final vehiculeData = {
+        'titre': _titreController.text,
+        'prix': _prixController.text,
+        'description': _descriptionController.text,
+        'localisation': _localisationController.text,
+        'groupe': "articles",
+        'categorie': _selectedCategory,
+        'etat': _selectedEtat,
+        'images': imageUrls,
+        'modele': null,
+        'annee': null,
+        'kilometrage': null,
+        'typeCarburant': null,
+        'transmission': null,
+        'numero': _numeroController.text,
+        'createdAt': FieldValue.serverTimestamp(),
+        'userId': FirebaseAuth.instance.currentUser?.uid,
+        "views":0
+      };
+
+      await FirebaseFirestore.instance.collection('articles').add(vehiculeData);
+
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text("Article publié avec succès")),
+      );
+
+      Navigator.pop(context);
+    } catch (e) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text("Erreur lors de la publication : $e")),
+      );
+      print("Erreur lors de la publication : $e");
+    }
   }
-
-  try {
-    // Upload des images
-    List<String> imageUrls = await uploadImagesToFirebase(gallerieImages);
-
-    // Création du document Firestore
-    final vehiculeData = {
-      'titre': _titreController.text,
-      'prix': _prixController.text,
-      'description': _descriptionController.text,
-      'localisation': _localisationController.text,
-      'groupe': "articles",
-      'categorie': _selectedCategory,
-      'etat': _selectedEtat,
-      'images': imageUrls,
-      'modele': null,
-      'annee': null,
-      'kilometrage': null,
-      'typeCarburant': null,
-      'transmission': null,
-      'numero': _numeroController.text,
-      'createdAt': FieldValue.serverTimestamp(),
-      'userId': FirebaseAuth.instance.currentUser?.uid,
-    };
-
-    await FirebaseFirestore.instance.collection('articles').add(vehiculeData);
-
-    ScaffoldMessenger.of(context).showSnackBar(
-      const SnackBar(content: Text("Article publié avec succès")),
-    );
-
-    // Réinitialiser ou rediriger
-    Navigator.pop(context);
-  } catch (e) {
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(content: Text("Erreur lors de la publication : $e")),
-    );
-    print("Erreur lors de la publication : $e");
-  }
-}
 
 
   @override
@@ -402,7 +414,7 @@ class _AddArticlesState extends State<AddArticles> {
                           vertical: 8.r,
                         ),
                         child: TextFormField(
-                          keyboardType: TextInputType.number,
+                          keyboardType: TextInputType.text,
                           controller: _localisationController,
                           validator: null,
                           decoration: InputDecoration(
@@ -642,3 +654,117 @@ class _AddArticlesState extends State<AddArticles> {
     );
   }
 }
+
+// selectionner plusieur images depuis gallerie du telephone
+  // Future<void> _selectMultiImageGallery() async {
+  //   try {
+  //     final List<XFile> pickedFiles = await _picker.pickMultiImage();
+  //     if (pickedFiles.isNotEmpty) {
+  //       if (gallerieImages.length + pickedFiles.length <= 10) {
+  //         setState(() {
+  //           gallerieImages.addAll(pickedFiles);
+  //         });
+  //       } else {
+  //         ScaffoldMessenger.of(
+  //           // ignore: use_build_context_synchronously
+  //           context,
+  //         ).showSnackBar(
+  //           SnackBar(content: Text("Limite de 10 images atteinte}")),
+  //         );
+  //       }
+  //     }
+  //   } catch (e) {
+  //     // ignore: use_build_context_synchronously
+  //     ScaffoldMessenger.of(
+  //       // ignore: use_build_context_synchronously
+  //       context,
+  //     ).showSnackBar(SnackBar(content: Text("Erreur: ${e.toString()}")));
+  //   }
+  // }
+
+//   Future<List<String>> uploadImagesToFirebase(List<XFile> images) async {
+//   final storage = FirebaseStorage.instance;
+//   List<String> downloadUrls = [];
+
+//   for (var image in images) {
+//     final fileName = DateTime.now().millisecondsSinceEpoch.toString();
+//     final ref = storage.ref().child('articles_images/$fileName.jpg');
+//     await ref.putFile(File(image.path));
+//     final url = await ref.getDownloadURL();
+//     downloadUrls.add(url);
+//   }
+
+//   return downloadUrls;
+// }
+
+
+//   void _submitForm() async {
+//   if (_titreController.text.isEmpty ||
+//       _prixController.text.isEmpty ||
+//       _selectedCategory == null ||
+//       _selectedEtat == null) {
+//     ScaffoldMessenger.of(context).showSnackBar(
+//       const SnackBar(content: Text("Veuillez remplir tous les champs obligatoires")),
+//     );
+//     return;
+//   }
+
+//   try {
+//     // Upload des images
+//     List<String> imageUrls = [];
+   
+//     // Galerie ou URL manuelle
+//     if (gallerieImages.isNotEmpty) {
+//       imageUrls = await uploadImagesToFirebase(gallerieImages);
+//     } else if (_imagesController.text.isNotEmpty) {
+//       imageUrls = [_imagesController.text];
+//     }
+
+//     // Création du document Firestore
+//     final vehiculeData = {
+//       'titre': _titreController.text,
+//       'prix': _prixController.text,
+//       'description': _descriptionController.text,
+//       'localisation': _localisationController.text,
+//       'groupe': "articles",
+//       'categorie': _selectedCategory,
+//       'etat': _selectedEtat,
+//       'images': imageUrls,
+//       'modele': null,
+//       'annee': null,
+//       'kilometrage': null,
+//       'typeCarburant': null,
+//       'transmission': null,
+//       'numero': _numeroController.text,
+//       'createdAt': FieldValue.serverTimestamp(),
+//       'userId': FirebaseAuth.instance.currentUser?.uid,
+//     };
+
+//     await FirebaseFirestore.instance.collection('articles').add(vehiculeData);
+
+//     ScaffoldMessenger.of(context).showSnackBar(
+//       const SnackBar(content: Text("Article publié avec succès")),
+//     );
+
+//     // Réinitialiser ou rediriger
+//     Navigator.pop(context);
+//   } catch (e) {
+//     ScaffoldMessenger.of(context).showSnackBar(
+//       SnackBar(content: Text("Erreur lors de la publication : $e")),
+//     );
+//     print("Erreur lors de la publication : $e");
+//   }
+// }
+
+
+// final ImagePicker _picker = ImagePicker();
+//   List<XFile> gallerieImages = [];
+
+//   final TextEditingController _titreController = TextEditingController();
+//   final TextEditingController _prixController = TextEditingController();
+//   final TextEditingController _descriptionController = TextEditingController();
+//   final TextEditingController _localisationController = TextEditingController();
+//   final TextEditingController _numeroController = TextEditingController();
+
+//   String? _selectedCategory;
+//   String? _selectedEtat;
