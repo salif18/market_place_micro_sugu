@@ -162,24 +162,22 @@ class _SingleViewState extends State<SingleView> {
 
   List<ProductModel> fakeVehiculeData = ProductModel.getProducts();
 
-   @override
-void initState() {
-  super.initState();
-  _incrementView(widget.item.id ?? "");
-}
-
-Future<void> _incrementView(String id) async {
-  try {
-    FirebaseFirestore _firestore = FirebaseFirestore.instance;
-    await _firestore.collection("articles")
-    .doc(id)
-    .update({
-      "views": FieldValue.increment(1), // ✅ Incrémentation de 1
-    });
-  } catch (e) {
-    print('Erreur: $e');
+  @override
+  void initState() {
+    super.initState();
+    _incrementView(widget.item.id ?? "");
   }
-}
+
+  Future<void> _incrementView(String id) async {
+    try {
+      FirebaseFirestore _firestore = FirebaseFirestore.instance;
+      await _firestore.collection("articles").doc(id).update({
+        "views": FieldValue.increment(1), // ✅ Incrémentation de 1
+      });
+    } catch (e) {
+      print('Erreur: $e');
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -202,7 +200,8 @@ Future<void> _incrementView(String id) async {
               actions: [
                 Consumer<FavoriteProvider>(
                   builder: (context, favoriteProvider, child) {
-                    List<ProductModel> favorites = favoriteProvider.getFavorites;
+                    List<ProductModel> favorites =
+                        favoriteProvider.getFavorites;
                     return SizedBox(
                       child: IconButton(
                         onPressed: () {
@@ -230,7 +229,7 @@ Future<void> _incrementView(String id) async {
               ],
               flexibleSpace: FlexibleSpaceBar(
                 centerTitle: true,
-                background: Container(color: Colors.white,),
+                background: Container(color: Colors.white),
                 title: Text(
                   widget.item.titre.split(" ").first,
                   style: GoogleFonts.roboto(
@@ -250,10 +249,10 @@ Future<void> _incrementView(String id) async {
                   scrollDirection: Axis.horizontal,
                   itemCount: widget.item.images.length,
                   itemBuilder: (context, index) {
-                    String photo =  widget.item.images[index];
+                    String photo = widget.item.images[index];
                     return Image.network(
-                     photo,
-                      width: MediaQuery.of(context).size.width,                 
+                      photo,
+                      width: MediaQuery.of(context).size.width,
                       fit: BoxFit.cover,
                     );
                   },
@@ -274,7 +273,7 @@ Future<void> _incrementView(String id) async {
                         fontWeight: FontWeight.bold,
                       ),
                     ),
-                    
+
                     Text(
                       widget.item.prix + " " + "FCFA",
                       style: GoogleFonts.roboto(
@@ -282,15 +281,21 @@ Future<void> _incrementView(String id) async {
                         fontWeight: FontWeight.bold,
                       ),
                     ),
-                    if(widget.item.views! > 0)
-                    Row(
-                      children: [
-                        Icon(Mdi.eye, size: 18.sp,color: Colors.grey,),
-                        SizedBox(width: 8.w,),
-                        Text(widget.item.views.toString() +" " + "vues",
-                        style: GoogleFonts.roboto(fontSize: 12.sp, color: Colors.grey,fontWeight: FontWeight.w400),)
-                      ],
-                    ),
+                    if (widget.item.views! > 0)
+                      Row(
+                        children: [
+                          Icon(Mdi.eye, size: 18.sp, color: Colors.grey),
+                          SizedBox(width: 8.w),
+                          Text(
+                            widget.item.views.toString() + " " + "vues",
+                            style: GoogleFonts.roboto(
+                              fontSize: 12.sp,
+                              color: Colors.grey,
+                              fontWeight: FontWeight.w400,
+                            ),
+                          ),
+                        ],
+                      ),
                   ],
                 ),
               ),
@@ -301,7 +306,7 @@ Future<void> _incrementView(String id) async {
                 child: Row(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Icon(Mdi.mapMarker),
+                    Icon(Mdi.mapMarker, size: 24.sp, color: Colors.blueGrey),
                     Text(
                       widget.item.localisation,
                       style: GoogleFonts.roboto(
@@ -317,120 +322,153 @@ Future<void> _incrementView(String id) async {
               padding: EdgeInsets.symmetric(horizontal: 16.r, vertical: 8.r),
               sliver: SliverToBoxAdapter(
                 child: Container(
-                  padding: EdgeInsets.symmetric(horizontal: 12.r, vertical: 8.r),
+                  padding: EdgeInsets.symmetric(
+                    horizontal: 12.r,
+                    vertical: 8.r,
+                  ),
                   decoration: BoxDecoration(
                     color: Colors.grey[50],
                     borderRadius: BorderRadius.circular(10.r),
                   ),
                   child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
-                        mainAxisAlignment: MainAxisAlignment.start,
                         children: [
-                          Text(
-                            widget.item.modele != null ? "Modèle" : "",
-                            style: GoogleFonts.roboto(
-                              fontSize: 16.sp,
-                              fontWeight: FontWeight.bold,
+                          if (widget.item.modele != null &&
+                              widget.item.modele!.isNotEmpty)
+                            Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  "Modèle",
+                                  style: GoogleFonts.roboto(
+                                    fontSize: 16.sp,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                ),
+                                Text(
+                                  widget.item.modele!,
+                                  style: GoogleFonts.roboto(
+                                    fontSize: 14.sp,
+                                    fontWeight: FontWeight.w400,
+                                  ),
+                                ),
+                              ],
                             ),
-                          ),
-                          Text(
-                            widget.item.modele ?? "",
-                            style: GoogleFonts.roboto(
-                              fontSize: 14.sp,
-                              fontWeight: FontWeight.normal,
+
+                          if (widget.item.annee != null &&
+                              widget.item.modele!.isNotEmpty)
+                            Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  "Année",
+                                  style: GoogleFonts.roboto(
+                                    fontSize: 16.sp,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                ),
+                                Text(
+                                  widget.item.annee!,
+                                  style: GoogleFonts.roboto(
+                                    fontSize: 14.sp,
+                                    fontWeight: FontWeight.w400,
+                                  ),
+                                ),
+                              ],
                             ),
-                          ),
-                          Text(
-                            widget.item.kilometrage != null
-                                ? "Kilometrage"
-                                : "",
-                            style: GoogleFonts.roboto(
-                              fontSize: 16.sp,
-                              fontWeight: FontWeight.bold,
+                          if (widget.item.kilometrage != null &&
+                              widget.item.kilometrage!.isNotEmpty)
+                            Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  "Kilométrage",
+                                  style: GoogleFonts.roboto(
+                                    fontSize: 16.sp,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                ),
+                                Text(
+                                  widget.item.kilometrage! + " " + "km",
+                                  style: GoogleFonts.roboto(
+                                    fontSize: 14.sp,
+                                    fontWeight: FontWeight.w400,
+                                  ),
+                                ),
+                              ],
                             ),
-                          ),
-                          Text(
-                            widget.item.kilometrage ?? "",
-                            style: GoogleFonts.roboto(
-                              fontSize: 14.sp,
-                              fontWeight: FontWeight.normal,
-                            ),
-                          ),
-                          Text(
-                            widget.item.transmission != null
-                                ? "Transmission"
-                                : "",
-                            style: GoogleFonts.roboto(
-                              fontSize: 16.sp,
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
-                          Text(
-                            widget.item.transmission ?? "",
-                            style: GoogleFonts.roboto(
-                              fontSize: 14.sp,
-                              fontWeight: FontWeight.normal,
-                            ),
-                          ),
                         ],
                       ),
-                      SizedBox(width: 16.w),
-                      Expanded(
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          mainAxisAlignment: MainAxisAlignment.start,
-                          children: [
-                            Text(
-                              widget.item.annee != null ? "Année" : "",
-                              style: GoogleFonts.roboto(
-                                fontSize: 16.sp,
-                                fontWeight: FontWeight.bold,
-                              ),
+
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          if (widget.item.typeCarburant != null &&
+                              widget.item.typeCarburant!.isNotEmpty)
+                            Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  "Carburant",
+                                  style: GoogleFonts.roboto(
+                                    fontSize: 16.sp,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                ),
+                                Text(
+                                  widget.item.typeCarburant!,
+                                  style: GoogleFonts.roboto(
+                                    fontSize: 14.sp,
+                                    fontWeight: FontWeight.w400,
+                                  ),
+                                ),
+                              ],
                             ),
-                            Text(
-                              widget.item.annee ?? "",
-                              style: GoogleFonts.roboto(
-                                fontSize: 14.sp,
-                                fontWeight: FontWeight.normal,
-                              ),
+
+                          if (widget.item.transmission != null &&
+                              widget.item.transmission!.isNotEmpty)
+                            Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  "Transmission",
+                                  style: GoogleFonts.roboto(
+                                    fontSize: 16.sp,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                ),
+                                Text(
+                                  widget.item.transmission!,
+                                  style: GoogleFonts.roboto(
+                                    fontSize: 14.sp,
+                                    fontWeight: FontWeight.w400,
+                                  ),
+                                ),
+                              ],
                             ),
-                            Text(
-                              widget.item.typeCarburant != null
-                                  ? "Carburant"
-                                  : "",
-                              style: GoogleFonts.roboto(
-                                fontSize: 16.sp,
-                                fontWeight: FontWeight.bold,
+
+                          Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                "Etat",
+                                style: GoogleFonts.roboto(
+                                  fontSize: 16.sp,
+                                  fontWeight: FontWeight.bold,
+                                ),
                               ),
-                            ),
-                            Text(
-                              widget.item.typeCarburant ?? "",
-                              style: GoogleFonts.roboto(
-                                fontSize: 14.sp,
-                                fontWeight: FontWeight.normal,
+                              Text(
+                                widget.item.etat,
+                                style: GoogleFonts.roboto(
+                                  fontSize: 14.sp,
+                                  fontWeight: FontWeight.w400,
+                                ),
                               ),
-                            ),
-                            Text(
-                              // ignore: unnecessary_null_comparison
-                              widget.item.etat != null ? "Etat" : "",
-                              style: GoogleFonts.roboto(
-                                fontSize: 16.sp,
-                                fontWeight: FontWeight.bold,
-                              ),
-                            ),
-                            Text(
-                              widget.item.etat,
-                              style: GoogleFonts.roboto(
-                                fontSize: 14.sp,
-                                fontWeight: FontWeight.normal,
-                              ),
-                            ),
-                          ],
-                        ),
+                            ],
+                          ),
+                        ],
                       ),
                     ],
                   ),
@@ -441,7 +479,10 @@ Future<void> _incrementView(String id) async {
               padding: EdgeInsets.symmetric(horizontal: 16.r, vertical: 8.r),
               sliver: SliverToBoxAdapter(
                 child: Container(
-                  padding: EdgeInsets.symmetric(horizontal: 12.r, vertical: 8.r),
+                  padding: EdgeInsets.symmetric(
+                    horizontal: 12.r,
+                    vertical: 8.r,
+                  ),
                   decoration: BoxDecoration(
                     color: Colors.grey[50],
                     borderRadius: BorderRadius.circular(10.r),
@@ -469,7 +510,7 @@ Future<void> _incrementView(String id) async {
                 ),
               ),
             ),
-        
+
             SliverPadding(
               padding: EdgeInsets.symmetric(vertical: 8.r, horizontal: 16.r),
               sliver: SliverToBoxAdapter(
@@ -483,7 +524,7 @@ Future<void> _incrementView(String id) async {
               ),
             ),
 
-              StreamBuilder(
+            StreamBuilder(
               stream:
                   FirebaseFirestore.instance
                       .collection('articles')
@@ -491,7 +532,7 @@ Future<void> _incrementView(String id) async {
                       .where('titre', isEqualTo: widget.item.titre)
                       // .orderBy('createdAt', descending: true)
                       .snapshots(),
-                   
+
               builder: (context, snapshot) {
                 if (snapshot.connectionState == ConnectionState.waiting) {
                   return SliverFillRemaining(
@@ -514,7 +555,7 @@ Future<void> _incrementView(String id) async {
                       snapshot.data!.docs.map((doc) {
                         return ProductModel.fromJson(doc.data(), doc.id);
                       }).toList();
-                       
+
                   return SliverPadding(
                     padding: EdgeInsets.symmetric(
                       vertical: 8.r,
@@ -557,7 +598,9 @@ Future<void> _incrementView(String id) async {
                                 Expanded(
                                   flex: 4,
                                   child: Image.network(
-                                     item.images.isNotEmpty ? item.images[0] : '',
+                                    item.images.isNotEmpty
+                                        ? item.images[0]
+                                        : '',
                                     fit: BoxFit.cover,
                                     width: 200.w,
                                   ),

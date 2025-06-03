@@ -64,10 +64,6 @@ class _ConnexionViewState extends State<ConnexionView> {
               },
             ),
           );
-          // Navigator.pushReplacement(
-          //   context,
-          //   MaterialPageRoute(builder: (_) => ProfilView()),
-          // );
         }
       } on FirebaseAuthException catch (e) {
         String message = '';
@@ -183,10 +179,10 @@ class _ConnexionViewState extends State<ConnexionView> {
               floating: true,
               backgroundColor: Colors.grey[100],
 
-              // leading: IconButton(
-              //   onPressed: () => Navigator.pop(context),
-              //   icon: Icon(Icons.arrow_back_ios_rounded, size: 18.sp),
-              // ),
+              leading: IconButton(
+                onPressed: () => Navigator.pop(context),
+                icon: Icon(Icons.arrow_back_ios_rounded, size: 18.sp),
+              ),
               flexibleSpace: FlexibleSpaceBar(
                 background: Container(color: Colors.grey[100]),
                 centerTitle: true,

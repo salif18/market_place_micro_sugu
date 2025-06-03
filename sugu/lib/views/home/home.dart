@@ -274,7 +274,7 @@ class _HomeViewState extends State<HomeView> {
                       Text(
                         "Catégories",
                         style: GoogleFonts.roboto(
-                          fontSize: 14.sp,
+                          fontSize: 16.sp,
                           fontWeight: FontWeight.bold,
                         ),
                       ),
@@ -361,7 +361,7 @@ class _HomeViewState extends State<HomeView> {
                               item["name"],
                               overflow: TextOverflow.ellipsis,
                               style: GoogleFonts.roboto(
-                                fontSize: 12.sp,
+                                fontSize: 13.sp,
                                 fontWeight: FontWeight.w600,
                               ),
                             ),
@@ -379,7 +379,7 @@ class _HomeViewState extends State<HomeView> {
                   child: Text(
                     "Annonces récentes",
                     style: GoogleFonts.roboto(
-                      fontSize: 14.sp,
+                      fontSize: 16.sp,
                       fontWeight: FontWeight.bold,
                     ),
                   ),
@@ -461,7 +461,7 @@ class _HomeViewState extends State<HomeView> {
                                         item.titre,
                                         overflow: TextOverflow.ellipsis,
                                         style: GoogleFonts.roboto(
-                                          fontSize: 14.sp,
+                                          fontSize: 13.sp,
                                           fontWeight: FontWeight.w500,
                                           color: Colors.black,
                                         ),
@@ -477,7 +477,7 @@ class _HomeViewState extends State<HomeView> {
                                         child: Text(
                                           item.prix + " " + "FCFA",
                                           style: GoogleFonts.roboto(
-                                            fontSize: 14.sp,
+                                            fontSize: 13.sp,
                                             fontWeight: FontWeight.bold,
                                             color: Colors.black,
                                           ),
@@ -502,7 +502,7 @@ class _HomeViewState extends State<HomeView> {
                   child: Text(
                     "À vendre",
                     style: GoogleFonts.roboto(
-                      fontSize: 14.sp,
+                      fontSize: 16.sp,
                       fontWeight: FontWeight.bold,
                     ),
                   ),
@@ -583,7 +583,7 @@ class _HomeViewState extends State<HomeView> {
                                           ? item.images[0]
                                           : '',
                                       fit: BoxFit.cover,
-                                      width:200.w,
+                                      width: 200.w,
                                     ),
                                   ),
                                   SizedBox(height: 10.r),
@@ -595,7 +595,7 @@ class _HomeViewState extends State<HomeView> {
                                       item.titre,
                                       overflow: TextOverflow.ellipsis,
                                       style: GoogleFonts.roboto(
-                                        fontSize: 14.sp,
+                                        fontSize: 13.sp,
                                         fontWeight: FontWeight.w500,
                                         color: Colors.black,
                                       ),
@@ -611,7 +611,7 @@ class _HomeViewState extends State<HomeView> {
                                       child: Text(
                                         item.prix + " " + "FCFA",
                                         style: GoogleFonts.roboto(
-                                          fontSize: 14.sp,
+                                          fontSize: 13.sp,
                                           fontWeight: FontWeight.bold,
                                           color: Colors.black,
                                         ),

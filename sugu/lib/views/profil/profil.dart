@@ -195,8 +195,8 @@ class _ProfilViewState extends State<ProfilView> {
                                           ),
                                           child: Image.network(
                                             userData["photo"],
-                                            width: 80.w,
-                                            height: 80.h,
+                                            width: 60.w,
+                                            height: 60.h,
                                             fit: BoxFit.contain,
                                           ),
                                         )
@@ -211,7 +211,7 @@ class _ProfilViewState extends State<ProfilView> {
                                         ? Text(
                                           userData["name"],
                                           style: GoogleFonts.roboto(
-                                            fontSize: 16.sp,
+                                            fontSize: 14.sp,
                                             fontWeight: FontWeight.bold,
                                             color: Colors.black,
                                           ),
@@ -219,7 +219,7 @@ class _ProfilViewState extends State<ProfilView> {
                                         : Text(
                                           "Mon Micro Sugu",
                                           style: GoogleFonts.roboto(
-                                            fontSize: 16.sp,
+                                            fontSize: 14.sp,
                                             fontWeight: FontWeight.bold,
                                             color: Colors.black,
                                           ),
