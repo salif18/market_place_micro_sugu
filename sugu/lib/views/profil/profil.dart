@@ -118,6 +118,7 @@ class _ProfilViewState extends State<ProfilView> {
 
   @override
   Widget build(BuildContext context) {
+    final user = FirebaseAuth.instance.currentUser;
     return Scaffold(
       resizeToAvoidBottomInset: true,
       backgroundColor: Colors.white,
@@ -162,27 +163,72 @@ class _ProfilViewState extends State<ProfilView> {
                         bottom: BorderSide(width: 1, color: Colors.grey[200]!),
                       ),
                     ),
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Icon(Icons.person_outline_rounded, size: 50.sp),
-                        Text(
-                          "Mon Micro Sugu",
-                          style: GoogleFonts.roboto(
-                            fontSize: 16.sp,
-                            fontWeight: FontWeight.bold,
-                            color: Colors.black,
-                          ),
-                        ),
-                        Text(
-                          "Username@gmail.com",
-                          style: GoogleFonts.roboto(
-                            fontSize: 14.sp,
-                            fontWeight: FontWeight.normal,
-                            color: Colors.black,
-                          ),
-                        ),
-                      ],
+                    child: StreamBuilder(
+                      stream:
+                          FirebaseFirestore.instance
+                              .collection('users')
+                              .doc(user!.uid)
+                              .snapshots(),
+                      builder: (context, snapshot) {
+                        if (snapshot.connectionState ==
+                            ConnectionState.waiting) {
+                          return CircularProgressIndicator();
+                        }
+
+                        if (!snapshot.hasData || !snapshot.data!.exists) {
+                          return Text('Profil utilisateur introuvable.');
+                        }
+
+                        final userData =
+                            snapshot.data!.data() as Map<String, dynamic>;
+                        return Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            userData["photo"] != null &&
+                                    userData["photo"].toString().isNotEmpty
+                                ? ClipRRect(
+                                  borderRadius: BorderRadius.circular(100.r),
+                                  child: Image.network(
+                                    userData["photo"],
+                                    width: 80.w,
+                                    height: 80.h,
+                                    fit: BoxFit.contain,
+                                  ),
+                                )
+                                : Icon(
+                                  Icons.person_outline_rounded,
+                                  size: 50.sp,
+                                ),
+                            userData["name"] != null &&
+                                    userData["name"].toString().isNotEmpty
+                                ? Text(
+                                  userData["name"],
+                                  style: GoogleFonts.roboto(
+                                    fontSize: 16.sp,
+                                    fontWeight: FontWeight.bold,
+                                    color: Colors.black,
+                                  ),
+                                )
+                                : Text(
+                                  "Mon Micro Sugu",
+                                  style: GoogleFonts.roboto(
+                                    fontSize: 16.sp,
+                                    fontWeight: FontWeight.bold,
+                                    color: Colors.black,
+                                  ),
+                                ),
+
+                            Text(
+                              userData["email"],
+                              style: GoogleFonts.roboto(
+                                fontSize: 14.sp,
+                                fontWeight: FontWeight.normal,
+                                color: Colors.black,
+                              ),
+                            ),
+                          ],
+                        );
+                      },
                     ),
                   ),
                 ),

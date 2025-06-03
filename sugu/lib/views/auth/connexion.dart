@@ -151,10 +151,11 @@ class _ConnexionViewState extends State<ConnexionView> {
               pinned: true,
               floating: true,
               backgroundColor: Colors.grey[100],
-              leading: IconButton(
-                onPressed: () => Navigator.pop(context),
-                icon: Icon(Icons.arrow_back_ios_rounded, size: 18.sp),
-              ),
+              
+              // leading: IconButton(
+              //   onPressed: () => Navigator.pop(context),
+              //   icon: Icon(Icons.arrow_back_ios_rounded, size: 18.sp),
+              // ),
               flexibleSpace: FlexibleSpaceBar(
                 background: Container(color: Colors.grey[100]),
                 centerTitle: true,
