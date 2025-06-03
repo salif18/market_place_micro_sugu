@@ -31,6 +31,13 @@ class _InscriptionViewState extends State<InscriptionView> {
     // Vérification des champs obligatoires
     try {
       if (_globalKey.currentState!.validate()) {
+         showDialog(
+          context: context,
+          builder: (context) {
+            return const Center(
+              child: CircularProgressIndicator(),
+            );
+          });
         // Étape 1 : créer l'utilisateur
         UserCredential userCred = await _auth.createUserWithEmailAndPassword(
           email: _emailController.text.trim(),
@@ -80,6 +87,13 @@ class _InscriptionViewState extends State<InscriptionView> {
 
   Future<void> signInWithGoogle() async {
     try {
+       showDialog(
+          context: context,
+          builder: (context) {
+            return const Center(
+              child: CircularProgressIndicator(),
+            );
+          });
       // Déclencher la fenêtre de connexion Google
       final GoogleSignInAccount? googleUser = await GoogleSignIn().signIn();
 

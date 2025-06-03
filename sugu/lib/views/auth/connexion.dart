@@ -29,6 +29,13 @@ class _ConnexionViewState extends State<ConnexionView> {
   void _signInWithEmailAndPassword() async {
   if (_globalKey.currentState!.validate()) {
     try {
+       showDialog(
+          context: context,
+          builder: (context) {
+            return const Center(
+              child: CircularProgressIndicator(),
+            );
+          });
       UserCredential userCredential = await _auth.signInWithEmailAndPassword(
         email: _contactController.text.trim(),
         password: _passwordController.text.trim(),
@@ -62,6 +69,14 @@ class _ConnexionViewState extends State<ConnexionView> {
 
   Future<void> signInWithGoogle() async {
     try {
+
+       showDialog(
+          context: context,
+          builder: (context) {
+            return const Center(
+              child: CircularProgressIndicator(),
+            );
+          });
       // Déclencher la fenêtre de connexion Google
       final GoogleSignInAccount? googleUser = await GoogleSignIn().signIn();
 
@@ -356,19 +371,6 @@ class _ConnexionViewState extends State<ConnexionView> {
                         icon: Image.asset("assets/images/google.jpg",width: 40.w , height: 40.h,fit:  BoxFit.cover,),
                       ),
                     ),
-                    // SizedBox(width: 20.w),
-                    // Container(
-                    //   width: 80.w,
-                    //   height: 40.h,
-                    //   decoration: BoxDecoration(
-                    //     borderRadius: BorderRadius.circular(10),
-                    //     border: Border.all(width: 1.sp, color: Colors.black54),
-                    //   ),
-                    //   child: IconButton(
-                    //     onPressed: () {},
-                    //     icon: Icon(Icons.apple_outlined, size: 28.sp),
-                    //   ),
-                    // ),
                   ],
                 ),
               ),

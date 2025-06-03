@@ -3,11 +3,11 @@ import 'dart:io';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:crypto/crypto.dart';
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mdi_icons/flutter_mdi_icons.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:http/http.dart' as http;
 import 'package:image_picker/image_picker.dart';
 import 'package:sugu/models/product_model.dart';
 
@@ -125,60 +125,113 @@ class _UpdateAnnonceArticleState extends State<UpdateAnnonceArticle> {
     // Navigator.pop(context);
   }
 
+  // Future<void> deleteProductAndImages({
+  //   required String documentId,
+  //   required List<String> imageUrls, // Liste d'URLs Cloudinary
+  // }) async {
+  //   try {
+  //     // 🔐 Tes identifiants Cloudinary
+  //     const String cloudName = 'dm4qhqazr';
+  //     const String apiKey = '993914729256541';
+  //     const String apiSecret = '8EPFv5vn2j3nGugygij30Y67Zt8';
+
+  //     for (String imageUrl in imageUrls) {
+  //       // 1. Extraire le public ID
+  //       final uri = Uri.parse(imageUrl);
+  //       final parts = uri.pathSegments;
+  //       final filename = parts.last; // ex: "image1.jpg"
+  //       final folder = parts[parts.length - 2]; // ex: "articles_images"
+  //       final publicId =
+  //           '$folder/${filename.split('.').first}'; // ex: "articles_images/image1"
+
+  //       // 2. Supprimer l'image via Cloudinary
+  //       final timestamp = DateTime.now().millisecondsSinceEpoch ~/ 1000;
+  //       final signatureBase =
+  //           'public_id=$publicId&timestamp=$timestamp$apiSecret';
+
+  //       // Calculer la signature SHA1
+  //       final signature = sha1.convert(utf8.encode(signatureBase)).toString();
+
+  //       final response = await http.post(
+  //         Uri.parse('https://api.cloudinary.com/v1_1/$cloudName/image/destroy'),
+  //         body: {
+  //           'public_id': publicId,
+  //           'api_key': apiKey,
+  //           'timestamp': timestamp.toString(),
+  //           'signature': signature,
+  //         },
+  //       );
+
+  //       if (response.statusCode == 200) {
+  //         print('Image supprimée de Cloudinary : $publicId');
+  //       } else {
+  //         print('Erreur Cloudinary : ${response.body}');
+  //       }
+  //     }
+
+  //     // 3. Supprimer le document de Firestore
+  //     await FirebaseFirestore.instance
+  //         .collection('articles')
+  //         .doc(documentId)
+  //         .delete();
+  //     print('Produit supprimé avec succès');
+  //   } catch (e) {
+  //     print('Erreur suppression : $e');
+  //   }
+  // }
+
   Future<void> deleteProductAndImages({
-    required String documentId,
-    required List<String> imageUrls, // Liste d'URLs Cloudinary
-  }) async {
-    try {
-      // 🔐 Tes identifiants Cloudinary
-      const String cloudName = 'dm4qhqazr';
-      const String apiKey = '993914729256541';
-      const String apiSecret = '8EPFv5vn2j3nGugygij30Y67Zt8';
+  required String documentId,
+  required List<String> imageUrls,
+}) async {
+  try {
+    // 🔐 Identifiants Cloudinary
+    const String cloudName = 'dm4qhqazr';
+    const String apiKey = '993914729256541';
+    const String apiSecret = '8EPFv5vn2j3nGugygij30Y67Zt8';
 
-      for (String imageUrl in imageUrls) {
-        // 1. Extraire le public ID
-        final uri = Uri.parse(imageUrl);
-        final parts = uri.pathSegments;
-        final filename = parts.last; // ex: "image1.jpg"
-        final folder = parts[parts.length - 2]; // ex: "articles_images"
-        final publicId =
-            '$folder/${filename.split('.').first}'; // ex: "articles_images/image1"
+    final dio = Dio();
 
-        // 2. Supprimer l'image via Cloudinary
-        final timestamp = DateTime.now().millisecondsSinceEpoch ~/ 1000;
-        final signatureBase =
-            'public_id=$publicId&timestamp=$timestamp$apiSecret';
+    for (String imageUrl in imageUrls) {
+      // 🔍 1. Extraire le `public_id`
+      final uri = Uri.parse(imageUrl);
+      final parts = uri.pathSegments;
+      final filename = parts.last;
+      final folder = parts[parts.length - 2];
+      final publicId = '$folder/${filename.split('.').first}';
 
-        // Calculer la signature SHA1
-        final signature = sha1.convert(utf8.encode(signatureBase)).toString();
+      // ⏱️ 2. Générer la signature
+      final timestamp = DateTime.now().millisecondsSinceEpoch ~/ 1000;
+      final signatureBase = 'public_id=$publicId&timestamp=$timestamp$apiSecret';
+      final signature = sha1.convert(utf8.encode(signatureBase)).toString();
 
-        final response = await http.post(
-          Uri.parse('https://api.cloudinary.com/v1_1/$cloudName/image/destroy'),
-          body: {
-            'public_id': publicId,
-            'api_key': apiKey,
-            'timestamp': timestamp.toString(),
-            'signature': signature,
-          },
-        );
+      // 📤 3. Appel Dio pour supprimer l’image Cloudinary
+      final formData = FormData.fromMap({
+        'public_id': publicId,
+        'api_key': apiKey,
+        'timestamp': timestamp.toString(),
+        'signature': signature,
+      });
 
-        if (response.statusCode == 200) {
-          print('Image supprimée de Cloudinary : $publicId');
-        } else {
-          print('Erreur Cloudinary : ${response.body}');
-        }
+      final response = await dio.post(
+        'https://api.cloudinary.com/v1_1/$cloudName/image/destroy',
+        data: formData,
+      );
+
+      if (response.statusCode == 200 && response.data['result'] == 'ok') {
+        print('✅ Image supprimée : $publicId');
+      } else {
+        print('❌ Échec suppression image : $publicId - ${response.data}');
       }
-
-      // 3. Supprimer le document de Firestore
-      await FirebaseFirestore.instance
-          .collection('articles')
-          .doc(documentId)
-          .delete();
-      print('Produit supprimé avec succès');
-    } catch (e) {
-      print('Erreur suppression : $e');
     }
+
+    // 🗑️ 4. Supprimer le document Firestore
+    await FirebaseFirestore.instance.collection('articles').doc(documentId).delete();
+    print('🗑️ Produit supprimé avec succès');
+  } catch (e) {
+    print('❗Erreur lors de la suppression : $e');
   }
+}
 
   @override
   void dispose() {

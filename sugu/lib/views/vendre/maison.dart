@@ -1,13 +1,12 @@
-import 'dart:convert';
 import 'dart:io';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:dio/dio.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mdi_icons/flutter_mdi_icons.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:http/http.dart' as http;
 import 'package:image_picker/image_picker.dart';
 
 class AddMaisons extends StatefulWidget {
@@ -72,27 +71,35 @@ class _AddMaisonsState extends State<AddMaisons> {
   Future<List<String>> uploadImagesToCloudinary(List<XFile> images) async {
     List<String> uploadedUrls = [];
 
-    const cloudName = 'dm4qhqazr';
-    const uploadPreset = 'flutter_sugu_signed';
+    const cloudName = 'dm4qhqazr'; // ← remplace par ton cloud name
+    const uploadPreset = 'flutter_sugu_signed'; // ← remplace par ton preset
+
+    final dio = Dio();
 
     for (var image in images) {
-      final url = Uri.parse(
-        'https://api.cloudinary.com/v1_1/$cloudName/image/upload',
+      final file = await MultipartFile.fromFile(
+        image.path,
+        filename: image.name,
       );
 
-      final request =
-          http.MultipartRequest('POST', url)
-            ..fields['upload_preset'] = uploadPreset
-            ..files.add(await http.MultipartFile.fromPath('file', image.path));
+      final formData = FormData.fromMap({
+        'file': file,
+        'upload_preset': uploadPreset,
+      });
 
-      final response = await request.send();
-      final resBody = await response.stream.bytesToString();
+      try {
+        final response = await dio.post(
+          'https://api.cloudinary.com/v1_1/$cloudName/image/upload',
+          data: formData,
+        );
 
-      if (response.statusCode == 200) {
-        final data = jsonDecode(resBody);
-        uploadedUrls.add(data['secure_url']);
-      } else {
-        print('Erreur Cloudinary (${response.statusCode}): $resBody');
+        if (response.statusCode == 200) {
+          uploadedUrls.add(response.data['secure_url']);
+        } else {
+          print('Erreur Cloudinary (${response.statusCode}): ${response.data}');
+        }
+      } catch (e) {
+        print('Erreur lors de l\'upload : $e');
       }
     }
 
@@ -138,6 +145,12 @@ class _AddMaisonsState extends State<AddMaisons> {
         'userId': FirebaseAuth.instance.currentUser?.uid,
         "views": 0,
       };
+      showDialog(
+        context: context,
+        builder: (context) {
+          return const Center(child: CircularProgressIndicator());
+        },
+      );
 
       await FirebaseFirestore.instance.collection('articles').add(vehiculeData);
 

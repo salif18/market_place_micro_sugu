@@ -1,3 +1,8 @@
+import 'dart:convert';
+
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:crypto/crypto.dart';
+import 'package:dio/dio.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mdi_icons/flutter_mdi_icons.dart';
@@ -18,49 +23,98 @@ class ProfilView extends StatefulWidget {
 }
 
 class _ProfilViewState extends State<ProfilView> {
+  User? user = FirebaseAuth.instance.currentUser;
 
   Future<void> signOut(BuildContext context) async {
-  try {
-    await FirebaseAuth.instance.signOut();
-    print("Utilisateur déconnecté avec succès.");
+    try {
+      await FirebaseAuth.instance.signOut();
+      print("Utilisateur déconnecté avec succès.");
 
-    // Optionnel : rediriger vers la page de login ou d'accueil non connecté
-    Navigator.pushReplacement(
-      context,
-      MaterialPageRoute(builder: (_) => ConnexionView()), // remplace par ta page login
-    );
-  } catch (e) {
-    print("Erreur lors de la déconnexion : $e");
-  }
-}
-
-Future<void> deleteUserAccount(BuildContext context) async {
-  try {
-    User? user = FirebaseAuth.instance.currentUser;
-    if (user == null) {
-      print("Aucun utilisateur connecté.");
-      return;
+      // Optionnel : rediriger vers la page de login ou d'accueil non connecté
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(
+          builder: (_) => ConnexionView(),
+        ), // remplace par ta page login
+      );
+    } catch (e) {
+      print("Erreur lors de la déconnexion : $e");
     }
-
-    await user.delete();
-    print("Compte supprimé avec succès.");
-
-    // Optionnel : rediriger vers la page de connexion ou accueil
-    Navigator.pushReplacement(
-      context,
-      MaterialPageRoute(builder: (_) => ConnexionView()), // remplace par ta page login
-    );
-  } on FirebaseAuthException catch (e) {
-    if (e.code == 'requires-recent-login') {
-      print("Action sensible : veuillez vous reconnecter avant de supprimer le compte.");
-      // Ici, tu peux demander à l'utilisateur de se reconnecter (email/mdp, google, etc.)
-    } else {
-      print("Erreur lors de la suppression : ${e.message}");
-    }
-  } catch (e) {
-    print("Erreur inattendue : $e");
   }
-}
+
+  Future<void> deleteUserAndData(String userId) async {
+    try {
+      // 1. Cloudinary infos
+      const String cloudName = 'dm4qhqazr';
+      const String apiKey = '993914729256541';
+      const String apiSecret = '8EPFv5vn2j3nGugygij30Y67Zt8';
+
+      final dio = Dio();
+
+      // 2. Récupérer tous les articles de cet utilisateur
+      final articlesSnapshot =
+          await FirebaseFirestore.instance
+              .collection('articles')
+              .where('userId', isEqualTo: userId)
+              .get();
+
+      for (var doc in articlesSnapshot.docs) {
+        final data = doc.data();
+
+        // 3. Supprimer les images de Cloudinary
+        final List<dynamic> imageUrls = data['images'] ?? [];
+
+        for (String imageUrl in imageUrls) {
+          final uri = Uri.parse(imageUrl);
+          final parts = uri.pathSegments;
+          final filename = parts.last;
+          final folder = parts[parts.length - 2];
+          final publicId = '$folder/${filename.split('.').first}';
+
+          final timestamp = DateTime.now().millisecondsSinceEpoch ~/ 1000;
+          final signatureBase =
+              'public_id=$publicId&timestamp=$timestamp$apiSecret';
+          final signature = sha1.convert(utf8.encode(signatureBase)).toString();
+
+          final formData = FormData.fromMap({
+            'public_id': publicId,
+            'api_key': apiKey,
+            'timestamp': timestamp.toString(),
+            'signature': signature,
+          });
+
+          final response = await dio.post(
+            'https://api.cloudinary.com/v1_1/$cloudName/image/destroy',
+            data: formData,
+          );
+
+          if (response.statusCode == 200 && response.data['result'] == 'ok') {
+            print('✅ Image supprimée : $publicId');
+          } else {
+            print('❌ Échec suppression image : $publicId');
+          }
+        }
+
+        // 4. Supprimer l'article dans Firestore
+        await doc.reference.delete();
+      }
+
+      // 🔥 Supprimer le document utilisateur de la collection Firestore "users"
+      await FirebaseFirestore.instance.collection('users').doc(userId).delete();
+      print('📄 Document utilisateur supprimé dans Firestore');
+
+      // 5. Supprimer l'utilisateur Firebase Auth
+      final user = FirebaseAuth.instance.currentUser;
+      if (user != null && user.uid == userId) {
+        await user.delete();
+        print('🗑️ Compte utilisateur supprimé');
+      }
+
+      print('✅ Suppression complète effectuée');
+    } catch (e) {
+      print('❌ Erreur pendant la suppression : $e');
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -77,7 +131,7 @@ Future<void> deleteUserAccount(BuildContext context) async {
               pinned: true,
               floating: true,
               flexibleSpace: FlexibleSpaceBar(
-                 background: Container(color: Colors.white,),
+                background: Container(color: Colors.white),
                 centerTitle: true,
                 title: Text(
                   "Profil",
@@ -92,7 +146,10 @@ Future<void> deleteUserAccount(BuildContext context) async {
             SliverList(
               delegate: SliverChildListDelegate([
                 Padding(
-                  padding: EdgeInsets.symmetric(horizontal: 16.r, vertical: 16.r),
+                  padding: EdgeInsets.symmetric(
+                    horizontal: 16.r,
+                    vertical: 16.r,
+                  ),
                   child: Container(
                     padding: EdgeInsets.symmetric(
                       horizontal: 16.r,
@@ -391,7 +448,7 @@ Future<void> deleteUserAccount(BuildContext context) async {
                   padding: EdgeInsets.all(16.r),
                   child: Container(
                     padding: EdgeInsets.symmetric(horizontal: 8.r),
-                   height: 100.h,
+                    height: 100.h,
                     color: Colors.grey[200],
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.center,
@@ -400,7 +457,7 @@ Future<void> deleteUserAccount(BuildContext context) async {
                           flex: 1,
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.center,
-                                  
+
                             children: [
                               Expanded(
                                 flex: 2,
@@ -435,16 +492,14 @@ Future<void> deleteUserAccount(BuildContext context) async {
                                   fit: BoxFit.cover,
                                 ),
                               ),
-                                  
-                             
                             ],
                           ),
                         ),
                         Expanded(
                           child: Center(
-                            child: Text("Développer par Salif Moctar")
-                            ),
-                        )
+                            child: Text("Développer par Salif Moctar"),
+                          ),
+                        ),
                       ],
                     ),
                   ),
@@ -529,7 +584,10 @@ Future<void> deleteUserAccount(BuildContext context) async {
                             backgroundColor: Colors.red[700],
                             padding: EdgeInsets.symmetric(vertical: 16.r),
                           ),
-                          onPressed: () => deleteUserAccount(context),
+                          onPressed: () {
+                            deleteUserAndData(user!.uid.toString());
+                            Navigator.pop(context, true);
+                          },
                           child: Text(
                             "Supprimer",
                             style: GoogleFonts.roboto(
