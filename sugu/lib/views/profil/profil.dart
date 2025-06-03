@@ -34,7 +34,7 @@ class _ProfilViewState extends State<ProfilView> {
       Navigator.pushReplacement(
         context,
         MaterialPageRoute(
-          builder: (_) => ConnexionView(),
+          builder: (_) => ConnexionView(recentScreen: "profil",),
         ), // remplace par ta page login
       );
     } catch (e) {
@@ -163,53 +163,85 @@ class _ProfilViewState extends State<ProfilView> {
                         bottom: BorderSide(width: 1, color: Colors.grey[200]!),
                       ),
                     ),
-                    child: StreamBuilder(
-                      stream:
-                          FirebaseFirestore.instance
-                              .collection('users')
-                              .doc(user!.uid)
-                              .snapshots(),
-                      builder: (context, snapshot) {
-                        if (snapshot.connectionState ==
-                            ConnectionState.waiting) {
-                          return CircularProgressIndicator();
-                        }
+                    child:
+                        user != null
+                            ? StreamBuilder(
+                              stream:
+                                  FirebaseFirestore.instance
+                                      .collection('users')
+                                      .doc(user.uid)
+                                      .snapshots(),
+                              builder: (context, snapshot) {
+                                if (!snapshot.hasData ||
+                                    !snapshot.data!.exists) {
+                                  return Text(
+                                    'Profil utilisateur introuvable.',
+                                  );
+                                }
 
-                        if (!snapshot.hasData || !snapshot.data!.exists) {
-                          return Text('Profil utilisateur introuvable.');
-                        }
+                                final userData =
+                                    snapshot.data!.data()
+                                        as Map<String, dynamic>;
+                                return Column(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    userData["photo"] != null &&
+                                            userData["photo"]
+                                                .toString()
+                                                .isNotEmpty
+                                        ? ClipRRect(
+                                          borderRadius: BorderRadius.circular(
+                                            100.r,
+                                          ),
+                                          child: Image.network(
+                                            userData["photo"],
+                                            width: 80.w,
+                                            height: 80.h,
+                                            fit: BoxFit.contain,
+                                          ),
+                                        )
+                                        : Icon(
+                                          Icons.person_outline_rounded,
+                                          size: 50.sp,
+                                        ),
+                                    userData["name"] != null &&
+                                            userData["name"]
+                                                .toString()
+                                                .isNotEmpty
+                                        ? Text(
+                                          userData["name"],
+                                          style: GoogleFonts.roboto(
+                                            fontSize: 16.sp,
+                                            fontWeight: FontWeight.bold,
+                                            color: Colors.black,
+                                          ),
+                                        )
+                                        : Text(
+                                          "Mon Micro Sugu",
+                                          style: GoogleFonts.roboto(
+                                            fontSize: 16.sp,
+                                            fontWeight: FontWeight.bold,
+                                            color: Colors.black,
+                                          ),
+                                        ),
 
-                        final userData =
-                            snapshot.data!.data() as Map<String, dynamic>;
-                        return Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            userData["photo"] != null &&
-                                    userData["photo"].toString().isNotEmpty
-                                ? ClipRRect(
-                                  borderRadius: BorderRadius.circular(100.r),
-                                  child: Image.network(
-                                    userData["photo"],
-                                    width: 80.w,
-                                    height: 80.h,
-                                    fit: BoxFit.contain,
-                                  ),
-                                )
-                                : Icon(
-                                  Icons.person_outline_rounded,
-                                  size: 50.sp,
-                                ),
-                            userData["name"] != null &&
-                                    userData["name"].toString().isNotEmpty
-                                ? Text(
-                                  userData["name"],
-                                  style: GoogleFonts.roboto(
-                                    fontSize: 16.sp,
-                                    fontWeight: FontWeight.bold,
-                                    color: Colors.black,
-                                  ),
-                                )
-                                : Text(
+                                    Text(
+                                      userData["email"],
+                                      style: GoogleFonts.roboto(
+                                        fontSize: 14.sp,
+                                        fontWeight: FontWeight.normal,
+                                        color: Colors.black,
+                                      ),
+                                    ),
+                                  ],
+                                );
+                              },
+                            )
+                            : Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Icon(Icons.person_outline_rounded, size: 50.sp),
+                                Text(
                                   "Mon Micro Sugu",
                                   style: GoogleFonts.roboto(
                                     fontSize: 16.sp,
@@ -218,18 +250,16 @@ class _ProfilViewState extends State<ProfilView> {
                                   ),
                                 ),
 
-                            Text(
-                              userData["email"],
-                              style: GoogleFonts.roboto(
-                                fontSize: 14.sp,
-                                fontWeight: FontWeight.normal,
-                                color: Colors.black,
-                              ),
+                                Text(
+                                  "example@gmail.com",
+                                  style: GoogleFonts.roboto(
+                                    fontSize: 14.sp,
+                                    fontWeight: FontWeight.normal,
+                                    color: Colors.black,
+                                  ),
+                                ),
+                              ],
                             ),
-                          ],
-                        );
-                      },
-                    ),
                   ),
                 ),
                 SizedBox(height: 10.h),
@@ -283,7 +313,7 @@ class _ProfilViewState extends State<ProfilView> {
                     child: ListTile(
                       leading: Icon(Mdi.tagOutline, size: 20.sp),
                       title: Text(
-                        "Vos annonces",
+                        "Mes produits au marché",
                         style: GoogleFonts.roboto(
                           fontSize: 16.sp,
                           fontWeight: FontWeight.w400,
@@ -294,13 +324,27 @@ class _ProfilViewState extends State<ProfilView> {
                         Icons.arrow_forward_ios_rounded,
                         size: 18.sp,
                       ),
-                      onTap:
-                          () => Navigator.push(
+                      onTap: () {
+                        final user = FirebaseAuth.instance.currentUser;
+
+                        if (user != null) {
+                          // L'utilisateur est connecté
+                          Navigator.push(
                             context,
                             MaterialPageRoute(
                               builder: (context) => const VosAnnonceView(),
                             ),
-                          ),
+                          );
+                        } else {
+                          // L'utilisateur n'est pas connecté
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => ConnexionView(recentScreen:"profil"),
+                            ),
+                          );
+                        }
+                      },
                     ),
                   ),
                 ),
@@ -494,8 +538,8 @@ class _ProfilViewState extends State<ProfilView> {
                   padding: EdgeInsets.all(16.r),
                   child: Container(
                     padding: EdgeInsets.symmetric(horizontal: 8.r),
-                    height: 100.h,
-                    color: Colors.grey[200],
+                    height: 50.h,
+                    color: Colors.grey[50],
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
@@ -541,11 +585,7 @@ class _ProfilViewState extends State<ProfilView> {
                             ],
                           ),
                         ),
-                        Expanded(
-                          child: Center(
-                            child: Text("Développer par Salif Moctar"),
-                          ),
-                        ),
+                       
                       ],
                     ),
                   ),

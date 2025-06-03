@@ -8,9 +8,11 @@ import 'package:google_sign_in/google_sign_in.dart';
 import 'package:sugu/views/auth/forget_pass.dart';
 import 'package:sugu/views/auth/inscription.dart';
 import 'package:sugu/views/profil/profil.dart';
+import 'package:sugu/views/vendre/vendre.dart';
 
 class ConnexionView extends StatefulWidget {
-  const ConnexionView({super.key});
+  final String recentScreen;
+  const ConnexionView({super.key, required this.recentScreen});
 
   @override
   State<ConnexionView> createState() => _ConnexionViewState();
@@ -27,56 +29,71 @@ class _ConnexionViewState extends State<ConnexionView> {
   final TextEditingController _passwordController = TextEditingController();
 
   void _signInWithEmailAndPassword() async {
-  if (_globalKey.currentState!.validate()) {
-    try {
-       showDialog(
+    if (_globalKey.currentState!.validate()) {
+      try {
+        showDialog(
           context: context,
           builder: (context) {
-            return const Center(
-              child: CircularProgressIndicator(),
-            );
-          });
-      UserCredential userCredential = await _auth.signInWithEmailAndPassword(
-        email: _contactController.text.trim(),
-        password: _passwordController.text.trim(),
-      );
-
-      final user = userCredential.user;
-      if (user != null) {
-        print("Connecté : ${user.email}");
-        Navigator.pushReplacement(
-          context,
-          MaterialPageRoute(builder: (_) => ProfilView()),
+            return const Center(child: CircularProgressIndicator());
+          },
         );
-      }
-    } on FirebaseAuthException catch (e) {
-      String message = '';
-      if (e.code == 'user-not-found') {
-        message = 'Aucun utilisateur trouvé pour cet e-mail.';
-      } else if (e.code == 'wrong-password') {
-        message = 'Mot de passe incorrect.';
-      } else {
-        message = 'Erreur : ${e.message}';
-      }
+        UserCredential userCredential = await _auth.signInWithEmailAndPassword(
+          email: _contactController.text.trim(),
+          password: _passwordController.text.trim(),
+        );
 
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text(message)),
-      );
+        final user = userCredential.user;
+        if (user != null) {
+          print("Connecté : ${user.email}");
+          Navigator.pushReplacement(
+            context,
+            MaterialPageRoute(
+              builder: (context) {
+                switch (widget.recentScreen) {
+                  case "profil":
+                    return ProfilView();
+                  case "vendre":
+                    return AnnonceView();
+                  default:
+                    // Affiche une page vide ou une erreur gentille
+                    return Scaffold(
+                      appBar: AppBar(title: Text("Erreur")),
+                      body: Center(child: Text("Type d'annonce non reconnu")),
+                    );
+                }
+              },
+            ),
+          );
+          // Navigator.pushReplacement(
+          //   context,
+          //   MaterialPageRoute(builder: (_) => ProfilView()),
+          // );
+        }
+      } on FirebaseAuthException catch (e) {
+        String message = '';
+        if (e.code == 'user-not-found') {
+          message = 'Aucun utilisateur trouvé pour cet e-mail.';
+        } else if (e.code == 'wrong-password') {
+          message = 'Mot de passe incorrect.';
+        } else {
+          message = 'Erreur : ${e.message}';
+        }
+
+        ScaffoldMessenger.of(
+          context,
+        ).showSnackBar(SnackBar(content: Text(message)));
+      }
     }
   }
-}
-
 
   Future<void> signInWithGoogle() async {
     try {
-
-       showDialog(
-          context: context,
-          builder: (context) {
-            return const Center(
-              child: CircularProgressIndicator(),
-            );
-          });
+      showDialog(
+        context: context,
+        builder: (context) {
+          return const Center(child: CircularProgressIndicator());
+        },
+      );
       // Déclencher la fenêtre de connexion Google
       final GoogleSignInAccount? googleUser = await GoogleSignIn().signIn();
 
@@ -115,12 +132,26 @@ class _ConnexionViewState extends State<ConnexionView> {
         });
       }
 
-       if (user != null) {
+      if (user != null) {
         print("Connecté : ${user.email}");
-        Navigator.pushReplacement(
-          context,
-          MaterialPageRoute(builder: (_) => ProfilView()),
-        );
+      Navigator.pushReplacement(
+            context,
+            MaterialPageRoute(
+              builder: (context) {
+                switch (widget.recentScreen) {
+                  case "profil":
+                    return ProfilView();
+                  case "vendre":
+                    return AnnonceView();
+                  default:
+                    // Affiche une page vide ou une erreur gentille
+                    return Scaffold(
+                      appBar: AppBar(title: Text("Erreur")),
+                      body: Center(child: Text("Type d'annonce non reconnu")),
+                    );
+                }
+              },
+            ));
       }
 
       print('Connexion réussie avec Google : ${user?.email}');
@@ -151,7 +182,7 @@ class _ConnexionViewState extends State<ConnexionView> {
               pinned: true,
               floating: true,
               backgroundColor: Colors.grey[100],
-              
+
               // leading: IconButton(
               //   onPressed: () => Navigator.pop(context),
               //   icon: Icon(Icons.arrow_back_ios_rounded, size: 18.sp),
@@ -310,7 +341,7 @@ class _ConnexionViewState extends State<ConnexionView> {
                   padding: EdgeInsets.symmetric(horizontal: 14.r),
                   child: ElevatedButton(
                     onPressed: () {
-                    _signInWithEmailAndPassword();
+                      _signInWithEmailAndPassword();
                     },
 
                     style: ElevatedButton.styleFrom(
@@ -358,7 +389,7 @@ class _ConnexionViewState extends State<ConnexionView> {
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                     Container(
+                    Container(
                       width: 300.w,
                       height: 40.h,
                       decoration: BoxDecoration(
@@ -369,7 +400,12 @@ class _ConnexionViewState extends State<ConnexionView> {
                         onPressed: () {
                           signInWithGoogle();
                         },
-                        icon: Image.asset("assets/images/google.jpg",width: 40.w , height: 40.h,fit:  BoxFit.cover,),
+                        icon: Image.asset(
+                          "assets/images/google.jpg",
+                          width: 40.w,
+                          height: 40.h,
+                          fit: BoxFit.cover,
+                        ),
                       ),
                     ),
                   ],

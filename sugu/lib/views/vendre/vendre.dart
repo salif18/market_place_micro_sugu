@@ -1,7 +1,9 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:flutter_mdi_icons/flutter_mdi_icons.dart';
+import 'package:sugu/views/auth/connexion.dart';
 import 'package:sugu/views/vendre/article.dart';
 import 'package:sugu/views/vendre/maison.dart';
 import 'package:sugu/views/vendre/vehicule.dart';
@@ -29,7 +31,7 @@ class _AnnonceViewState extends State<AnnonceView> {
               pinned: true,
               floating: true,
               flexibleSpace: FlexibleSpaceBar(
-                 background: Container(color: Colors.white,),
+                background: Container(color: Colors.white),
                 centerTitle: true,
                 title: Text(
                   "Créer une annonce",
@@ -85,32 +87,83 @@ class _AnnonceViewState extends State<AnnonceView> {
                 ),
               ),
             ),
-            SliverPadding(
-              padding: EdgeInsets.symmetric(vertical: 8.r, horizontal: 16.r),
-              sliver: SliverToBoxAdapter(
-                child: Container(
-                  padding: EdgeInsets.all(10.r),
-                  child: IconButton(
-                    onPressed: () {
-                      _buildAlertDialog(context);
-                    },
-        
-                    style: IconButton.styleFrom(
-                      backgroundColor: Colors.deepOrangeAccent,
-                      minimumSize: Size(40.w, 40.h),
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(10.r),
+            StreamBuilder<User?>(
+              stream: FirebaseAuth.instance.authStateChanges(),
+              builder: (context, snapshot) {
+                if (snapshot.hasData) {
+                  // L'utilisateur est connecté
+                  return SliverPadding(
+                    padding: EdgeInsets.symmetric(
+                      vertical: 8.r,
+                      horizontal: 16.r,
+                    ),
+                    sliver: SliverToBoxAdapter(
+                      child: Container(
+                        padding: EdgeInsets.all(10.r),
+                        child: IconButton(
+                          onPressed: () {
+                            _buildAlertDialog(context);
+                          },
+
+                          style: IconButton.styleFrom(
+                            backgroundColor: Colors.deepOrangeAccent,
+                            minimumSize: Size(40.w, 40.h),
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(10.r),
+                            ),
+                          ),
+
+                          icon: Icon(
+                            Icons.add_business_outlined,
+                            color: Colors.white,
+                            size: 28.sp,
+                          ),
+                        ),
                       ),
                     ),
-        
-                    icon: Icon(
-                      Icons.add_business_outlined,
-                      color: Colors.white,
-                      size: 28.sp,
+                  );
+                } else {
+                  // L'utilisateur n'est pas connecté
+                  return SliverPadding(
+                    padding: EdgeInsets.symmetric(
+                      vertical: 8.r,
+                      horizontal: 16.r,
                     ),
-                  ),
-                ),
-              ),
+                    sliver: SliverToBoxAdapter(
+                      child: Container(
+                        padding: EdgeInsets.all(10.r),
+                        child: ElevatedButton(
+                          onPressed: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => ConnexionView(recentScreen: "vendre"),
+                              ),
+                            );
+                          },
+
+                          style: IconButton.styleFrom(
+                            backgroundColor: Colors.deepOrangeAccent,
+                            minimumSize: Size(40.w, 40.h),
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(10.r),
+                            ),
+                          ),
+
+                          child: Text(
+                            'Se connecter',
+                            style: GoogleFonts.roboto(
+                              fontSize: 14.sp,
+                              color: Colors.white,
+                              fontWeight: FontWeight.w600,
+                            ),
+                          ),
+                        ),
+                      ),
+                    ),
+                  );
+                }
+              },
             ),
           ],
         ),

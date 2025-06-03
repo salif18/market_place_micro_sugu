@@ -461,7 +461,7 @@ class _InscriptionViewState extends State<InscriptionView> {
                         Navigator.push(
                           context,
                           MaterialPageRoute(
-                            builder: (context) => ConnexionView(),
+                            builder: (context) => ConnexionView(recentScreen: "profil"),
                           ),
                         );
                       },
