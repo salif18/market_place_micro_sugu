@@ -121,7 +121,7 @@ class _CategoriesViewState extends State<CategoriesView> {
                                   child: Image.network(
                                      item.images.isNotEmpty ? item.images[0] : '',
                                     fit: BoxFit.cover,
-                                    width: double.infinity,
+                                    width: 200.w,
                                   ),
                                 ),
                                 SizedBox(height: 10.r),

@@ -17,7 +17,6 @@ class VosAnnonceView extends StatefulWidget {
 }
 
 class _VosAnnonceViewState extends State<VosAnnonceView> {
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -52,7 +51,10 @@ class _VosAnnonceViewState extends State<VosAnnonceView> {
               stream:
                   FirebaseFirestore.instance
                       .collection('articles')
-                      .where('userId', isEqualTo: FirebaseAuth.instance.currentUser!.uid)
+                      .where(
+                        'userId',
+                        isEqualTo: FirebaseAuth.instance.currentUser!.uid,
+                      )
                       // .orderBy('createdAt', descending: true)
                       .snapshots(),
               builder: (context, snapshot) {
@@ -138,9 +140,11 @@ class _VosAnnonceViewState extends State<VosAnnonceView> {
                                 Expanded(
                                   flex: 4,
                                   child: Image.network(
-                                     item.images.isNotEmpty ? item.images[0] : '',
+                                    item.images.isNotEmpty
+                                        ? item.images[0]
+                                        : '',
                                     fit: BoxFit.cover,
-                                    width: double.infinity,
+                                    width: 200.w,
                                   ),
                                 ),
                                 SizedBox(height: 10.r),
@@ -175,7 +179,7 @@ class _VosAnnonceViewState extends State<VosAnnonceView> {
                                     ),
                                   ),
                                 ),
-                                
+
                                 Expanded(
                                   flex: 1,
                                   child: Padding(
@@ -183,12 +187,23 @@ class _VosAnnonceViewState extends State<VosAnnonceView> {
                                       horizontal: 5.r,
                                     ),
                                     child: Row(
-                                      mainAxisAlignment: MainAxisAlignment.start,
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.start,
                                       children: [
-                                        Icon(Mdi.eye, size: 14.sp,),
-                                         SizedBox(width: 5.w),
-                                         Text(item.views.toString() +" " + "vues",
-                        style: GoogleFonts.roboto(fontSize: 12.sp, color: Colors.grey,fontWeight: FontWeight.w400),)
+                                        Icon(
+                                          Mdi.eye,
+                                          size: 14.sp,
+                                          color: Colors.grey,
+                                        ),
+                                        SizedBox(width: 5.w),
+                                        Text(
+                                          item.views.toString() + " " + "vues",
+                                          style: GoogleFonts.roboto(
+                                            fontSize: 12.sp,
+                                            color: Colors.grey,
+                                            fontWeight: FontWeight.w400,
+                                          ),
+                                        ),
                                       ],
                                     ),
                                   ),

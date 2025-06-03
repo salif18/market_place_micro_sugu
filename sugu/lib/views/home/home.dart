@@ -449,7 +449,7 @@ class _HomeViewState extends State<HomeView> {
                                       child: Image.network(
                                         item.images[0],
                                         fit: BoxFit.cover,
-                                        width: double.infinity,
+                                        width: 200.w,
                                       ),
                                     ),
                                     SizedBox(height: 10.h),
@@ -583,7 +583,7 @@ class _HomeViewState extends State<HomeView> {
                                           ? item.images[0]
                                           : '',
                                       fit: BoxFit.cover,
-                                      width: double.infinity,
+                                      width:200.w,
                                     ),
                                   ),
                                   SizedBox(height: 10.r),

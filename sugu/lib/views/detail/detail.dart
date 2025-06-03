@@ -250,9 +250,10 @@ Future<void> _incrementView(String id) async {
                   scrollDirection: Axis.horizontal,
                   itemCount: widget.item.images.length,
                   itemBuilder: (context, index) {
+                    String photo =  widget.item.images[index];
                     return Image.network(
-                      widget.item.images[index],
-                      width: double.infinity,
+                     photo,
+                      width: MediaQuery.of(context).size.width,                 
                       fit: BoxFit.cover,
                     );
                   },
@@ -284,7 +285,7 @@ Future<void> _incrementView(String id) async {
                     if(widget.item.views! > 0)
                     Row(
                       children: [
-                        Icon(Icons.remove_red_eye_outlined, size: 18.sp,),
+                        Icon(Mdi.eye, size: 18.sp,color: Colors.grey,),
                         SizedBox(width: 8.w,),
                         Text(widget.item.views.toString() +" " + "vues",
                         style: GoogleFonts.roboto(fontSize: 12.sp, color: Colors.grey,fontWeight: FontWeight.w400),)
@@ -513,7 +514,7 @@ Future<void> _incrementView(String id) async {
                       snapshot.data!.docs.map((doc) {
                         return ProductModel.fromJson(doc.data(), doc.id);
                       }).toList();
-                         print(snapshot.data!.docs);
+                       
                   return SliverPadding(
                     padding: EdgeInsets.symmetric(
                       vertical: 8.r,
@@ -558,7 +559,7 @@ Future<void> _incrementView(String id) async {
                                   child: Image.network(
                                      item.images.isNotEmpty ? item.images[0] : '',
                                     fit: BoxFit.cover,
-                                    width: double.infinity,
+                                    width: 200.w,
                                   ),
                                 ),
                                 SizedBox(height: 10.r),
