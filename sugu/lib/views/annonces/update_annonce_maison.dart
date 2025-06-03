@@ -1,9 +1,13 @@
+import 'dart:convert';
 import 'dart:io';
 
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:crypto/crypto.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mdi_icons/flutter_mdi_icons.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:http/http.dart' as http;
 import 'package:image_picker/image_picker.dart';
 import 'package:sugu/models/product_model.dart';
 
@@ -114,6 +118,62 @@ class _UpdateAnnonceMaisonState extends State<UpdateAnnonceMaison> {
     // Optionnel: Redirection ou reset du formulaire
     // Navigator.pop(context);
   }
+
+  Future<void> deleteProductAndImages({
+    required String documentId,
+    required List<String> imageUrls, // Liste d'URLs Cloudinary
+  }) async {
+    try {
+      // 🔐 Tes identifiants Cloudinary
+      const String cloudName = 'dm4qhqazr';
+      const String apiKey = '993914729256541';
+      const String apiSecret = '8EPFv5vn2j3nGugygij30Y67Zt8';
+
+      for (String imageUrl in imageUrls) {
+        // 1. Extraire le public ID
+        final uri = Uri.parse(imageUrl);
+        final parts = uri.pathSegments;
+        final filename = parts.last; // ex: "image1.jpg"
+        final folder = parts[parts.length - 2]; // ex: "articles_images"
+        final publicId =
+            '$folder/${filename.split('.').first}'; // ex: "articles_images/image1"
+
+        // 2. Supprimer l'image via Cloudinary
+        final timestamp = DateTime.now().millisecondsSinceEpoch ~/ 1000;
+        final signatureBase =
+            'public_id=$publicId&timestamp=$timestamp$apiSecret';
+
+        // Calculer la signature SHA1
+        final signature = sha1.convert(utf8.encode(signatureBase)).toString();
+
+        final response = await http.post(
+          Uri.parse('https://api.cloudinary.com/v1_1/$cloudName/image/destroy'),
+          body: {
+            'public_id': publicId,
+            'api_key': apiKey,
+            'timestamp': timestamp.toString(),
+            'signature': signature,
+          },
+        );
+
+        if (response.statusCode == 200) {
+          print('Image supprimée de Cloudinary : $publicId');
+        } else {
+          print('Erreur Cloudinary : ${response.body}');
+        }
+      }
+
+      // 3. Supprimer le document de Firestore
+      await FirebaseFirestore.instance
+          .collection('articles')
+          .doc(documentId)
+          .delete();
+      print('Produit supprimé avec succès');
+    } catch (e) {
+      print('Erreur suppression : $e');
+    }
+  }
+
 
   @override
   void dispose() {
@@ -447,7 +507,7 @@ class _UpdateAnnonceMaisonState extends State<UpdateAnnonceMaison> {
                         ),
                         child: ElevatedButton(
                           onPressed: () {
-                            _submitForm();
+                            _showDeleteDialog(context,widget.item);
                           },
                           style: ElevatedButton.styleFrom(
                             backgroundColor: Colors.redAccent,
@@ -634,6 +694,97 @@ class _UpdateAnnonceMaisonState extends State<UpdateAnnonceMaison> {
           ),
         );
       },
+    );
+  }
+   _showDeleteDialog(BuildContext context, item) async {
+    return await showModalBottomSheet<bool>(
+      context: context,
+      isScrollControlled: true,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(top: Radius.circular(20.r)),
+      ),
+      builder:
+          (context) => Padding(
+            padding: EdgeInsets.only(
+              bottom: MediaQuery.of(context).viewInsets.bottom,
+            ),
+            child: Container(
+              padding: EdgeInsets.all(24.r),
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Center(
+                    child: Icon(
+                      Icons.warning_rounded,
+                      size: 48.sp,
+                      color: Colors.orange[700],
+                    ),
+                  ),
+                  SizedBox(height: 16.h),
+                  Text(
+                    "Suppression de produit",
+                    style: GoogleFonts.roboto(
+                      fontSize: 20.sp,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.red[700],
+                    ),
+                    textAlign: TextAlign.center,
+                  ),
+                  SizedBox(height: 16.h),
+                  Text(
+                    "Êtes-vous sûr de vouloir supprimer définitivement votre produit ? "
+                    "Cette action est irréversible et toutes vos données seront perdues.",
+                    style: GoogleFonts.roboto(
+                      fontSize: 16.sp,
+                      color: Colors.grey[800],
+                    ),
+                    textAlign: TextAlign.center,
+                  ),
+                  SizedBox(height: 24.h),
+                  Row(
+                    children: [
+                      Expanded(
+                        child: OutlinedButton(
+                          style: OutlinedButton.styleFrom(
+                            padding: EdgeInsets.symmetric(vertical: 16.r),
+                            side: BorderSide(color: Colors.grey[300]!),
+                          ),
+                          onPressed: () => Navigator.pop(context, false),
+                          child: Text(
+                            "Annuler",
+                            style: GoogleFonts.roboto(
+                              fontSize: 16.sp,
+                              fontWeight: FontWeight.w500,
+                              color: Colors.grey[800],
+                            ),
+                          ),
+                        ),
+                      ),
+                      SizedBox(width: 16.w),
+                      Expanded(
+                        child: ElevatedButton(
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: Colors.red[700],
+                            padding: EdgeInsets.symmetric(vertical: 16.r),
+                          ),
+                          onPressed: () => deleteProductAndImages(documentId: item.id, imageUrls: item.images),
+                          child: Text(
+                            "Supprimer",
+                            style: GoogleFonts.roboto(
+                              fontSize: 16.sp,
+                              fontWeight: FontWeight.w500,
+                              color: Colors.white,
+                            ),
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ],
+              ),
+            ),
+          ),
     );
   }
 }
