@@ -347,7 +347,7 @@ class _InscriptionViewState extends State<InscriptionView> {
                                   _view_password = !_view_password;
                                 });
                               },
-                              icon:_view_password ? Icon(Mdi.eyeOffOutline, size: 22.sp): Icon(Mdi.eyeOutline, size: 22.sp)),
+                              icon: Icon( _view_password ? Mdi.eyeOffOutline :Mdi.eyeOutline, size: 22.sp)),
                           ),
                         ),
                       ),

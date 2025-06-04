@@ -444,6 +444,7 @@ class _ProfilViewState extends State<ProfilView> {
                     ),
                   ),
                 ),
+                if(user != null)
                 Padding(
                   padding: EdgeInsets.symmetric(horizontal: 16.r),
                   child: Container(
@@ -478,6 +479,7 @@ class _ProfilViewState extends State<ProfilView> {
                     ),
                   ),
                 ),
+                if(user != null)
                 Padding(
                   padding: EdgeInsets.symmetric(horizontal: 16.r),
                   child: Container(
@@ -506,6 +508,7 @@ class _ProfilViewState extends State<ProfilView> {
                     ),
                   ),
                 ),
+                if(user != null)
                 Padding(
                   padding: EdgeInsets.symmetric(horizontal: 16.r),
                   child: Container(
@@ -534,8 +537,9 @@ class _ProfilViewState extends State<ProfilView> {
                     ),
                   ),
                 ),
+                SizedBox(height: 150.h,),
                 Padding(
-                  padding: EdgeInsets.all(16.r),
+                  padding: EdgeInsets.symmetric( horizontal:16.r),
                   child: Container(
                     padding: EdgeInsets.symmetric(horizontal: 8.r),
                     height: 50.h,
@@ -547,7 +551,6 @@ class _ProfilViewState extends State<ProfilView> {
                           flex: 1,
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.center,
-
                             children: [
                               Expanded(
                                 flex: 2,

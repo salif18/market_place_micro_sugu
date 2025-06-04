@@ -18,9 +18,7 @@ class _UpdatePassViewState extends State<UpdatePassView> {
   final GlobalKey<FormState> _globalKey = GlobalKey<FormState>();
   // Contrôleurs pour les champs de formulaire
   final TextEditingController _emailController = TextEditingController();
-  // final TextEditingController _newPassword = TextEditingController();
-  // final TextEditingController _passwordConfirmation = TextEditingController();
-
+  
   void _submitForm() async {
     if (!_globalKey.currentState!.validate()) return;
 
@@ -173,103 +171,12 @@ class _UpdatePassViewState extends State<UpdatePassView> {
                           ),
                         ),
                       ),
-                      // Padding(
-                      //   padding: EdgeInsets.symmetric(
-                      //     horizontal: 16.r,
-                      //     vertical: 8.r,
-                      //   ),
-                      //   child: TextFormField(
-                      //     keyboardType: TextInputType.visiblePassword,
-                      //     obscureText: true,
-                      //     controller: _newPassword,
-                      //     validator: (value) {
-                      //       if (value!.isEmpty) {
-                      //         return 'Veuillez entrer votre nouveau mot de passe';
-                      //       }
-                      //       return null;
-                      //     },
-                      //     decoration: InputDecoration(
-                      //       hintText: "Nouveau mot de passe",
-                      //       hintStyle: GoogleFonts.roboto(fontSize: 16.sp),
-                      //       filled: true,
-                      //       fillColor: Colors.white,
-                      //       contentPadding: EdgeInsets.symmetric(
-                      //         horizontal: 16.r,
-                      //         vertical: 10.r,
-                      //       ),
-                      //       border: OutlineInputBorder(
-                      //         borderRadius: BorderRadius.circular(10.r),
-                      //         borderSide: BorderSide.none,
-                      //       ),
-                      //       suffixIcon: Icon(Mdi.eyeOffOutline, size: 22.sp),
-                      //     ),
-                      //   ),
-                      // ),
-                      // Padding(
-                      //   padding: EdgeInsets.symmetric(
-                      //     horizontal: 16.r,
-                      //     vertical: 8.r,
-                      //   ),
-                      //   child: TextFormField(
-                      //     keyboardType: TextInputType.visiblePassword,
-                      //     obscureText: true,
-                      //     controller: _passwordConfirmation,
-                      //     validator: (value) {
-                      //       if (value!.isEmpty) {
-                      //         return 'Veuillez retaper votre nouveau mot de passe';
-                      //       }
-                      //       return null;
-                      //     },
-                      //     decoration: InputDecoration(
-                      //       hintText: "Rétaper le nouveau mot de passe",
-                      //       hintStyle: GoogleFonts.roboto(fontSize: 16.sp),
-                      //       filled: true,
-                      //       fillColor: Colors.white,
-                      //       contentPadding: EdgeInsets.symmetric(
-                      //         horizontal: 16.r,
-                      //         vertical: 10.r,
-                      //       ),
-                      //       border: OutlineInputBorder(
-                      //         borderRadius: BorderRadius.circular(10.r),
-                      //         borderSide: BorderSide.none,
-                      //       ),
-                      //       suffixIcon: Icon(Mdi.eyeOffOutline, size: 22.sp),
-                      //     ),
-                      //   ),
-                      // ),
                     ],
                   ),
                 ),
               ),
             ),
-            // SliverPadding(
-            //   padding: EdgeInsets.symmetric(horizontal: 16.r, vertical: 5.r),
-            //   sliver: SliverToBoxAdapter(
-            //     child: Row(
-            //       mainAxisAlignment: MainAxisAlignment.end,
-            //       children: [
-            //         TextButton(
-            //           onPressed: () {
-            //             Navigator.push(
-            //               context,
-            //               MaterialPageRoute(
-            //                 builder: (context) => const ForgetPassWordView(),
-            //               ),
-            //             );
-            //           },
-            //           child: Text(
-            //             "Mot de passe oublié ?",
-            //             style: GoogleFonts.roboto(
-            //               fontSize: 12.sp,
-            //               fontWeight: FontWeight.bold,
-            //               color: Colors.blueAccent,
-            //             ),
-            //           ),
-            //         ),
-            //       ],
-            //     ),
-            //   ),
-            // ),
+
             SliverPadding(
               padding: EdgeInsets.symmetric(horizontal: 16.h, vertical: 20.r),
               sliver: SliverToBoxAdapter(

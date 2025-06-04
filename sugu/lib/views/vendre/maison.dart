@@ -17,6 +17,8 @@ class AddMaisons extends StatefulWidget {
 }
 
 class _AddMaisonsState extends State<AddMaisons> {
+     // CLE KEY POUR LE FORMULAIRE
+  final GlobalKey<FormState> _globalKey = GlobalKey<FormState>();
   // Contrôleurs pour les champs de formulaire
   final TextEditingController _titreController = TextEditingController();
   final TextEditingController _prixController = TextEditingController();
@@ -108,17 +110,13 @@ class _AddMaisonsState extends State<AddMaisons> {
 
   // ✅ 3. Soumettre le formulaire à firebase
   void _submitForm() async {
-    if (_titreController.text.isEmpty ||
-        _prixController.text.isEmpty ||
-        _selectedCategory == null ||
-        _selectedEtat == null) {
+    if (_globalKey.currentState!.validate() ||  _selectedCategory != null ||
+        _selectedEtat != null) {
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(
           content: Text("Veuillez remplir tous les champs obligatoires"),
         ),
       );
-      return;
-    }
 
     try {
       // Upload vers Cloudinary
@@ -158,13 +156,15 @@ class _AddMaisonsState extends State<AddMaisons> {
         const SnackBar(content: Text("Article publié avec succès")),
       );
 
-      Navigator.pop(context);
+       Navigator.push(context, MaterialPageRoute(builder: (context) => AddMaisons()));
     } catch (e) {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(content: Text("Erreur lors de la publication : $e")),
       );
       print("Erreur lors de la publication : $e");
     }
+        }
+        return ;
   }
 
   @override
@@ -211,6 +211,7 @@ class _AddMaisonsState extends State<AddMaisons> {
             SliverList(
               delegate: SliverChildListDelegate([
                 Form(
+                  key: _globalKey,
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
@@ -290,7 +291,12 @@ class _AddMaisonsState extends State<AddMaisons> {
                         child: TextFormField(
                           keyboardType: TextInputType.text,
                           controller: _titreController,
-                          validator: null,
+                          validator: (value) {
+                            if (value!.isEmpty) {
+                              return 'Veuillez entrer un titre';
+                            }
+                            return null;
+                          },
                           decoration: InputDecoration(
                             hintText: "Titre",
                             hintStyle: GoogleFonts.roboto(fontSize: 16.sp),
@@ -315,7 +321,12 @@ class _AddMaisonsState extends State<AddMaisons> {
                         child: TextFormField(
                           keyboardType: TextInputType.number,
                           controller: _prixController,
-                          validator: null,
+                          validator: (value) {
+                            if (value!.isEmpty) {
+                              return 'Veuillez entrer un prix';
+                            }
+                            return null;
+                          },
                           decoration: InputDecoration(
                             hintText: "Prix",
                             hintStyle: GoogleFonts.roboto(fontSize: 16.sp),
@@ -406,7 +417,12 @@ class _AddMaisonsState extends State<AddMaisons> {
                         child: TextFormField(
                           keyboardType: TextInputType.text,
                           controller: _descriptionController,
-                          validator: null,
+                          validator: (value) {
+                            if (value!.isEmpty) {
+                              return 'Veuillez entrer une description';
+                            }
+                            return null;
+                          },
                           decoration: InputDecoration(
                             hintText: "Description",
                             hintStyle: GoogleFonts.roboto(fontSize: 16.sp),
@@ -431,7 +447,12 @@ class _AddMaisonsState extends State<AddMaisons> {
                         child: TextFormField(
                           keyboardType: TextInputType.text,
                           controller: _localisationController,
-                          validator: null,
+                          validator: (value) {
+                            if (value!.isEmpty) {
+                              return 'Veuillez entrer une localisation';
+                            }
+                            return null;
+                          },
                           decoration: InputDecoration(
                             hintText: "localisation",
                             hintStyle: GoogleFonts.roboto(fontSize: 16.sp),
@@ -456,7 +477,12 @@ class _AddMaisonsState extends State<AddMaisons> {
                         child: TextFormField(
                           keyboardType: TextInputType.phone,
                           controller: _numeroController,
-                          validator: null,
+                          validator: (value) {
+                            if (value!.isEmpty) {
+                              return 'Veuillez entrer un numéro';
+                            }
+                            return null;
+                          },
                           decoration: InputDecoration(
                             hintText: "Numéro vendeur",
                             hintStyle: GoogleFonts.roboto(fontSize: 16.sp),

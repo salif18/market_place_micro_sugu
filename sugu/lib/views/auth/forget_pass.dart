@@ -149,36 +149,6 @@ class _ForgetPassWordViewState extends State<ForgetPassWordView> {
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      // Padding(
-                      //   padding: EdgeInsets.symmetric(
-                      //     horizontal: 16.r,
-                      //     vertical: 8.r,
-                      //   ),
-                      //   child: TextFormField(
-                      //     keyboardType: TextInputType.text,
-                      //     controller: _contactController,
-                      //     validator: (value) {
-                      //       if (value!.isEmpty) {
-                      //         return 'Veuillez entrer un numéro ';
-                      //       }
-                      //       return null;
-                      //     },
-                      //     decoration: InputDecoration(
-                      //       hintText: "Numéro",
-                      //       hintStyle: GoogleFonts.roboto(fontSize: 16.sp),
-                      //       filled: true,
-                      //       fillColor: Colors.white,
-                      //       contentPadding: EdgeInsets.symmetric(
-                      //         horizontal: 16.r,
-                      //         vertical: 10.r,
-                      //       ),
-                      //       border: OutlineInputBorder(
-                      //         borderRadius: BorderRadius.circular(10.r),
-                      //         borderSide: BorderSide.none,
-                      //       ),
-                      //     ),
-                      //   ),
-                      // ),
                       Padding(
                         padding: EdgeInsets.symmetric(
                           horizontal: 16.r,

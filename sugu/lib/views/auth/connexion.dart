@@ -303,7 +303,7 @@ class _ConnexionViewState extends State<ConnexionView> {
                                   view_password = !view_password;
                                 });
                               },
-                              icon:view_password ? Icon(Mdi.eyeOffOutline, size: 22.sp): Icon(Mdi.eyeOutline, size: 22.sp)),
+                              icon: Icon( view_password ? Mdi.eyeOffOutline : Mdi.eyeOutline, size: 22.sp)),
                           ),
                         ),
                       ),
