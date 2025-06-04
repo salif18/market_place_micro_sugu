@@ -28,6 +28,8 @@ class _ConnexionViewState extends State<ConnexionView> {
   final TextEditingController _contactController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
 
+  bool view_password = true;
+
   void _signInWithEmailAndPassword() async {
     if (_globalKey.currentState!.validate()) {
       try {
@@ -71,10 +73,14 @@ class _ConnexionViewState extends State<ConnexionView> {
           message = 'Aucun utilisateur trouvé pour cet e-mail.';
         } else if (e.code == 'wrong-password') {
           message = 'Mot de passe incorrect.';
+        } else if (e.code == 'invalid-email') {
+          message = 'Adresse email invalide.';
+        } else if (e.code == 'invalid-credential') {
+          message =
+              'Identifiants incorrects. Vérifiez votre email ou mot de passe.';
         } else {
-          message = 'Erreur : ${e.message}';
+          message = 'Erreur inconnue (${e.code}) : ${e.message}';
         }
-
         ScaffoldMessenger.of(
           context,
         ).showSnackBar(SnackBar(content: Text(message)));
@@ -130,24 +136,25 @@ class _ConnexionViewState extends State<ConnexionView> {
 
       if (user != null) {
         print("Connecté : ${user.email}");
-      Navigator.pushReplacement(
-            context,
-            MaterialPageRoute(
-              builder: (context) {
-                switch (widget.recentScreen) {
-                  case "profil":
-                    return ProfilView();
-                  case "vendre":
-                    return AnnonceView();
-                  default:
-                    // Affiche une page vide ou une erreur gentille
-                    return Scaffold(
-                      appBar: AppBar(title: Text("Erreur")),
-                      body: Center(child: Text("Type d'annonce non reconnu")),
-                    );
-                }
-              },
-            ));
+        Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(
+            builder: (context) {
+              switch (widget.recentScreen) {
+                case "profil":
+                  return ProfilView();
+                case "vendre":
+                  return AnnonceView();
+                default:
+                  // Affiche une page vide ou une erreur gentille
+                  return Scaffold(
+                    appBar: AppBar(title: Text("Erreur")),
+                    body: Center(child: Text("Type d'annonce non reconnu")),
+                  );
+              }
+            },
+          ),
+        );
       }
 
       print('Connexion réussie avec Google : ${user?.email}');
@@ -269,7 +276,7 @@ class _ConnexionViewState extends State<ConnexionView> {
                         ),
                         child: TextFormField(
                           keyboardType: TextInputType.visiblePassword,
-                          obscureText: true,
+                          obscureText: view_password,
                           controller: _passwordController,
                           validator: (value) {
                             if (value!.isEmpty) {
@@ -290,7 +297,13 @@ class _ConnexionViewState extends State<ConnexionView> {
                               borderRadius: BorderRadius.circular(10.r),
                               borderSide: BorderSide.none,
                             ),
-                            suffixIcon: Icon(Mdi.eyeOffOutline, size: 22.sp),
+                            suffixIcon: IconButton(
+                              onPressed: (){
+                                setState(() {
+                                  view_password = !view_password;
+                                });
+                              },
+                              icon:view_password ? Icon(Mdi.eyeOffOutline, size: 22.sp): Icon(Mdi.eyeOutline, size: 22.sp)),
                           ),
                         ),
                       ),

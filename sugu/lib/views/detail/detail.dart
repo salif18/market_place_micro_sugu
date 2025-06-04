@@ -304,14 +304,15 @@ class _SingleViewState extends State<SingleView> {
               padding: EdgeInsets.symmetric(horizontal: 16.r, vertical: 8.r),
               sliver: SliverToBoxAdapter(
                 child: Row(
-                  crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisAlignment: MainAxisAlignment.end,
                   children: [
-                    Icon(Mdi.mapMarker, size: 24.sp, color: Colors.blueGrey),
+                    Icon(Mdi.mapMarker, size: 20.sp, color: Colors.blueGrey),
                     Text(
                       widget.item.localisation,
                       style: GoogleFonts.roboto(
-                        fontSize: 16.sp,
-                        fontWeight: FontWeight.normal,
+                        fontSize: 14.sp,
+                        fontWeight: FontWeight.w400,
+                        color: Colors.blueGrey
                       ),
                     ),
                   ],
@@ -378,30 +379,30 @@ class _SingleViewState extends State<SingleView> {
                                 ),
                               ],
                             ),
-                          if (widget.item.kilometrage != null &&
-                              widget.item.kilometrage!.isNotEmpty)
-                            Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text(
-                                  "Kilométrage",
-                                  style: GoogleFonts.roboto(
-                                    fontSize: 16.sp,
-                                    fontWeight: FontWeight.bold,
-                                  ),
+
+                          Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                "Etat",
+                                style: GoogleFonts.roboto(
+                                  fontSize: 16.sp,
+                                  fontWeight: FontWeight.bold,
                                 ),
-                                Text(
-                                  widget.item.kilometrage! + " " + "km",
-                                  style: GoogleFonts.roboto(
-                                    fontSize: 14.sp,
-                                    fontWeight: FontWeight.w400,
-                                  ),
+                              ),
+                              Text(
+                                widget.item.etat,
+                                style: GoogleFonts.roboto(
+                                  fontSize: 14.sp,
+                                  fontWeight: FontWeight.w400,
                                 ),
-                              ],
-                            ),
+                              ),
+                            ],
+                          ),
+
                         ],
                       ),
-
+                    SizedBox(width:20.sp),
                       Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
@@ -449,25 +450,27 @@ class _SingleViewState extends State<SingleView> {
                               ],
                             ),
 
-                          Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text(
-                                "Etat",
-                                style: GoogleFonts.roboto(
-                                  fontSize: 16.sp,
-                                  fontWeight: FontWeight.bold,
+                          if (widget.item.kilometrage != null &&
+                              widget.item.kilometrage!.isNotEmpty)
+                            Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  "Kilométrage",
+                                  style: GoogleFonts.roboto(
+                                    fontSize: 16.sp,
+                                    fontWeight: FontWeight.bold,
+                                  ),
                                 ),
-                              ),
-                              Text(
-                                widget.item.etat,
-                                style: GoogleFonts.roboto(
-                                  fontSize: 14.sp,
-                                  fontWeight: FontWeight.w400,
+                                Text(
+                                  widget.item.kilometrage! + " " + "km",
+                                  style: GoogleFonts.roboto(
+                                    fontSize: 14.sp,
+                                    fontWeight: FontWeight.w400,
+                                  ),
                                 ),
-                              ),
-                            ],
-                          ),
+                              ],
+                            ),
                         ],
                       ),
                     ],

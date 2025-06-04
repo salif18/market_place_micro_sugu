@@ -56,8 +56,8 @@ class _MyRootsState extends State<MyRoots> {
         },
         backgroundColor: Colors.white,
         elevation: 20,
-        selectedItemColor: Colors.deepOrange,
-        unselectedItemColor: Colors.grey[500],
+        selectedItemColor: Colors.black,
+        unselectedItemColor: Colors.grey[400],
         iconSize: 25.sp,
         selectedLabelStyle: GoogleFonts.roboto(fontSize: 12.sp),
         items: [

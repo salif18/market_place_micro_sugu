@@ -26,6 +26,7 @@ class _InscriptionViewState extends State<InscriptionView> {
   final TextEditingController _numeroController = TextEditingController();
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
+  bool _view_password = true;
 
   Future<void> _singInWithEmailAndPassword() async {
     // Vérification des champs obligatoires
@@ -319,7 +320,7 @@ class _InscriptionViewState extends State<InscriptionView> {
                         ),
                         child: TextFormField(
                           keyboardType: TextInputType.visiblePassword,
-                          obscureText: true,
+                          obscureText: _view_password,
                           controller: _passwordController,
                           validator: (value) {
                             if (value!.isEmpty) {
@@ -340,7 +341,13 @@ class _InscriptionViewState extends State<InscriptionView> {
                               borderRadius: BorderRadius.circular(10.r),
                               borderSide: BorderSide.none,
                             ),
-                            suffixIcon: Icon(Mdi.eyeOffOutline, size: 22.sp),
+                            suffixIcon: IconButton(
+                              onPressed: (){
+                                setState(() {
+                                  _view_password = !_view_password;
+                                });
+                              },
+                              icon:_view_password ? Icon(Mdi.eyeOffOutline, size: 22.sp): Icon(Mdi.eyeOutline, size: 22.sp)),
                           ),
                         ),
                       ),

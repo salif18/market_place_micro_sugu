@@ -1,3 +1,4 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -14,20 +15,61 @@ class _ForgetPassWordViewState extends State<ForgetPassWordView> {
   // CLE KEY POUR LE FORMULAIRE
   final GlobalKey<FormState> _globalKey = GlobalKey<FormState>();
   // Contrôleurs pour les champs de formulaire
-  final TextEditingController _contactController = TextEditingController();
+  final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
 
-  void _submitForm() {
-    // Vérification des champs obligatoires
-    if (_globalKey.currentState!.validate()) {
-      return;
-    } else {}
+ void _submitForm() async {
+  if (!_globalKey.currentState!.validate()) return;
+
+  final email = _emailController.text.trim();
+
+  // Affichage d'un indicateur de chargement (optionnel)
+  showDialog(
+    context: context,
+    barrierDismissible: false,
+    builder: (_) => const Center(child: CircularProgressIndicator()),
+  );
+
+  try {
+    await FirebaseAuth.instance.sendPasswordResetEmail(email: email);
+
+    Navigator.pop(context); // Fermer le loader
+
+    ScaffoldMessenger.of(context).showSnackBar(
+      const SnackBar(content: Text("📩 Email de réinitialisation envoyé.")),
+    );
+
+    // Aller vers un autre écran (optionnel)
+    Navigator.pushReplacement(
+      context,
+      MaterialPageRoute(builder: (context) => InitializeVew()),
+    );
+  } on FirebaseAuthException catch (e) {
+    Navigator.pop(context); // Fermer le loader si erreur
+
+    String message;
+    switch (e.code) {
+      case 'user-not-found':
+        message = "Aucun utilisateur trouvé avec cet email.";
+        break;
+      case 'invalid-email':
+        message = "Email invalide.";
+        break;
+      default:
+        message = "Erreur : ${e.message}";
+    }
+
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(content: Text("❌ $message")),
+    );
   }
+}
+
 
   @override
   void dispose() {
     // Nettoyage des contrôleurs
-    _contactController.dispose();
+    _emailController.dispose();
     _passwordController.dispose();
     super.dispose();
   }
@@ -107,36 +149,36 @@ class _ForgetPassWordViewState extends State<ForgetPassWordView> {
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      Padding(
-                        padding: EdgeInsets.symmetric(
-                          horizontal: 16.r,
-                          vertical: 8.r,
-                        ),
-                        child: TextFormField(
-                          keyboardType: TextInputType.text,
-                          controller: _contactController,
-                          validator: (value) {
-                            if (value!.isEmpty) {
-                              return 'Veuillez entrer un numéro ';
-                            }
-                            return null;
-                          },
-                          decoration: InputDecoration(
-                            hintText: "Numéro",
-                            hintStyle: GoogleFonts.roboto(fontSize: 16.sp),
-                            filled: true,
-                            fillColor: Colors.white,
-                            contentPadding: EdgeInsets.symmetric(
-                              horizontal: 16.r,
-                              vertical: 10.r,
-                            ),
-                            border: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(10.r),
-                              borderSide: BorderSide.none,
-                            ),
-                          ),
-                        ),
-                      ),
+                      // Padding(
+                      //   padding: EdgeInsets.symmetric(
+                      //     horizontal: 16.r,
+                      //     vertical: 8.r,
+                      //   ),
+                      //   child: TextFormField(
+                      //     keyboardType: TextInputType.text,
+                      //     controller: _contactController,
+                      //     validator: (value) {
+                      //       if (value!.isEmpty) {
+                      //         return 'Veuillez entrer un numéro ';
+                      //       }
+                      //       return null;
+                      //     },
+                      //     decoration: InputDecoration(
+                      //       hintText: "Numéro",
+                      //       hintStyle: GoogleFonts.roboto(fontSize: 16.sp),
+                      //       filled: true,
+                      //       fillColor: Colors.white,
+                      //       contentPadding: EdgeInsets.symmetric(
+                      //         horizontal: 16.r,
+                      //         vertical: 10.r,
+                      //       ),
+                      //       border: OutlineInputBorder(
+                      //         borderRadius: BorderRadius.circular(10.r),
+                      //         borderSide: BorderSide.none,
+                      //       ),
+                      //     ),
+                      //   ),
+                      // ),
                       Padding(
                         padding: EdgeInsets.symmetric(
                           horizontal: 16.r,
@@ -144,8 +186,7 @@ class _ForgetPassWordViewState extends State<ForgetPassWordView> {
                         ),
                         child: TextFormField(
                           keyboardType: TextInputType.emailAddress,
-        
-                          controller: _passwordController,
+                          controller: _emailController,
                           validator: (value) {
                             if (value!.isEmpty) {
                               return 'Veuillez entrer votre email';
@@ -185,12 +226,6 @@ class _ForgetPassWordViewState extends State<ForgetPassWordView> {
                   child: ElevatedButton(
                     onPressed: () {
                       _submitForm();
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => const InitializeVew(),
-                        ),
-                      );
                     },
         
                     style: ElevatedButton.styleFrom(

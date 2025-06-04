@@ -554,22 +554,22 @@ class _ProfilViewState extends State<ProfilView> {
                                 child: Text(
                                   "Copyright ",
                                   style: GoogleFonts.roboto(
-                                    fontSize: 14.sp,
-                                    color: Colors.black,
+                                    fontSize: 12.sp,
+                                    color: Colors.blueGrey,
                                   ),
                                 ),
                               ),
                               Expanded(
                                 flex: 1,
-                                child: Icon(Mdi.copyright, size: 14.sp),
+                                child: Icon(Mdi.copyright, size: 12.sp,color: Colors.blueGrey,),
                               ),
                               Expanded(
                                 flex: 2,
                                 child: Text(
                                   "2025",
                                   style: GoogleFonts.roboto(
-                                    fontSize: 14.sp,
-                                    color: Colors.black,
+                                    fontSize: 12.sp,
+                                    color: Colors.blueGrey,
                                   ),
                                 ),
                               ),
