@@ -17,7 +17,7 @@ class AddVehicules extends StatefulWidget {
 }
 
 class _AddVehiculesState extends State<AddVehicules> {
-     // CLE KEY POUR LE FORMULAIRE
+  // CLE KEY POUR LE FORMULAIRE
   final GlobalKey<FormState> _globalKey = GlobalKey<FormState>();
   // Contrôleurs pour les champs de formulaire
   final TextEditingController _titreController = TextEditingController();
@@ -71,7 +71,8 @@ class _AddVehiculesState extends State<AddVehicules> {
       ).showSnackBar(SnackBar(content: Text("Erreur: ${e.toString()}")));
     }
   }
- // ✅ 2. Upload des images sur Cloudinary
+
+  // ✅ 2. Upload des images sur Cloudinary
   Future<List<String>> uploadImagesToCloudinary(List<XFile> images) async {
     List<String> uploadedUrls = [];
 
@@ -109,9 +110,11 @@ class _AddVehiculesState extends State<AddVehicules> {
 
     return uploadedUrls;
   }
+
   // ✅ 3. Soumettre le formulaire
   void _submitForm() async {
-    if (_globalKey.currentState!.validate() ||  _selectedCategory != null ||
+    if (_globalKey.currentState!.validate() ||
+        _selectedCategory != null ||
         _selectedEtat != null) {
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(
@@ -119,54 +122,64 @@ class _AddVehiculesState extends State<AddVehicules> {
         ),
       );
 
-    try {
-      // Upload vers Cloudinary
-      List<String> imageUrls = await uploadImagesToCloudinary(gallerieImages);
+      try {
+        // Upload vers Cloudinary
+        List<String> imageUrls = await uploadImagesToCloudinary(gallerieImages);
 
-      // Création du document Firestore
-      final vehiculeData = {
-        'titre': _titreController.text,
-        'prix': _prixController.text,
-        'description': _descriptionController.text,
-        'localisation': _localisationController.text,
-        'groupe': "véhicules, voitures",
-        'categorie': _selectedCategory,
-        'etat': _selectedEtat,
-        'images': imageUrls,
-        'modele': _modelController.text,
-        'annee': _anneeController.text,
-        'kilometrage': _kmController.text,
-        'typeCarburant': _carburantController.text,
-        'transmission': _transmissionController.text,
-        'numero': _numeroController.text,
-        'createdAt': FieldValue.serverTimestamp(),
-        'userId': FirebaseAuth.instance.currentUser?.uid,
-        "views": 0,
-      };
+        // Création du document Firestore
+        final vehiculeData = {
+          'titre': _titreController.text,
+          'prix': _prixController.text,
+          'description': _descriptionController.text,
+          'localisation': _localisationController.text,
+          'groupe': "véhicules, voitures",
+          'categorie': _selectedCategory,
+          'etat': _selectedEtat,
+          'images': imageUrls,
+          'modele': _modelController.text,
+          'annee': _anneeController.text,
+          'kilometrage': _kmController.text,
+          'typeCarburant': _carburantController.text,
+          'transmission': _transmissionController.text,
+          'numero': _numeroController.text,
+          'createdAt': FieldValue.serverTimestamp(),
+          'userId': FirebaseAuth.instance.currentUser?.uid,
+          "views": 0,
+        };
 
-      showDialog(
-        context: context,
-        builder: (context) {
-          return const Center(child: CircularProgressIndicator());
-        },
-      );
+        showDialog(
+          context: context,
+          builder: (context) {
+            return const Center(child: CircularProgressIndicator());
+          },
+        );
 
-      await FirebaseFirestore.instance.collection('articles').add(vehiculeData);
+        await FirebaseFirestore.instance
+            .collection('articles')
+            .add(vehiculeData);
 
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text("Article publié avec succès")),
-      );
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            backgroundColor: Colors.deepOrangeAccent,
+            content: Text(
+              "Article publié avec succès",
+              style: GoogleFonts.roboto(fontSize: 14.sp, color: Colors.white),
+            ),
+          ),
+        );
 
-      // Réinitialiser ou rediriger
-       Navigator.push(context, MaterialPageRoute(builder: (context) => AddVehicules()));
-    } catch (e) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text("Erreur lors de la publication : $e")),
-      );
-      print("Erreur lors de la publication : $e");
+        // Réinitialiser ou rediriger
+        Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(builder: (context) => AddVehicules()),
+        );
+      } catch (e) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text("Erreur lors de la publication : $e")),
+        );
+        print("Erreur lors de la publication : $e");
+      }
     }
-     
-    } 
     return;
   }
 
@@ -358,7 +371,7 @@ class _AddVehiculesState extends State<AddVehicules> {
                         child: TextFormField(
                           keyboardType: TextInputType.text,
                           controller: _anneeController,
-                          validator:(value) {
+                          validator: (value) {
                             if (value!.isEmpty) {
                               return 'Veuillez entrer une année';
                             }

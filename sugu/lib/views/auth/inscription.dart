@@ -79,6 +79,7 @@ class _InscriptionViewState extends State<InscriptionView> {
       ScaffoldMessenger.of(
         context,
       ).showSnackBar(SnackBar(content: Text(message)));
+      Navigator.pop(context);
     } catch (e) {
       print('Erreur: $e');
     } finally {
@@ -465,10 +466,10 @@ class _InscriptionViewState extends State<InscriptionView> {
                     ),
                     TextButton(
                       onPressed: () {
-                        Navigator.push(
+                        Navigator.pushReplacement(
                           context,
                           MaterialPageRoute(
-                            builder: (context) => ConnexionView(recentScreen: "profil"),
+                            builder: (context) => ConnexionView(),
                           ),
                         );
                       },

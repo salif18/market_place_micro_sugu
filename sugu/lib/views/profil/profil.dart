@@ -8,6 +8,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_mdi_icons/flutter_mdi_icons.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:sugu/routes.dart';
 import 'package:sugu/views/about/about.dart';
 import 'package:sugu/views/annonces/annonce.dart';
 import 'package:sugu/views/auth/connexion.dart';
@@ -28,15 +29,7 @@ class _ProfilViewState extends State<ProfilView> {
   Future<void> signOut(BuildContext context) async {
     try {
       await FirebaseAuth.instance.signOut();
-      print("Utilisateur déconnecté avec succès.");
-
-      // Optionnel : rediriger vers la page de login ou d'accueil non connecté
-      Navigator.pushReplacement(
-        context,
-        MaterialPageRoute(
-          builder: (_) => ConnexionView(recentScreen: "profil",),
-        ), // remplace par ta page login
-      );
+         Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (context)=> MyRoots()),(route)=> false);
     } catch (e) {
       print("Erreur lors de la déconnexion : $e");
     }
@@ -340,7 +333,7 @@ class _ProfilViewState extends State<ProfilView> {
                           Navigator.push(
                             context,
                             MaterialPageRoute(
-                              builder: (context) => ConnexionView(recentScreen:"profil"),
+                              builder: (context) => ConnexionView(),
                             ),
                           );
                         }
@@ -508,6 +501,35 @@ class _ProfilViewState extends State<ProfilView> {
                     ),
                   ),
                 ),
+                 if(user == null)
+                Padding(
+                  padding: EdgeInsets.symmetric(horizontal: 16.r),
+                  child: Container(
+                    decoration: BoxDecoration(
+                      color: Colors.white,
+                      borderRadius: BorderRadius.circular(10.r),
+                      border: Border(
+                        bottom: BorderSide(width: 1, color: Colors.grey[200]!),
+                      ),
+                    ),
+                    child: ListTile(
+                      leading: Icon(Mdi.login, size: 20.sp),
+                      title: Text(
+                        "Se connecter",
+                        style: GoogleFonts.roboto(
+                          fontSize: 16.sp,
+                          fontWeight: FontWeight.w400,
+                          color: Colors.black,
+                        ),
+                      ),
+                      trailing: Icon(
+                        Icons.arrow_forward_ios_rounded,
+                        size: 18.sp,
+                      ),
+                      onTap: () => Navigator.push(context, MaterialPageRoute(builder: (context) => ConnexionView())),
+                    ),
+                  ),
+                ),
                 if(user != null)
                 Padding(
                   padding: EdgeInsets.symmetric(horizontal: 16.r),
@@ -537,7 +559,7 @@ class _ProfilViewState extends State<ProfilView> {
                     ),
                   ),
                 ),
-                SizedBox(height: 150.h,),
+                SizedBox(height: 125.h,),
                 Padding(
                   padding: EdgeInsets.symmetric( horizontal:16.r),
                   child: Container(
@@ -760,7 +782,10 @@ class _ProfilViewState extends State<ProfilView> {
                             backgroundColor: Colors.deepOrange[700],
                             padding: EdgeInsets.symmetric(vertical: 14.r),
                           ),
-                          onPressed: () => signOut(context),
+                          onPressed: (){
+                            signOut(context);
+                            Navigator.pop(context,true);
+                          },
                           child: Text(
                             "Oui",
                             style: GoogleFonts.roboto(

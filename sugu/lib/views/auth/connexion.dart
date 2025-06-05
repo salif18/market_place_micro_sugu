@@ -5,14 +5,13 @@ import 'package:flutter_mdi_icons/flutter_mdi_icons.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:google_sign_in/google_sign_in.dart';
+import 'package:sugu/routes.dart';
 import 'package:sugu/views/auth/forget_pass.dart';
 import 'package:sugu/views/auth/inscription.dart';
-import 'package:sugu/views/profil/profil.dart';
-import 'package:sugu/views/vendre/vendre.dart';
+
 
 class ConnexionView extends StatefulWidget {
-  final String recentScreen;
-  const ConnexionView({super.key, required this.recentScreen});
+  const ConnexionView({super.key});
 
   @override
   State<ConnexionView> createState() => _ConnexionViewState();
@@ -46,44 +45,23 @@ class _ConnexionViewState extends State<ConnexionView> {
 
         final user = userCredential.user;
         if (user != null) {
-          print("Connecté : ${user.email}");
-          Navigator.pushReplacement(
-            context,
-            MaterialPageRoute(
-              builder: (context) {
-                switch (widget.recentScreen) {
-                  case "profil":
-                    return ProfilView();
-                  case "vendre":
-                    return AnnonceView();
-                  default:
-                    // Affiche une page vide ou une erreur gentille
-                    return Scaffold(
-                      appBar: AppBar(title: Text("Erreur")),
-                      body: Center(child: Text("Type d'annonce non reconnu")),
-                    );
-                }
-              },
-            ),
-          );
+          Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (context)=> MyRoots()),(Route)=> false);
         }
       } on FirebaseAuthException catch (e) {
         String message = '';
-        if (e.code == 'user-not-found') {
-          message = 'Aucun utilisateur trouvé pour cet e-mail.';
-        } else if (e.code == 'wrong-password') {
-          message = 'Mot de passe incorrect.';
-        } else if (e.code == 'invalid-email') {
+         if (e.code == 'invalid-email') {
           message = 'Adresse email invalide.';
         } else if (e.code == 'invalid-credential') {
-          message =
-              'Identifiants incorrects. Vérifiez votre email ou mot de passe.';
+          message = 'Vérifiez votre email ou mot de passe.';
         } else {
           message = 'Erreur inconnue (${e.code}) : ${e.message}';
         }
         ScaffoldMessenger.of(
           context,
-        ).showSnackBar(SnackBar(content: Text(message)));
+        ).showSnackBar(SnackBar(
+          backgroundColor: Colors.deepOrangeAccent,
+          content: Text(message,style: GoogleFonts.roboto(fontSize: 14.sp, color: Colors.white),)));
+         Navigator.pop(context);
       }
     }
   }
@@ -135,26 +113,8 @@ class _ConnexionViewState extends State<ConnexionView> {
       }
 
       if (user != null) {
-        print("Connecté : ${user.email}");
-        Navigator.pushReplacement(
-          context,
-          MaterialPageRoute(
-            builder: (context) {
-              switch (widget.recentScreen) {
-                case "profil":
-                  return ProfilView();
-                case "vendre":
-                  return AnnonceView();
-                default:
-                  // Affiche une page vide ou une erreur gentille
-                  return Scaffold(
-                    appBar: AppBar(title: Text("Erreur")),
-                    body: Center(child: Text("Type d'annonce non reconnu")),
-                  );
-              }
-            },
-          ),
-        );
+       
+        Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (context)=> MyRoots()),(route)=> false);
       }
 
       print('Connexion réussie avec Google : ${user?.email}');

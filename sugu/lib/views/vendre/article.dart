@@ -161,10 +161,12 @@ class _AddArticlesState extends State<AddArticles> {
       await FirebaseFirestore.instance.collection('articles').add(vehiculeData);
 
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text("Article publié avec succès")),
+        SnackBar(backgroundColor: Colors.deepOrangeAccent,
+          content: Text("Article publié avec succès",
+          style:GoogleFonts.roboto(fontSize: 14.sp , color: Colors.white))),
       );
 
-      Navigator.push(context, MaterialPageRoute(builder: (context) => AddArticles()));
+      Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => AddArticles()));
     } catch (e) {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(content: Text("Erreur lors de la publication : $e")),

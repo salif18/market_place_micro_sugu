@@ -132,7 +132,7 @@ class _AnnonceViewState extends State<AnnonceView> {
                           MaterialPageRoute(
                             builder:
                                 (context) =>
-                                    ConnexionView(recentScreen: "vendre"),
+                                    ConnexionView(),
                           ),
                         );
                       },
