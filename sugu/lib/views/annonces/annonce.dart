@@ -30,6 +30,14 @@ class _VosAnnonceViewState extends State<VosAnnonceView> {
 
       final dio = Dio();
 
+         showDialog(
+          context: context,
+          builder: (context) {
+            return const Center(
+              child: CircularProgressIndicator(),
+            );
+          });
+
       for (String imageUrl in imageUrls) {
         // 🔍 1. Extraire le `public_id`
         final uri = Uri.parse(imageUrl);
@@ -52,20 +60,10 @@ class _VosAnnonceViewState extends State<VosAnnonceView> {
           'signature': signature,
         });
 
-         showDialog(
-          context: context,
-          builder: (context) {
-            return const Center(
-              child: CircularProgressIndicator(),
-            );
-          });
-
         final response = await dio.post(
           'https://api.cloudinary.com/v1_1/$cloudName/image/destroy',
           data: formData,
         );
-
-        
 
         if (response.statusCode == 200 && response.data['result'] == 'ok') {
           print('✅ Image supprimée : $publicId');
@@ -121,9 +119,7 @@ class _VosAnnonceViewState extends State<VosAnnonceView> {
                       .collection('articles')
                       .where(
                         'userId',
-                        isEqualTo: FirebaseAuth.instance.currentUser!.uid,
-                      )
-                      // .orderBy('createdAt', descending: true)
+                        isEqualTo: FirebaseAuth.instance.currentUser!.uid)
                       .snapshots(),
               builder: (context, snapshot) {
                 if (snapshot.connectionState == ConnectionState.waiting) {
@@ -370,7 +366,7 @@ class _VosAnnonceViewState extends State<VosAnnonceView> {
                               documentId: item.id,
                               imageUrls: item.images,
                             );
-                            Navigator.pop(context, true);
+                            Navigator.pop(context);
                           },
                           child: Text(
                             "Supprimer",

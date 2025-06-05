@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:dio/dio.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 // import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mdi_icons/flutter_mdi_icons.dart';
@@ -18,7 +19,7 @@ class AddArticles extends StatefulWidget {
 }
 
 class _AddArticlesState extends State<AddArticles> {
-    // CLE KEY POUR LE FORMULAIRE
+  // CLE KEY POUR LE FORMULAIRE
   final GlobalKey<FormState> _globalKey = GlobalKey<FormState>();
   // Contrôleurs pour les champs de formulaire
   final TextEditingController _titreController = TextEditingController();
@@ -76,6 +77,33 @@ class _AddArticlesState extends State<AddArticles> {
     }
   }
 
+// stocker images avec firebase storage
+  Future<List<String>> uploadImagesToFirebase(
+    List<XFile> gallerieImages,
+  ) async {
+    final FirebaseStorage storage = FirebaseStorage.instance;
+    List<String> downloadUrls = [];
+
+    for (XFile xfile in gallerieImages) {
+      File file = File(xfile.path);
+
+      // Référence unique pour chaque image
+      final Reference ref = storage.ref().child(
+        'images/${DateTime.now().millisecondsSinceEpoch}_${xfile.name}',
+      );
+
+      final UploadTask uploadTask = ref.putFile(file);
+
+      await uploadTask;
+
+      final String urlImage = await ref.getDownloadURL();
+
+      downloadUrls.add(urlImage);
+    }
+
+    return downloadUrls;
+  }
+
   // ✅ 2. Upload des images sur Cloudinary
   Future<List<String>> uploadImagesToCloudinary(List<XFile> images) async {
     List<String> uploadedUrls = [];
@@ -117,64 +145,76 @@ class _AddArticlesState extends State<AddArticles> {
 
   // ✅ 3. Soumettre le formulaire
   void _submitForm() async {
-    if (_globalKey.currentState!.validate() ||  _selectedCategory != null ||
+    if (_globalKey.currentState!.validate() ||
+        _selectedCategory != null ||
         _selectedEtat != null) {
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(
           content: Text("Veuillez remplir tous les champs obligatoires"),
         ),
       );
-  
-    try {
 
-       showDialog(
-        context: context,
-        builder: (context) {
-          return const Center(child: CircularProgressIndicator());
-        },
-      );
-      // Upload vers Cloudinary
-      List<String> imageUrls = await uploadImagesToCloudinary(gallerieImages);
-      print(imageUrls);
+      try {
+        showDialog(
+          context: context,
+          builder: (context) {
+            return const Center(child: CircularProgressIndicator());
+          },
+        );
+        // Upload vers Cloudinary
+        List<String> imageUrls = await uploadImagesToCloudinary(gallerieImages);
 
-      // Création du document Firestore
-      final vehiculeData = {
-        'titre': _titreController.text,
-        'prix': _prixController.text,
-        'description': _descriptionController.text,
-        'localisation': _localisationController.text,
-        'groupe': "articles",
-        'categorie': _selectedCategory,
-        'etat': _selectedEtat,
-        'images': imageUrls,
-        'modele': null,
-        'annee': null,
-        'kilometrage': null,
-        'typeCarburant': null,
-        'transmission': null,
-        'numero': _numeroController.text,
-        'createdAt': FieldValue.serverTimestamp(),
-        'userId': FirebaseAuth.instance.currentUser?.uid,
-        "views": 0,
-      };
-     
-      await FirebaseFirestore.instance.collection('articles').add(vehiculeData);
+        // Upload vers firebase storage
+        // List<String> imageUrls = await uploadImagesToFirebase(gallerieImages);
+        // print(imageUrls);
 
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(backgroundColor: Colors.deepOrangeAccent,
-          content: Text("Article publié avec succès",
-          style:GoogleFonts.roboto(fontSize: 14.sp , color: Colors.white))),
-      );
+        // Création du document Firestore
+        final vehiculeData = {
+          'titre': _titreController.text,
+          'prix': _prixController.text,
+          'description': _descriptionController.text,
+          'localisation': _localisationController.text,
+          'groupe': "articles",
+          'categorie': _selectedCategory,
+          'etat': _selectedEtat,
+          'images': imageUrls,
+          'modele': null,
+          'annee': null,
+          'kilometrage': null,
+          'typeCarburant': null,
+          'transmission': null,
+          'numero': _numeroController.text,
+          'createdAt': FieldValue.serverTimestamp(),
+          'userId': FirebaseAuth.instance.currentUser?.uid,
+          "views": 0,
+        };
 
-      Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => AddArticles()));
-    } catch (e) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text("Erreur lors de la publication : $e")),
-      );
-      print("Erreur lors de la publication : $e");
+        await FirebaseFirestore.instance
+            .collection('articles')
+            .add(vehiculeData);
+
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            backgroundColor: Colors.deepOrangeAccent,
+            content: Text(
+              "Article publié avec succès",
+              style: GoogleFonts.roboto(fontSize: 14.sp, color: Colors.white),
+            ),
+          ),
+        );
+
+        Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(builder: (context) => AddArticles()),
+        );
+      } catch (e) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text("Erreur lors de la publication : $e")),
+        );
+        print("Erreur lors de la publication : $e");
+      }
     }
-     }
-     return;
+    return;
   }
 
   @override
@@ -331,7 +371,7 @@ class _AddArticlesState extends State<AddArticles> {
                         child: TextFormField(
                           keyboardType: TextInputType.number,
                           controller: _prixController,
-                          validator:(value) {
+                          validator: (value) {
                             if (value!.isEmpty) {
                               return 'Veuillez entrer un prix';
                             }
@@ -460,7 +500,7 @@ class _AddArticlesState extends State<AddArticles> {
                         child: TextFormField(
                           keyboardType: TextInputType.text,
                           controller: _localisationController,
-                          validator:(value) {
+                          validator: (value) {
                             if (value!.isEmpty) {
                               return 'Veuillez entrer une localisation';
                             }

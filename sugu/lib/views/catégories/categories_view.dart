@@ -15,7 +15,6 @@ class CategoriesView extends StatefulWidget {
 }
 
 class _CategoriesViewState extends State<CategoriesView> {
-  List<ProductModel> fakeVehiculeData = ProductModel.getProducts();
 
   @override
   Widget build(BuildContext context) {
@@ -53,7 +52,6 @@ class _CategoriesViewState extends State<CategoriesView> {
                   FirebaseFirestore.instance
                       .collection('articles')
                       .where('categorie', isEqualTo: widget.categoryName)          
-                      // .orderBy('createdAt', descending: true)
                       .snapshots(),
               builder: (context, snapshot) {
                 if (snapshot.connectionState == ConnectionState.waiting) {

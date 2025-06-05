@@ -312,7 +312,7 @@ class _SingleViewState extends State<SingleView> {
                       style: GoogleFonts.roboto(
                         fontSize: 14.sp,
                         fontWeight: FontWeight.w400,
-                        color: Colors.blueGrey
+                        color: Colors.blueGrey,
                       ),
                     ),
                   ],
@@ -399,10 +399,9 @@ class _SingleViewState extends State<SingleView> {
                               ),
                             ],
                           ),
-
                         ],
                       ),
-                    SizedBox(width:20.sp),
+                      SizedBox(width: 20.sp),
                       Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
@@ -531,11 +530,13 @@ class _SingleViewState extends State<SingleView> {
               stream:
                   FirebaseFirestore.instance
                       .collection('articles')
-                      .where('categorie', isEqualTo: widget.item.categorie)
-                      .where('titre', isEqualTo: widget.item.titre)
-                      // .orderBy('createdAt', descending: true)
+                      .where(
+                        Filter.or(
+                          Filter('categorie', isEqualTo: widget.item.categorie),
+                          Filter('titre', isEqualTo: widget.item.titre),
+                        ),
+                      )
                       .snapshots(),
-
               builder: (context, snapshot) {
                 if (snapshot.connectionState == ConnectionState.waiting) {
                   return SliverFillRemaining(

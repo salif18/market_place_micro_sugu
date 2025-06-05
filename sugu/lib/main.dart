@@ -4,7 +4,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 import 'package:sugu/components/splash.dart';
-import 'package:sugu/provider/auth_provider.dart';
 import 'package:sugu/provider/favorite_provider.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
@@ -26,7 +25,6 @@ void main() async {
   runApp(
     MultiProvider(
       providers: [
-        ChangeNotifierProvider(create: (_) => AuthProvider()),
         ChangeNotifierProvider(create: (_) => FavoriteProvider()),
       ],
       child: const MyApp(),

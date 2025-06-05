@@ -79,7 +79,7 @@ class _MyRootsState extends State<MyRoots> {
                           count: provider.getFavorites.length,
                           // largeSize: 40.sp / 2,
                           backgroundColor: Colors.amber,
-                          textColor: Colors.black,
+                          textColor: Colors.black87,
                           textStyle: GoogleFonts.roboto(
                             fontSize: 14.sp,
                             fontWeight: FontWeight.w600,
