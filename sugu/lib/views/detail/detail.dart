@@ -304,7 +304,7 @@ class _SingleViewState extends State<SingleView> {
               padding: EdgeInsets.symmetric(horizontal: 16.r, vertical: 8.r),
               sliver: SliverToBoxAdapter(
                 child: Row(
-                  mainAxisAlignment: MainAxisAlignment.end,
+                  mainAxisAlignment: MainAxisAlignment.start,
                   children: [
                     Icon(Mdi.mapMarker, size: 20.sp, color: Colors.blueGrey),
                     Text(
