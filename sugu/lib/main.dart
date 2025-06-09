@@ -31,8 +31,8 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
 
-  FirebaseMessaging.instance.subscribeToTopic('all_users');
-  
+  // FirebaseMessaging.instance.subscribeToTopic('all_users');
+
   // lire la notification en arriere plan
   FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
 
@@ -86,6 +86,7 @@ class NotificationService {
   FirebaseMessaging messaging = FirebaseMessaging.instance;
   final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
       FlutterLocalNotificationsPlugin();
+  User? user = FirebaseAuth.instance.currentUser;
 
   Future<void> initialize(BuildContext context) async {
     messaging.requestPermission(
@@ -107,19 +108,24 @@ class NotificationService {
 
     await flutterLocalNotificationsPlugin.initialize(initializationSettings);
 
-   //Obtenir le token du téléphone de l'utilisateur
-    messaging.getToken().then((token) {
-      print("Le fmcToken:$token");
-      final userId = FirebaseAuth.instance.currentUser!.uid;
-      final docRef = FirebaseFirestore.instance.collection('users').doc(userId);
-     docRef.update({
-      'fcmToken': token,
-      'updatedAt': FieldValue.serverTimestamp(), // Optionnel: mettre à jour la date modif
-    });
-    print('fcmToken mis à jour avec succès');
-    });
+    //Obtenir le token du téléphone de l'utilisateur
+    if (user != null) {
+      messaging.getToken().then((token) {
+        print("Le fmcToken:$token");
+        final userId = FirebaseAuth.instance.currentUser!.uid;
+        final docRef = FirebaseFirestore.instance
+            .collection('users')
+            .doc(userId);
+        docRef.update({
+          'fcmToken': token,
+          'updatedAt':
+              FieldValue.serverTimestamp(), // Optionnel: mettre à jour la date modif
+        });
+        print('fcmToken mis à jour avec succès');
+      });
+    }
 
-   // Lire le message
+    // Lire le message
     FirebaseMessaging.onMessage.listen((RemoteMessage message) {
       print("notification message:${message.notification!.body}");
 

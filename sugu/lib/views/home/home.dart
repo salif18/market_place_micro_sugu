@@ -115,7 +115,7 @@ class _HomeViewState extends State<HomeView> {
     },
     {
       "id": 17,
-      "name": "sacs",
+      "name": "Sacs",
       "icon": Mdi.bagPersonalOutline,
       "color": Colors.red.shade300,
     },
@@ -191,7 +191,7 @@ class _HomeViewState extends State<HomeView> {
   Widget build(BuildContext context) {
     // Triez les catégories par nom avant de les utiliser
     final sortedCategories = [...categories]
-      ..sort((a, b) => a['name'].compareTo(b['name']));
+      ..sort((a, b) => b['name'].compareTo(a['name']));
     return Scaffold(
       resizeToAvoidBottomInset: true,
       backgroundColor: Colors.white,
@@ -377,7 +377,7 @@ class _HomeViewState extends State<HomeView> {
                         ],
                       ),
                     );
-                  }, childCount: 8),
+                  }, childCount: 4),
                 ),
               ),
 
@@ -478,45 +478,51 @@ class _HomeViewState extends State<HomeView> {
                                             borderRadius: BorderRadius.circular(
                                               10.r,
                                             ),
-                                            child: Image.network(
+                                            child: item.images.isNotEmpty ? Image.network(
                                               item.images.isNotEmpty
                                                   ? item.images[0]
                                                   : '',
                                               fit: BoxFit.cover,
                                               width: double.infinity,
-                                            ),
+                                            ) : Image.asset("assets/images/default.png", 
+                                            fit: BoxFit.cover,
+                                            width: double.infinity,),
                                           ),
                                         ),
                                       ),
                                       SizedBox(height: 8.h),
                                       // Titre
-                                      Padding(
-                                        padding: EdgeInsets.symmetric(
-                                          horizontal: 8.r,
-                                        ),
-                                        child: Text(
-                                          item.titre,
-                                          overflow: TextOverflow.ellipsis,
-                                          maxLines: 1,
-                                          style: GoogleFonts.roboto(
-                                            fontSize: 12.sp,
-                                            fontWeight: FontWeight.w500,
-                                            color: Colors.black,
+                                      Expanded(
+                                        child: Padding(
+                                          padding: EdgeInsets.symmetric(
+                                            horizontal: 8.r,
+                                          ),
+                                          child: Text(
+                                            item.titre,
+                                            overflow: TextOverflow.ellipsis,
+                                            maxLines: 1,
+                                            style: GoogleFonts.roboto(
+                                              fontSize: 12.sp,
+                                              fontWeight: FontWeight.w500,
+                                              color: Colors.black,
+                                            ),
                                           ),
                                         ),
                                       ),
                                       SizedBox(height: 1.h),
                                       // Prix
-                                      Padding(
-                                        padding: EdgeInsets.symmetric(
-                                          horizontal: 8.r,
-                                        ),
-                                        child: Text(
-                                          "${item.prix} FCFA",
-                                          style: GoogleFonts.roboto(
-                                            fontSize: 12.sp,
-                                            fontWeight: FontWeight.bold,
-                                            color: Colors.black,
+                                      Expanded(
+                                        child: Padding(
+                                          padding: EdgeInsets.symmetric(
+                                            horizontal: 8.r,
+                                          ),
+                                          child: Text(
+                                            "${item.prix} FCFA",
+                                            style: GoogleFonts.roboto(
+                                              fontSize: 12.sp,
+                                              fontWeight: FontWeight.bold,
+                                              color: Colors.black,
+                                            ),
                                           ),
                                         ),
                                       ),
@@ -631,45 +637,51 @@ class _HomeViewState extends State<HomeView> {
                                         borderRadius: BorderRadius.circular(
                                           10.r,
                                         ),
-                                        child: Image.network(
-                                          item.images.isNotEmpty
-                                              ? item.images[0]
-                                              : '',
-                                          fit: BoxFit.cover,
-                                          width: double.infinity,
-                                        ),
+                                        child: item.images.isNotEmpty ? Image.network(
+                                              item.images.isNotEmpty
+                                                  ? item.images[0]
+                                                  : '',
+                                              fit: BoxFit.cover,
+                                              width: double.infinity,
+                                            ) : Image.asset("assets/images/default.png", 
+                                            fit: BoxFit.cover,
+                                            width: double.infinity,),
                                       ),
                                     ),
                                   ),
                                   // Espace
                                   SizedBox(height: 8.h),
                                   // Titre
-                                  Padding(
-                                    padding: EdgeInsets.symmetric(
-                                      horizontal: 8.r,
-                                    ),
-                                    child: Text(
-                                      item.titre,
-                                      maxLines: 1,
-                                      overflow: TextOverflow.ellipsis,
-                                      style: GoogleFonts.roboto(
-                                        fontSize: 12.sp,
-                                        fontWeight: FontWeight.w500,
+                                  Expanded(
+                                    child: Padding(
+                                      padding: EdgeInsets.symmetric(
+                                        horizontal: 8.r,
+                                      ),
+                                      child: Text(
+                                        item.titre,
+                                        maxLines: 1,
+                                        overflow: TextOverflow.ellipsis,
+                                        style: GoogleFonts.roboto(
+                                          fontSize: 12.sp,
+                                          fontWeight: FontWeight.w500,
+                                        ),
                                       ),
                                     ),
                                   ),
                                   SizedBox(height: 1.h),
                                   // Prix
-                                  Padding(
-                                    padding: EdgeInsets.symmetric(
-                                      horizontal: 8.r,
-                                    ),
-                                    child: Text(
-                                      "${item.prix} FCFA",
-                                      style: GoogleFonts.roboto(
-                                        fontSize: 12.sp,
-                                        fontWeight: FontWeight.bold,
-                                        color: Colors.black87,
+                                  Expanded(
+                                    child: Padding(
+                                      padding: EdgeInsets.symmetric(
+                                        horizontal: 8.r,
+                                      ),
+                                      child: Text(
+                                        "${item.prix} FCFA",
+                                        style: GoogleFonts.roboto(
+                                          fontSize: 12.sp,
+                                          fontWeight: FontWeight.bold,
+                                          color: Colors.black87,
+                                        ),
                                       ),
                                     ),
                                   ),

@@ -250,11 +250,17 @@ class _SingleViewState extends State<SingleView> {
                   ),
                   itemBuilder: (context, index) {
                     String photo = widget.item.images[index];
-                    return Image.network(
-                      photo,
-                      width: MediaQuery.of(context).size.width,
-                      fit: BoxFit.cover,
-                    );
+                    return photo.isNotEmpty
+                        ? Image.network(
+                          photo,
+                          width: MediaQuery.of(context).size.width,
+                          fit: BoxFit.cover,
+                        )
+                        : Image.asset(
+                          "assets/images/default.png",
+                          fit: BoxFit.cover,
+                          width: double.infinity,
+                        );
                   },
                 ),
               ),
@@ -614,45 +620,56 @@ class _SingleViewState extends State<SingleView> {
                                     ),
                                     child: ClipRRect(
                                       borderRadius: BorderRadius.circular(10.r),
-                                      child: Image.network(
-                                        item.images.isNotEmpty
-                                            ? item.images[0]
-                                            : '',
-                                        fit: BoxFit.cover,
-                                        width: double.infinity,
-                                      ),
+                                      child:
+                                          item.images.isNotEmpty
+                                              ? Image.network(
+                                                item.images.isNotEmpty
+                                                    ? item.images[0]
+                                                    : '',
+                                                fit: BoxFit.cover,
+                                                width: double.infinity,
+                                              )
+                                              : Image.asset(
+                                                "assets/images/default.png",
+                                                fit: BoxFit.cover,
+                                                width: double.infinity,
+                                              ),
                                     ),
                                   ),
                                 ),
                                 // Espace
                                 SizedBox(height: 8.h),
                                 // Titre
-                                Padding(
-                                  padding: EdgeInsets.symmetric(
-                                    horizontal: 8.r,
-                                  ),
-                                  child: Text(
-                                    item.titre,
-                                    maxLines: 1,
-                                    overflow: TextOverflow.ellipsis,
-                                    style: GoogleFonts.roboto(
-                                      fontSize: 12.sp,
-                                      fontWeight: FontWeight.w500,
+                                Expanded(
+                                  child: Padding(
+                                    padding: EdgeInsets.symmetric(
+                                      horizontal: 8.r,
+                                    ),
+                                    child: Text(
+                                      item.titre,
+                                      maxLines: 1,
+                                      overflow: TextOverflow.ellipsis,
+                                      style: GoogleFonts.roboto(
+                                        fontSize: 12.sp,
+                                        fontWeight: FontWeight.w500,
+                                      ),
                                     ),
                                   ),
                                 ),
                                 SizedBox(height: 1.h),
                                 // Prix
-                                Padding(
-                                  padding: EdgeInsets.symmetric(
-                                    horizontal: 8.r,
-                                  ),
-                                  child: Text(
-                                    "${item.prix} FCFA",
-                                    style: GoogleFonts.roboto(
-                                      fontSize: 12.sp,
-                                      fontWeight: FontWeight.bold,
-                                      color: Colors.black87,
+                                Expanded(
+                                  child: Padding(
+                                    padding: EdgeInsets.symmetric(
+                                      horizontal: 8.r,
+                                    ),
+                                    child: Text(
+                                      "${item.prix} FCFA",
+                                      style: GoogleFonts.roboto(
+                                        fontSize: 12.sp,
+                                        fontWeight: FontWeight.bold,
+                                        color: Colors.black87,
+                                      ),
                                     ),
                                   ),
                                 ),

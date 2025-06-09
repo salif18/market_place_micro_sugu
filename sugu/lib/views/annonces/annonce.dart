@@ -78,7 +78,7 @@ class _VosAnnonceViewState extends State<VosAnnonceView> {
           .delete();
       print('🗑️ Produit supprimé avec succès');
 
-      Navigator.pop(context,true);
+      Navigator.pop(context, true);
     } catch (e) {
       print('❗Erreur lors de la suppression : $e');
     }
@@ -194,68 +194,81 @@ class _VosAnnonceViewState extends State<VosAnnonceView> {
                                     ),
                                     child: ClipRRect(
                                       borderRadius: BorderRadius.circular(10.r),
-                                      child: Image.network(
-                                        item.images.isNotEmpty
-                                            ? item.images[0]
-                                            : '',
-                                        fit: BoxFit.cover,
-                                        width: double.infinity,
-                                      ),
+                                      child:
+                                          item.images.isNotEmpty
+                                              ? Image.network(
+                                                item.images.isNotEmpty
+                                                    ? item.images[0]
+                                                    : '',
+                                                fit: BoxFit.cover,
+                                                width: double.infinity,
+                                              )
+                                              : Image.asset(
+                                                "assets/images/default.png",
+                                                fit: BoxFit.cover,
+                                                width: double.infinity,
+                                              ),
                                     ),
                                   ),
                                 ),
                                 SizedBox(height: 8.h),
-                                Padding(
-                                  padding: EdgeInsets.symmetric(
-                                    horizontal: 8.r,
-                                  ),
-                                  child: Text(
-                                    item.titre,
-                                    overflow: TextOverflow.ellipsis,
-                                    maxLines: 1,
-                                    style: GoogleFonts.roboto(
-                                      fontSize: 12.sp,
-                                      fontWeight: FontWeight.w500,
-                                      color: Colors.black,
+                                Expanded(
+                                  child: Padding(
+                                    padding: EdgeInsets.symmetric(
+                                      horizontal: 8.r,
+                                    ),
+                                    child: Text(
+                                      item.titre,
+                                      overflow: TextOverflow.ellipsis,
+                                      maxLines: 1,
+                                      style: GoogleFonts.roboto(
+                                        fontSize: 12.sp,
+                                        fontWeight: FontWeight.w500,
+                                        color: Colors.black,
+                                      ),
                                     ),
                                   ),
                                 ),
                                 SizedBox(height: 1.h),
-                                Padding(
-                                  padding: EdgeInsets.symmetric(
-                                    horizontal: 8.r,
-                                  ),
-                                  child: Text(
-                                    "${item.prix} FCFA",
-                                    style: GoogleFonts.roboto(
-                                      fontSize: 12.sp,
-                                      fontWeight: FontWeight.bold,
-                                      color: Colors.black,
+                                Expanded(
+                                  child: Padding(
+                                    padding: EdgeInsets.symmetric(
+                                      horizontal: 8.r,
+                                    ),
+                                    child: Text(
+                                      "${item.prix} FCFA",
+                                      style: GoogleFonts.roboto(
+                                        fontSize: 12.sp,
+                                        fontWeight: FontWeight.bold,
+                                        color: Colors.black,
+                                      ),
                                     ),
                                   ),
                                 ),
                                 SizedBox(height: 2.h),
-                                Padding(
-                                  padding: EdgeInsets.symmetric(
-                                    horizontal: 8.r,
-                                  ),
-                                  child: Row(
-                                    children: [
-                                      Icon(
-                                        Mdi.eye,
-                                        size: 14.sp,
-                                        color: Colors.grey,
-                                      ),
-                                      SizedBox(width: 5.w),
-                                      Text(
-                                        "${item.views} vues",
-                                        style: GoogleFonts.roboto(
-                                          fontSize: 12.sp,
+                                Expanded(
+                                  child: Padding(
+                                    padding: EdgeInsets.symmetric(
+                                      horizontal: 8.r,
+                                    ),
+                                    child: Row(
+                                      children: [
+                                        Icon(
+                                          Mdi.eye,
+                                          size: 14.sp,
                                           color: Colors.grey,
-                                          fontWeight: FontWeight.w400,
                                         ),
-                                      ),
-                                    ],
+                                        SizedBox(width: 5.w),
+                                        Text(
+                                          "${item.views} vues",
+                                          style: GoogleFonts.roboto(
+                                            fontSize: 12.sp,
+                                            color: Colors.grey,
+                                            fontWeight: FontWeight.w400,
+                                          ),
+                                        ),
+                                      ],
+                                    ),
                                   ),
                                 ),
                               ],
@@ -351,7 +364,7 @@ class _VosAnnonceViewState extends State<VosAnnonceView> {
                               documentId: item.id,
                               imageUrls: item.images,
                             );
-                            Navigator.pop(context,true);
+                            Navigator.pop(context, true);
                           },
                           child: Text(
                             "Supprimer",
