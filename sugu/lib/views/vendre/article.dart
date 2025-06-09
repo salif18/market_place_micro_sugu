@@ -43,7 +43,7 @@ class _AddArticlesState extends State<AddArticles> {
     {"id": 7, "name": "Jeux vidéos", "icon": Mdi.controllerClassicOutline},
     {"id": 8, "name": "Bijoux accessoires", "icon": Mdi.diamondStone},
     {"id": 9, "name": "sacs", "icon": Mdi.bagPersonalOutline},
-    {"id": 10, "name": "Vetements", "icon": Mdi.tshirtCrewOutline},
+    {"id": 10, "name": "Vêtements", "icon": Mdi.tshirtCrewOutline},
     {"id": 11, "name": "Chaussures", "icon": Mdi.shoeFormal},
     {"id": 12, "name": "Jouets", "icon": Mdi.toyBrickOutline},
     {"id": 13, "name": "Produits pour animaux", "icon": Mdi.pawOutline},

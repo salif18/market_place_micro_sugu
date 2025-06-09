@@ -81,8 +81,8 @@ class _MyRootsState extends State<MyRoots> {
                           backgroundColor: Colors.amber,
                           textColor: Colors.black87,
                           textStyle: GoogleFonts.roboto(
-                            fontSize: 14.sp,
-                            fontWeight: FontWeight.w600,
+                            fontSize: 11.sp,
+                            fontWeight: FontWeight.w500,
                           ),
                         ),
                       ),

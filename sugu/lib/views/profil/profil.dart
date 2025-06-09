@@ -306,7 +306,7 @@ class _ProfilViewState extends State<ProfilView> {
                     child: ListTile(
                       leading: Icon(Mdi.tagOutline, size: 20.sp),
                       title: Text(
-                        "Mes produits au marché",
+                        "Mes annonces",
                         style: GoogleFonts.roboto(
                           fontSize: 16.sp,
                           fontWeight: FontWeight.w400,

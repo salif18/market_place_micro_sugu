@@ -278,7 +278,7 @@ class _SingleViewState extends State<SingleView> {
                     Text(
                       widget.item.prix + " " + "FCFA",
                       style: GoogleFonts.roboto(
-                        fontSize: 20.sp,
+                        fontSize: 18.sp,
                         fontWeight: FontWeight.bold,
                       ),
                     ),
@@ -570,10 +570,10 @@ class _SingleViewState extends State<SingleView> {
                       gridDelegate:
                           const SliverGridDelegateWithFixedCrossAxisCount(
                             crossAxisCount: 2,
-                            crossAxisSpacing: 2,
-                            mainAxisSpacing: 2,
+                            crossAxisSpacing: 1,
+                            mainAxisSpacing: 1,
                             childAspectRatio:
-                                0.71, // Ajuste pour obtenir une belle carte
+                                0.78, // Ajuste pour obtenir une belle carte
                           ),
                       delegate: SliverChildBuilderDelegate((
                         BuildContext context,
@@ -636,12 +636,12 @@ class _SingleViewState extends State<SingleView> {
                                     maxLines: 1,
                                     overflow: TextOverflow.ellipsis,
                                     style: GoogleFonts.roboto(
-                                      fontSize: 13.sp,
+                                      fontSize: 12.sp,
                                       fontWeight: FontWeight.w500,
                                     ),
                                   ),
                                 ),
-                                SizedBox(height: 4.h),
+                                SizedBox(height: 1.h),
                                 // Prix
                                 Padding(
                                   padding: EdgeInsets.symmetric(
@@ -650,7 +650,7 @@ class _SingleViewState extends State<SingleView> {
                                   child: Text(
                                     "${item.prix} FCFA",
                                     style: GoogleFonts.roboto(
-                                      fontSize: 14.sp,
+                                      fontSize: 12.sp,
                                       fontWeight: FontWeight.bold,
                                       color: Colors.black87,
                                     ),

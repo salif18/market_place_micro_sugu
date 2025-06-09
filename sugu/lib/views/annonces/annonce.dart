@@ -106,7 +106,7 @@ class _VosAnnonceViewState extends State<VosAnnonceView> {
                 background: Container(color: Colors.white),
                 centerTitle: true,
                 title: Text(
-                  "Vos annonces",
+                  "Mes annonces",
                   style: GoogleFonts.montserrat(
                     fontSize: 18.sp,
                     fontWeight: FontWeight.bold,
@@ -154,9 +154,9 @@ class _VosAnnonceViewState extends State<VosAnnonceView> {
                       gridDelegate:
                           const SliverGridDelegateWithFixedCrossAxisCount(
                             crossAxisCount: 2,
-                            crossAxisSpacing: 2,
-                            mainAxisSpacing: 4,
-                            childAspectRatio: 0.68,
+                            crossAxisSpacing: 1,
+                            mainAxisSpacing: 1,
+                            childAspectRatio: 0.72,
                           ),
                       delegate: SliverChildBuilderDelegate((
                         BuildContext context,
@@ -214,13 +214,13 @@ class _VosAnnonceViewState extends State<VosAnnonceView> {
                                     overflow: TextOverflow.ellipsis,
                                     maxLines: 1,
                                     style: GoogleFonts.roboto(
-                                      fontSize: 14.sp,
+                                      fontSize: 12.sp,
                                       fontWeight: FontWeight.w500,
                                       color: Colors.black,
                                     ),
                                   ),
                                 ),
-                                SizedBox(height: 2.h),
+                                SizedBox(height: 1.h),
                                 Padding(
                                   padding: EdgeInsets.symmetric(
                                     horizontal: 8.r,
@@ -228,7 +228,7 @@ class _VosAnnonceViewState extends State<VosAnnonceView> {
                                   child: Text(
                                     "${item.prix} FCFA",
                                     style: GoogleFonts.roboto(
-                                      fontSize: 14.sp,
+                                      fontSize: 12.sp,
                                       fontWeight: FontWeight.bold,
                                       color: Colors.black,
                                     ),

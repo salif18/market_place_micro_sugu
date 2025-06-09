@@ -121,7 +121,7 @@ class _HomeViewState extends State<HomeView> {
     },
     {
       "id": 18,
-      "name": "Vetements",
+      "name": "Vêtements",
       "icon": Mdi.tshirtCrewOutline,
       "color": Colors.cyan.shade400,
     },
@@ -426,7 +426,7 @@ class _HomeViewState extends State<HomeView> {
                         }).toList();
                     return SliverToBoxAdapter(
                       child: SizedBox(
-                        height: 200.h, // hauteur fixe du bloc horizontal
+                        height: 188.h, // hauteur fixe du bloc horizontal
                         child: ListView.builder(
                           scrollDirection: Axis.horizontal,
                           itemCount: articles.length,
@@ -499,13 +499,13 @@ class _HomeViewState extends State<HomeView> {
                                           overflow: TextOverflow.ellipsis,
                                           maxLines: 1,
                                           style: GoogleFonts.roboto(
-                                            fontSize: 13.sp,
+                                            fontSize: 12.sp,
                                             fontWeight: FontWeight.w500,
                                             color: Colors.black,
                                           ),
                                         ),
                                       ),
-                                      SizedBox(height: 4.h),
+                                      SizedBox(height: 1.h),
                                       // Prix
                                       Padding(
                                         padding: EdgeInsets.symmetric(
@@ -514,7 +514,7 @@ class _HomeViewState extends State<HomeView> {
                                         child: Text(
                                           "${item.prix} FCFA",
                                           style: GoogleFonts.roboto(
-                                            fontSize: 14.sp,
+                                            fontSize: 12.sp,
                                             fontWeight: FontWeight.bold,
                                             color: Colors.black,
                                           ),
@@ -583,10 +583,10 @@ class _HomeViewState extends State<HomeView> {
                         gridDelegate:
                             const SliverGridDelegateWithFixedCrossAxisCount(
                               crossAxisCount: 2,
-                              crossAxisSpacing: 2,
-                              mainAxisSpacing: 2,
+                              crossAxisSpacing: 1,
+                              mainAxisSpacing: 1,
                               childAspectRatio:
-                                  0.71, // Ajuste pour obtenir une belle carte
+                                  0.78, // Ajuste pour obtenir une belle carte
                             ),
                         delegate: SliverChildBuilderDelegate((
                           BuildContext context,
@@ -653,12 +653,12 @@ class _HomeViewState extends State<HomeView> {
                                       maxLines: 1,
                                       overflow: TextOverflow.ellipsis,
                                       style: GoogleFonts.roboto(
-                                        fontSize: 13.sp,
+                                        fontSize: 12.sp,
                                         fontWeight: FontWeight.w500,
                                       ),
                                     ),
                                   ),
-                                  SizedBox(height: 4.h),
+                                  SizedBox(height: 1.h),
                                   // Prix
                                   Padding(
                                     padding: EdgeInsets.symmetric(
@@ -667,7 +667,7 @@ class _HomeViewState extends State<HomeView> {
                                     child: Text(
                                       "${item.prix} FCFA",
                                       style: GoogleFonts.roboto(
-                                        fontSize: 14.sp,
+                                        fontSize: 12.sp,
                                         fontWeight: FontWeight.bold,
                                         color: Colors.black87,
                                       ),
