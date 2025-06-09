@@ -30,13 +30,12 @@ class _VosAnnonceViewState extends State<VosAnnonceView> {
 
       final dio = Dio();
 
-         showDialog(
-          context: context,
-          builder: (context) {
-            return const Center(
-              child: CircularProgressIndicator(),
-            );
-          });
+      showDialog(
+        context: context,
+        builder: (context) {
+          return const Center(child: CircularProgressIndicator());
+        },
+      );
 
       for (String imageUrl in imageUrls) {
         // 🔍 1. Extraire le `public_id`
@@ -78,6 +77,8 @@ class _VosAnnonceViewState extends State<VosAnnonceView> {
           .doc(documentId)
           .delete();
       print('🗑️ Produit supprimé avec succès');
+
+      Navigator.pop(context,true);
     } catch (e) {
       print('❗Erreur lors de la suppression : $e');
     }
@@ -119,7 +120,8 @@ class _VosAnnonceViewState extends State<VosAnnonceView> {
                       .collection('articles')
                       .where(
                         'userId',
-                        isEqualTo: FirebaseAuth.instance.currentUser!.uid)
+                        isEqualTo: FirebaseAuth.instance.currentUser!.uid,
+                      )
                       .snapshots(),
               builder: (context, snapshot) {
                 if (snapshot.connectionState == ConnectionState.waiting) {
@@ -146,15 +148,15 @@ class _VosAnnonceViewState extends State<VosAnnonceView> {
                   return SliverPadding(
                     padding: EdgeInsets.symmetric(
                       vertical: 8.r,
-                      horizontal: 16.r,
+                      horizontal: 10.r,
                     ),
                     sliver: SliverGrid(
                       gridDelegate:
                           const SliverGridDelegateWithFixedCrossAxisCount(
                             crossAxisCount: 2,
-                            crossAxisSpacing: 5,
+                            crossAxisSpacing: 2,
                             mainAxisSpacing: 4,
-                            childAspectRatio: 0.77,
+                            childAspectRatio: 0.68,
                           ),
                       delegate: SliverChildBuilderDelegate((
                         BuildContext context,
@@ -165,61 +167,52 @@ class _VosAnnonceViewState extends State<VosAnnonceView> {
                         return GestureDetector(
                           onTap: () {
                             _showDeleteDialog(context, item);
-                            // Action on product tap
-                            // Navigator.push(
-                            //   context,
-                            //   MaterialPageRoute(
-                            //     builder: (context) {
-                            //       switch (item.groupe) {
-                            //         case "maisons":
-                            //           return UpdateAnnonceMaison(item: item);
-                            //         case "articles":
-                            //           return UpdateAnnonceArticle(item: item);
-                            //         case "véhicules, voitures":
-                            //           return UpdateAnnonceVehicule(item: item);
-                            //         default:
-                            //           // Affiche une page vide ou une erreur gentille
-                            //           return Scaffold(
-                            //             appBar: AppBar(title: Text("Erreur")),
-                            //             body: Center(
-                            //               child: Text(
-                            //                 "Type d'annonce non reconnu",
-                            //               ),
-                            //             ),
-                            //           );
-                            //       }
-                            //     },
-                            //   ),
-                            // );
                           },
-                          child: Container(
-                            width: 200.w,
-                            height: 200.h,
-                            // margin: EdgeInsets.all(8.r),
+                          child: Card(
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(0.r),
+                            ),
+                            elevation: 0,
                             color: Colors.white,
-                            alignment: Alignment.center,
+                            clipBehavior:
+                                Clip.antiAlias, // permet à l’image d’être arrondie
                             child: Column(
-                              mainAxisAlignment: MainAxisAlignment.start,
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
-                                Expanded(
-                                  flex: 4,
-                                  child: Image.network(
-                                    item.images.isNotEmpty
-                                        ? item.images[0]
-                                        : '',
-                                    fit: BoxFit.cover,
-                                    width: 200.w,
+                                // ✅ Image arrondie automatiquement par clipBehavior
+                                AspectRatio(
+                                  aspectRatio: 1,
+                                  child: Container(
+                                    decoration: BoxDecoration(
+                                      border: Border.all(
+                                        color:
+                                            Colors
+                                                .grey[200]!, // couleur de la bordure
+                                        width: 1.r, // épaisseur de la bordure
+                                      ),
+                                      borderRadius: BorderRadius.circular(10.r),
+                                    ),
+                                    child: ClipRRect(
+                                      borderRadius: BorderRadius.circular(10.r),
+                                      child: Image.network(
+                                        item.images.isNotEmpty
+                                            ? item.images[0]
+                                            : '',
+                                        fit: BoxFit.cover,
+                                        width: double.infinity,
+                                      ),
+                                    ),
                                   ),
                                 ),
-                                SizedBox(height: 10.r),
+                                SizedBox(height: 8.h),
                                 Padding(
                                   padding: EdgeInsets.symmetric(
-                                    horizontal: 5.r,
+                                    horizontal: 8.r,
                                   ),
                                   child: Text(
                                     item.titre,
                                     overflow: TextOverflow.ellipsis,
+                                    maxLines: 1,
                                     style: GoogleFonts.roboto(
                                       fontSize: 14.sp,
                                       fontWeight: FontWeight.w500,
@@ -228,49 +221,41 @@ class _VosAnnonceViewState extends State<VosAnnonceView> {
                                   ),
                                 ),
                                 SizedBox(height: 2.h),
-                                Expanded(
-                                  flex: 1,
-                                  child: Padding(
-                                    padding: EdgeInsets.symmetric(
-                                      horizontal: 5.r,
-                                    ),
-                                    child: Text(
-                                      item.prix + " " + "FCFA",
-                                      style: GoogleFonts.roboto(
-                                        fontSize: 14.sp,
-                                        fontWeight: FontWeight.bold,
-                                        color: Colors.black,
-                                      ),
+                                Padding(
+                                  padding: EdgeInsets.symmetric(
+                                    horizontal: 8.r,
+                                  ),
+                                  child: Text(
+                                    "${item.prix} FCFA",
+                                    style: GoogleFonts.roboto(
+                                      fontSize: 14.sp,
+                                      fontWeight: FontWeight.bold,
+                                      color: Colors.black,
                                     ),
                                   ),
                                 ),
-
-                                Expanded(
-                                  flex: 1,
-                                  child: Padding(
-                                    padding: EdgeInsets.symmetric(
-                                      horizontal: 5.r,
-                                    ),
-                                    child: Row(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.start,
-                                      children: [
-                                        Icon(
-                                          Mdi.eye,
-                                          size: 14.sp,
+                                SizedBox(height: 2.h),
+                                Padding(
+                                  padding: EdgeInsets.symmetric(
+                                    horizontal: 8.r,
+                                  ),
+                                  child: Row(
+                                    children: [
+                                      Icon(
+                                        Mdi.eye,
+                                        size: 14.sp,
+                                        color: Colors.grey,
+                                      ),
+                                      SizedBox(width: 5.w),
+                                      Text(
+                                        "${item.views} vues",
+                                        style: GoogleFonts.roboto(
+                                          fontSize: 12.sp,
                                           color: Colors.grey,
+                                          fontWeight: FontWeight.w400,
                                         ),
-                                        SizedBox(width: 5.w),
-                                        Text(
-                                          item.views.toString() + " " + "vues",
-                                          style: GoogleFonts.roboto(
-                                            fontSize: 12.sp,
-                                            color: Colors.grey,
-                                            fontWeight: FontWeight.w400,
-                                          ),
-                                        ),
-                                      ],
-                                    ),
+                                      ),
+                                    ],
                                   ),
                                 ),
                               ],
@@ -366,7 +351,7 @@ class _VosAnnonceViewState extends State<VosAnnonceView> {
                               documentId: item.id,
                               imageUrls: item.images,
                             );
-                            Navigator.pop(context);
+                            Navigator.pop(context,true);
                           },
                           child: Text(
                             "Supprimer",
