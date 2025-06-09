@@ -1,1 +1,41 @@
-{"flutter":{"platforms":{"android":{"default":{"projectId":"micro-sugu","appId":"1:71240326158:android:5d23e4a875c16fa4d6705f","fileOutput":"android/app/google-services.json"}},"dart":{"lib/firebase_options.dart":{"projectId":"micro-sugu","configurations":{"android":"1:71240326158:android:5d23e4a875c16fa4d6705f","ios":"1:71240326158:ios:a4f052e32612ccd6d6705f","macos":"1:71240326158:ios:a4f052e32612ccd6d6705f","web":"1:71240326158:web:5260afc89e611fbed6705f","windows":"1:71240326158:web:62a8fdbe5c27a233d6705f"}}}}}}
+{
+  "flutter": {
+    "platforms": {
+      "android": {
+        "default": {
+          "projectId": "micro-sugu",
+          "appId": "1:71240326158:android:5d23e4a875c16fa4d6705f",
+          "fileOutput": "android/app/google-services.json"
+        }
+      },
+      "dart": {
+        "lib/firebase_options.dart": {
+          "projectId": "micro-sugu",
+          "configurations": {
+            "android": "1:71240326158:android:5d23e4a875c16fa4d6705f",
+            "ios": "1:71240326158:ios:a4f052e32612ccd6d6705f",
+            "macos": "1:71240326158:ios:a4f052e32612ccd6d6705f",
+            "web": "1:71240326158:web:5260afc89e611fbed6705f",
+            "windows": "1:71240326158:web:62a8fdbe5c27a233d6705f"
+          }
+        }
+      }
+    }
+  },
+  "functions": [
+    {
+      "source": "functions",
+      "codebase": "default",
+      "ignore": [
+        "node_modules",
+        ".git",
+        "firebase-debug.log",
+        "firebase-debug.*.log",
+        "*.local"
+      ],
+      "predeploy": [
+        "npm --prefix \"$RESOURCE_DIR\" run lint"
+      ]
+    }
+  ]
+}

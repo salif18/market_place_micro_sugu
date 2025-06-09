@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'dart:io';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -9,6 +10,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_mdi_icons/flutter_mdi_icons.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:http/http.dart' as http;
 import 'package:image_picker/image_picker.dart';
 
 class AddArticles extends StatefulWidget {
@@ -51,6 +53,31 @@ class _AddArticlesState extends State<AddArticles> {
     {"id": 17, "name": "Artisanat d'art", "icon": Mdi.paletteOutline},
     {"id": 18, "name": "Pièces automobiles", "icon": Mdi.carWrench},
   ];
+
+  Future<void> sendNotificationToTopic({
+  required String topic,
+  required String title,
+  required String body,
+  Map<String, String>? data,
+}) async {
+  final response = await http.post(
+    Uri.parse('https://fcm.googleapis.com/fcm/send'),
+    headers: {
+      'Content-Type': 'application/json',
+      'Authorization': 'key=BK8lTGiGSidRsbjrn4_9cfUEzShX2jgu2s-NEb4xDIVVDoDK7glz9mMXP63ej3HgTPPTktxzUIWQ9A5S1LM-xk0',
+    },
+    body: jsonEncode({
+      'token': '/topics/$topic',
+      'notification': {
+        'title': title,
+        'body': body,
+      },
+    }),
+  );
+
+  print('Réponse du serveur: ${response.body}');
+}
+
   // configuration de selection image depuis gallerie
   final ImagePicker _picker = ImagePicker();
   List<XFile> gallerieImages = [];
@@ -193,6 +220,12 @@ class _AddArticlesState extends State<AddArticles> {
             .collection('articles')
             .add(vehiculeData);
 
+            await sendNotificationToTopic(
+              topic: "all_users", 
+              title: "Nouvelle annonce disponible !",
+               body: "Découvrez la dernière annonce ajoutée rien que pour vous."
+               );
+
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
             backgroundColor: Colors.deepOrangeAccent,
@@ -202,6 +235,7 @@ class _AddArticlesState extends State<AddArticles> {
             ),
           ),
         );
+
 
         Navigator.pushReplacement(
           context,

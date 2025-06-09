@@ -325,10 +325,10 @@ class _HomeViewState extends State<HomeView> {
                     int index,
                   ) {
                     final item =
-                        sortedCategories[index]; // Utilisez la liste triée ici
+                        sortedCategories[index]; // Donnée de la catégorie
+
                     return GestureDetector(
                       onTap: () {
-                        // Action on product tap
                         Navigator.push(
                           context,
                           MaterialPageRoute(
@@ -340,14 +340,18 @@ class _HomeViewState extends State<HomeView> {
                       },
                       child: Column(
                         children: [
+                          // Conteneur de l’icône avec bordure circulaire
                           Container(
                             width: 50.w,
-                            height: 45.h,
+                            height: 50.w, // carré pour une icône ronde
                             padding: EdgeInsets.all(10.r),
-                            alignment: Alignment.center,
                             decoration: BoxDecoration(
                               color: item["color"],
-                              borderRadius: BorderRadius.circular(100.r),
+                              border: Border.all(
+                                color: Colors.grey.shade300,
+                                width: 1.r,
+                              ),
+                              shape: BoxShape.circle,
                             ),
                             child: Icon(
                               item["icon"],
@@ -355,13 +359,17 @@ class _HomeViewState extends State<HomeView> {
                               size: 22.sp,
                             ),
                           ),
-                          const SizedBox(height: 8),
-                          Expanded(
+                          SizedBox(height: 8.h),
+                          SizedBox(
+                            height:
+                                20.h, // hauteur fixe pour éviter les débordements
                             child: Text(
                               item["name"],
+                              textAlign: TextAlign.center,
                               overflow: TextOverflow.ellipsis,
+                              maxLines: 1,
                               style: GoogleFonts.roboto(
-                                fontSize: 13.sp,
+                                fontSize: 12.sp,
                                 fontWeight: FontWeight.w600,
                               ),
                             ),
@@ -418,12 +426,14 @@ class _HomeViewState extends State<HomeView> {
                         }).toList();
                     return SliverToBoxAdapter(
                       child: SizedBox(
-                        height: 200.h, // important pour afficher correctement
+                        height: 200.h, // hauteur fixe du bloc horizontal
                         child: ListView.builder(
                           scrollDirection: Axis.horizontal,
                           itemCount: articles.length,
+                          padding: EdgeInsets.symmetric(horizontal: 12.r),
                           itemBuilder: (context, index) {
                             final item = articles[index];
+
                             return InkWell(
                               onTap: () {
                                 Navigator.push(
@@ -434,57 +444,84 @@ class _HomeViewState extends State<HomeView> {
                                   ),
                                 );
                               },
-                              child: Container(
-                                width: 160.w,
-                                height: 200.h,
-                                margin: EdgeInsets.all(4.r),
+                              child: Card(
                                 color: Colors.white,
-                                alignment: Alignment.center,
-                                child: Column(
-                                  mainAxisAlignment: MainAxisAlignment.start,
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Expanded(
-                                      flex: 4,
-                                      child: Image.network(
-                                        item.images[0],
-                                        fit: BoxFit.cover,
-                                        width: 200.w,
-                                      ),
-                                    ),
-                                    SizedBox(height: 10.h),
-                                    Padding(
-                                      padding: EdgeInsets.symmetric(
-                                        horizontal: 5.r,
-                                      ),
-                                      child: Text(
-                                        item.titre,
-                                        overflow: TextOverflow.ellipsis,
-                                        style: GoogleFonts.roboto(
-                                          fontSize: 13.sp,
-                                          fontWeight: FontWeight.w500,
-                                          color: Colors.black,
+                                margin: EdgeInsets.only(right: 12.r),
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(0.r),
+                                ),
+                                elevation: 0,
+                                child: Container(
+                                  width: 160.w,
+                                  padding: EdgeInsets.only(bottom: 8.r),
+                                  child: Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      // Image avec ratio carré
+                                      AspectRatio(
+                                        aspectRatio: 1,
+                                        child: Container(
+                                          decoration: BoxDecoration(
+                                            border: Border.all(
+                                              color:
+                                                  Colors
+                                                      .grey[200]!, // couleur de la bordure
+                                              width:
+                                                  1.r, // épaisseur de la bordure
+                                            ),
+                                            borderRadius: BorderRadius.circular(
+                                              10.r,
+                                            ),
+                                          ),
+                                          child: ClipRRect(
+                                            borderRadius: BorderRadius.circular(
+                                              10.r,
+                                            ),
+                                            child: Image.network(
+                                              item.images.isNotEmpty
+                                                  ? item.images[0]
+                                                  : '',
+                                              fit: BoxFit.cover,
+                                              width: double.infinity,
+                                            ),
+                                          ),
                                         ),
                                       ),
-                                    ),
-                                    SizedBox(height: 5.h),
-                                    Expanded(
-                                      flex: 1,
-                                      child: Padding(
+                                      SizedBox(height: 8.h),
+                                      // Titre
+                                      Padding(
                                         padding: EdgeInsets.symmetric(
-                                          horizontal: 5.r,
+                                          horizontal: 8.r,
                                         ),
                                         child: Text(
-                                          item.prix + " " + "FCFA",
+                                          item.titre,
+                                          overflow: TextOverflow.ellipsis,
+                                          maxLines: 1,
                                           style: GoogleFonts.roboto(
                                             fontSize: 13.sp,
+                                            fontWeight: FontWeight.w500,
+                                            color: Colors.black,
+                                          ),
+                                        ),
+                                      ),
+                                      SizedBox(height: 4.h),
+                                      // Prix
+                                      Padding(
+                                        padding: EdgeInsets.symmetric(
+                                          horizontal: 8.r,
+                                        ),
+                                        child: Text(
+                                          "${item.prix} FCFA",
+                                          style: GoogleFonts.roboto(
+                                            fontSize: 14.sp,
                                             fontWeight: FontWeight.bold,
                                             color: Colors.black,
                                           ),
                                         ),
                                       ),
-                                    ),
-                                  ],
+                                    ],
+                                  ),
                                 ),
                               ),
                             );
@@ -540,15 +577,16 @@ class _HomeViewState extends State<HomeView> {
                     return SliverPadding(
                       padding: EdgeInsets.symmetric(
                         vertical: 8.r,
-                        horizontal: 16.r,
+                        horizontal: 10.r,
                       ),
                       sliver: SliverGrid(
                         gridDelegate:
                             const SliverGridDelegateWithFixedCrossAxisCount(
                               crossAxisCount: 2,
-                              crossAxisSpacing: 5,
-                              mainAxisSpacing: 4,
-                              childAspectRatio: 0.77,
+                              crossAxisSpacing: 2,
+                              mainAxisSpacing: 2,
+                              childAspectRatio:
+                                  0.71, // Ajuste pour obtenir une belle carte
                             ),
                         delegate: SliverChildBuilderDelegate((
                           BuildContext context,
@@ -558,7 +596,6 @@ class _HomeViewState extends State<HomeView> {
 
                           return GestureDetector(
                             onTap: () {
-                              // Action on product tap
                               Navigator.push(
                                 context,
                                 MaterialPageRoute(
@@ -566,55 +603,73 @@ class _HomeViewState extends State<HomeView> {
                                 ),
                               );
                             },
-                            child: Container(
-                              width: 200.w,
-                              height: 200.h,
-                              // margin: EdgeInsets.all(8.r),
+                            child: Card(
+                              elevation: 0,
                               color: Colors.white,
-                              alignment: Alignment.center,
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(0.r),
+                              ),
                               child: Column(
-                                mainAxisAlignment: MainAxisAlignment.start,
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
-                                  Expanded(
-                                    flex: 4,
-                                    child: Image.network(
-                                      item.images.isNotEmpty
-                                          ? item.images[0]
-                                          : '',
-                                      fit: BoxFit.cover,
-                                      width: 200.w,
+                                  // Image produit
+                                  AspectRatio(
+                                    aspectRatio: 1,
+                                    child: Container(
+                                      decoration: BoxDecoration(
+                                        border: Border.all(
+                                          color:
+                                              Colors
+                                                  .grey[200]!, // couleur de la bordure
+                                          width: 1.r, // épaisseur de la bordure
+                                        ),
+                                        borderRadius: BorderRadius.circular(
+                                          10.r,
+                                        ),
+                                      ),
+                                      child: ClipRRect(
+                                        borderRadius: BorderRadius.circular(
+                                          10.r,
+                                        ),
+                                        child: Image.network(
+                                          item.images.isNotEmpty
+                                              ? item.images[0]
+                                              : '',
+                                          fit: BoxFit.cover,
+                                          width: double.infinity,
+                                        ),
+                                      ),
                                     ),
                                   ),
-                                  SizedBox(height: 10.r),
+                                  // Espace
+                                  SizedBox(height: 8.h),
+                                  // Titre
                                   Padding(
                                     padding: EdgeInsets.symmetric(
-                                      horizontal: 5.r,
+                                      horizontal: 8.r,
                                     ),
                                     child: Text(
                                       item.titre,
+                                      maxLines: 1,
                                       overflow: TextOverflow.ellipsis,
                                       style: GoogleFonts.roboto(
                                         fontSize: 13.sp,
                                         fontWeight: FontWeight.w500,
-                                        color: Colors.black,
                                       ),
                                     ),
                                   ),
-                                  SizedBox(height: 5.h),
-                                  Expanded(
-                                    flex: 1,
-                                    child: Padding(
-                                      padding: EdgeInsets.symmetric(
-                                        horizontal: 5.r,
-                                      ),
-                                      child: Text(
-                                        item.prix + " " + "FCFA",
-                                        style: GoogleFonts.roboto(
-                                          fontSize: 13.sp,
-                                          fontWeight: FontWeight.bold,
-                                          color: Colors.black,
-                                        ),
+                                  SizedBox(height: 4.h),
+                                  // Prix
+                                  Padding(
+                                    padding: EdgeInsets.symmetric(
+                                      horizontal: 8.r,
+                                    ),
+                                    child: Text(
+                                      "${item.prix} FCFA",
+                                      style: GoogleFonts.roboto(
+                                        fontSize: 14.sp,
+                                        fontWeight: FontWeight.bold,
+                                        color: Colors.black87,
                                       ),
                                     ),
                                   ),
