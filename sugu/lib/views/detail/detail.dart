@@ -10,6 +10,7 @@ import 'package:http/http.dart' as http;
 import 'package:provider/provider.dart';
 import 'package:sugu/models/product_model.dart';
 import 'package:sugu/provider/favorite_provider.dart';
+import 'package:sugu/utils/format_prix.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:path_provider/path_provider.dart';
 
@@ -23,6 +24,7 @@ class SingleView extends StatefulWidget {
 }
 
 class _SingleViewState extends State<SingleView> {
+  FormatPrice _formatPrice = FormatPrice();
   // CAS 2:
   void _contactSellerOnWhatsApp({
     required BuildContext context,
@@ -282,8 +284,8 @@ class _SingleViewState extends State<SingleView> {
                     ),
 
                     Text(
-                      widget.item.prix + " " + "FCFA",
-                      style: GoogleFonts.roboto(
+                      _formatPrice.formatNombre(widget.item.prix) + " " + "FCFA",
+                      style: GoogleFonts.montserrat(
                         fontSize: 18.sp,
                         fontWeight: FontWeight.bold,
                       ),
@@ -664,8 +666,8 @@ class _SingleViewState extends State<SingleView> {
                                       horizontal: 8.r,
                                     ),
                                     child: Text(
-                                      "${item.prix} FCFA",
-                                      style: GoogleFonts.roboto(
+                                        _formatPrice.formatNombre(item.prix),
+                                      style: GoogleFonts.montserrat(
                                         fontSize: 12.sp,
                                         fontWeight: FontWeight.bold,
                                         color: Colors.black87,

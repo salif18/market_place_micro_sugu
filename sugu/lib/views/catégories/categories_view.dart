@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:sugu/models/product_model.dart';
+import 'package:sugu/utils/format_prix.dart';
 import 'package:sugu/views/detail/detail.dart';
 
 class CategoriesView extends StatefulWidget {
@@ -15,6 +16,7 @@ class CategoriesView extends StatefulWidget {
 }
 
 class _CategoriesViewState extends State<CategoriesView> {
+  FormatPrice _formatPrice = FormatPrice();
 
   @override
   Widget build(BuildContext context) {
@@ -171,8 +173,8 @@ class _CategoriesViewState extends State<CategoriesView> {
                                         horizontal: 8.r,
                                       ),
                                       child: Text(
-                                        "${item.prix} FCFA",
-                                        style: GoogleFonts.roboto(
+                                         _formatPrice.formatNombre(item.prix),
+                                        style: GoogleFonts.montserrat(
                                           fontSize: 12.sp,
                                           fontWeight: FontWeight.bold,
                                           color: Colors.black87,

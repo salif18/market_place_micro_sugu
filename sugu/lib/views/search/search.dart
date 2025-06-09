@@ -4,6 +4,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:sugu/models/product_model.dart';
+import 'package:sugu/utils/format_prix.dart';
 import 'package:sugu/views/detail/detail.dart';
 
 class SearchView extends StatefulWidget {
@@ -14,6 +15,7 @@ class SearchView extends StatefulWidget {
 }
 
 class _SearchViewState extends State<SearchView> {
+  FormatPrice _formatPrice = FormatPrice();
   TextEditingController searchValue = TextEditingController();
   List resultOfSearch = [];
   List<String> recentSearches = [];
@@ -227,22 +229,42 @@ class _SearchViewState extends State<SearchView> {
                       child: ListTile(
                         leading:
                             item.images.isNotEmpty
-                                ? Image.network(
-                                  item.images[0],
-                                  width: 50.w,
-                                  height: 50.h,
-                                  fit: BoxFit.cover,
+                                ? AspectRatio(
+                                  aspectRatio: 1,
+                                  child: Container(
+                                     decoration: BoxDecoration(
+                                              border: Border.all(
+                                                color:
+                                                    Colors
+                                                        .grey[200]!, // couleur de la bordure
+                                                width:
+                                                    1.r, // épaisseur de la bordure
+                                              ),
+                                              borderRadius: BorderRadius.circular(
+                                                10.r,
+                                              ),
+                                            ),
+                                    child: ClipRRect(
+                                      borderRadius: BorderRadius.circular(10.r),
+                                      child: Image.network(
+                                        item.images[0],
+                                        // width: 50.w,
+                                        // height: 50.h,
+                                        fit: BoxFit.cover,
+                                      ),
+                                    ),
+                                  ),
                                 )
                                 : null,
                         title: Text(
                           item.titre,
-                          style: GoogleFonts.roboto(fontSize: 14.sp),
+                          style: GoogleFonts.roboto(fontSize: 12.sp),
                         ),
                         subtitle: Text(
-                          "${item.prix} FCFA",
-                          style: GoogleFonts.roboto(
+                          _formatPrice.formatNombre(item.prix),
+                          style: GoogleFonts.montserrat(
                             fontWeight: FontWeight.bold,
-                            fontSize: 14.sp,
+                            fontSize: 12.sp,
                           ),
                         ),
                         onTap: () {

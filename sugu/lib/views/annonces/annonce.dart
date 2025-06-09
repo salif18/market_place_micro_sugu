@@ -9,6 +9,7 @@ import 'package:flutter_mdi_icons/flutter_mdi_icons.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:sugu/models/product_model.dart';
+import 'package:sugu/utils/format_prix.dart';
 
 class VosAnnonceView extends StatefulWidget {
   const VosAnnonceView({super.key});
@@ -18,6 +19,7 @@ class VosAnnonceView extends StatefulWidget {
 }
 
 class _VosAnnonceViewState extends State<VosAnnonceView> {
+  FormatPrice _formatPrice = FormatPrice();
   Future<void> deleteProductAndImages({
     required String documentId,
     required List<String> imageUrls,
@@ -236,8 +238,8 @@ class _VosAnnonceViewState extends State<VosAnnonceView> {
                                       horizontal: 8.r,
                                     ),
                                     child: Text(
-                                      "${item.prix} FCFA",
-                                      style: GoogleFonts.roboto(
+                                       _formatPrice.formatNombre(item.prix),
+                                      style: GoogleFonts.montserrat(
                                         fontSize: 12.sp,
                                         fontWeight: FontWeight.bold,
                                         color: Colors.black,

@@ -4,6 +4,7 @@ import 'package:flutter_mdi_icons/flutter_mdi_icons.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:sugu/models/product_model.dart';
+import 'package:sugu/utils/format_prix.dart';
 import 'package:sugu/views/cat%C3%A9gories/categories_list.dart';
 import 'package:sugu/views/cat%C3%A9gories/categories_view.dart';
 import 'package:sugu/views/detail/detail.dart';
@@ -16,6 +17,8 @@ class HomeView extends StatefulWidget {
 }
 
 class _HomeViewState extends State<HomeView> {
+  FormatPrice _formatPrice = FormatPrice();
+
   List<Map<String, dynamic>> categories = [
     {
       "id": 1,
@@ -192,6 +195,7 @@ class _HomeViewState extends State<HomeView> {
     // Triez les catégories par nom avant de les utiliser
     final sortedCategories = [...categories]
       ..sort((a, b) => b['name'].compareTo(a['name']));
+
     return Scaffold(
       resizeToAvoidBottomInset: true,
       backgroundColor: Colors.white,
@@ -242,7 +246,7 @@ class _HomeViewState extends State<HomeView> {
                             alignment: Alignment.center,
                             height: 110.h,
                             decoration: BoxDecoration(
-                              color: Colors.deepOrangeAccent,
+                              color: Colors.orange.shade600,
                               borderRadius: BorderRadius.circular(10.r),
                             ),
                             padding: EdgeInsets.symmetric(
@@ -377,7 +381,7 @@ class _HomeViewState extends State<HomeView> {
                         ],
                       ),
                     );
-                  }, childCount: 4),
+                  }, childCount: 12),
                 ),
               ),
 
@@ -517,8 +521,8 @@ class _HomeViewState extends State<HomeView> {
                                             horizontal: 8.r,
                                           ),
                                           child: Text(
-                                            "${item.prix} FCFA",
-                                            style: GoogleFonts.roboto(
+                                            _formatPrice.formatNombre(item.prix),
+                                            style: GoogleFonts.montserrat(
                                               fontSize: 12.sp,
                                               fontWeight: FontWeight.bold,
                                               color: Colors.black,
@@ -676,8 +680,8 @@ class _HomeViewState extends State<HomeView> {
                                         horizontal: 8.r,
                                       ),
                                       child: Text(
-                                        "${item.prix} FCFA",
-                                        style: GoogleFonts.roboto(
+                                       _formatPrice.formatNombre(item.prix),
+                                        style: GoogleFonts.montserrat(
                                           fontSize: 12.sp,
                                           fontWeight: FontWeight.bold,
                                           color: Colors.black87,
