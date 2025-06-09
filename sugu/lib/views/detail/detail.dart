@@ -241,13 +241,13 @@ class _SingleViewState extends State<SingleView> {
               ),
             ),
             SliverToBoxAdapter(
-              child:
-              // Galerie d'images horizontale
-              SizedBox(
+              child: SizedBox(
                 height: 250.h,
-                child: ListView.builder(
-                  scrollDirection: Axis.horizontal,
+                child: PageView.builder(
                   itemCount: widget.item.images.length,
+                  controller: PageController(
+                    viewportFraction: 1.0, // plein écran
+                  ),
                   itemBuilder: (context, index) {
                     String photo = widget.item.images[index];
                     return Image.network(
@@ -259,6 +259,7 @@ class _SingleViewState extends State<SingleView> {
                 ),
               ),
             ),
+
             SliverPadding(
               padding: EdgeInsets.symmetric(horizontal: 16.r, vertical: 8.r),
               sliver: SliverToBoxAdapter(
@@ -561,111 +562,107 @@ class _SingleViewState extends State<SingleView> {
                       }).toList();
 
                   return SliverPadding(
-                      padding: EdgeInsets.symmetric(
-                        vertical: 8.r,
-                        horizontal: 10.r,
-                      ),
-                      sliver: SliverGrid(
-                        gridDelegate:
-                            const SliverGridDelegateWithFixedCrossAxisCount(
-                              crossAxisCount: 2,
-                              crossAxisSpacing: 2,
-                              mainAxisSpacing: 2,
-                              childAspectRatio:
-                                  0.71, // Ajuste pour obtenir une belle carte
-                            ),
-                        delegate: SliverChildBuilderDelegate((
-                          BuildContext context,
-                          int index,
-                        ) {
-                          ProductModel item = articles[index];
+                    padding: EdgeInsets.symmetric(
+                      vertical: 8.r,
+                      horizontal: 10.r,
+                    ),
+                    sliver: SliverGrid(
+                      gridDelegate:
+                          const SliverGridDelegateWithFixedCrossAxisCount(
+                            crossAxisCount: 2,
+                            crossAxisSpacing: 2,
+                            mainAxisSpacing: 2,
+                            childAspectRatio:
+                                0.71, // Ajuste pour obtenir une belle carte
+                          ),
+                      delegate: SliverChildBuilderDelegate((
+                        BuildContext context,
+                        int index,
+                      ) {
+                        ProductModel item = articles[index];
 
-                          return GestureDetector(
-                            onTap: () {
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (context) => SingleView(item: item),
-                                ),
-                              );
-                            },
-                            child: Card(
-                              elevation: 0,
-                              color: Colors.white,
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(0.r),
+                        return GestureDetector(
+                          onTap: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => SingleView(item: item),
                               ),
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  // Image produit
-                                   AspectRatio(
-                                    aspectRatio: 1,
-                                    child: Container(
-                                      decoration: BoxDecoration(
-                                            border: Border.all(
-                                              color:
-                                                  Colors.grey[200]!, // couleur de la bordure
-                                              width:
-                                                  1.r, // épaisseur de la bordure
-                                            ),
-                                            borderRadius: BorderRadius.circular(
-                                              10.r,
-                                            ),
-                                          ),
-                                      child: ClipRRect(
-                                        borderRadius: BorderRadius.circular(
-                                        10.r,
-                                        ),
-                                        child: Image.network(
-                                          item.images.isNotEmpty
-                                              ? item.images[0]
-                                              : '',
-                                          fit: BoxFit.cover,
-                                          width: double.infinity,
-                                        ),
-                                      ),
-                                    ),
-                                  ),
-                                  // Espace
-                                  SizedBox(height: 8.h),
-                                  // Titre
-                                  Padding(
-                                    padding: EdgeInsets.symmetric(
-                                      horizontal: 8.r,
-                                    ),
-                                    child: Text(
-                                      item.titre,
-                                      maxLines: 1,
-                                      overflow: TextOverflow.ellipsis,
-                                      style: GoogleFonts.roboto(
-                                        fontSize: 13.sp,
-                                        fontWeight: FontWeight.w500,
-                                      ),
-                                    ),
-                                  ),
-                                  SizedBox(height: 4.h),
-                                  // Prix
-                                  Padding(
-                                    padding: EdgeInsets.symmetric(
-                                      horizontal: 8.r,
-                                    ),
-                                    child: Text(
-                                      "${item.prix} FCFA",
-                                      style: GoogleFonts.roboto(
-                                        fontSize: 14.sp,
-                                        fontWeight: FontWeight.bold,
-                                        color: Colors.black87,
-                                      ),
-                                    ),
-                                  ),
-                                ],
-                              ),
+                            );
+                          },
+                          child: Card(
+                            elevation: 0,
+                            color: Colors.white,
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(0.r),
                             ),
-                          );
-                        }, childCount: articles.length),
-                      ),
-                    );
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                // Image produit
+                                AspectRatio(
+                                  aspectRatio: 1,
+                                  child: Container(
+                                    decoration: BoxDecoration(
+                                      border: Border.all(
+                                        color:
+                                            Colors
+                                                .grey[200]!, // couleur de la bordure
+                                        width: 1.r, // épaisseur de la bordure
+                                      ),
+                                      borderRadius: BorderRadius.circular(10.r),
+                                    ),
+                                    child: ClipRRect(
+                                      borderRadius: BorderRadius.circular(10.r),
+                                      child: Image.network(
+                                        item.images.isNotEmpty
+                                            ? item.images[0]
+                                            : '',
+                                        fit: BoxFit.cover,
+                                        width: double.infinity,
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                                // Espace
+                                SizedBox(height: 8.h),
+                                // Titre
+                                Padding(
+                                  padding: EdgeInsets.symmetric(
+                                    horizontal: 8.r,
+                                  ),
+                                  child: Text(
+                                    item.titre,
+                                    maxLines: 1,
+                                    overflow: TextOverflow.ellipsis,
+                                    style: GoogleFonts.roboto(
+                                      fontSize: 13.sp,
+                                      fontWeight: FontWeight.w500,
+                                    ),
+                                  ),
+                                ),
+                                SizedBox(height: 4.h),
+                                // Prix
+                                Padding(
+                                  padding: EdgeInsets.symmetric(
+                                    horizontal: 8.r,
+                                  ),
+                                  child: Text(
+                                    "${item.prix} FCFA",
+                                    style: GoogleFonts.roboto(
+                                      fontSize: 14.sp,
+                                      fontWeight: FontWeight.bold,
+                                      color: Colors.black87,
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                        );
+                      }, childCount: articles.length),
+                    ),
+                  );
                 }
               },
             ),
