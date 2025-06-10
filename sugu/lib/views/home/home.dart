@@ -429,8 +429,12 @@ class _HomeViewState extends State<HomeView> {
                           return ProductModel.fromJson(doc.data(), doc.id);
                         }).toList();
                     return SliverToBoxAdapter(
-                      child: SizedBox(
-                        height: 188.h, // hauteur fixe du bloc horizontal
+                      child: ConstrainedBox(
+                        constraints: BoxConstraints(
+                          minHeight: 188.h,
+                          maxHeight: 188.h,
+                        ),
+
                         child: ListView.builder(
                           scrollDirection: Axis.horizontal,
                           itemCount: articles.length,
@@ -439,7 +443,7 @@ class _HomeViewState extends State<HomeView> {
                             final item = articles[index];
 
                             return AspectRatio(
-                              aspectRatio:0.8,
+                              aspectRatio: 0.8,
                               child: InkWell(
                                 onTap: () {
                                   Navigator.push(
@@ -476,23 +480,26 @@ class _HomeViewState extends State<HomeView> {
                                                 width:
                                                     1.r, // épaisseur de la bordure
                                               ),
-                                              borderRadius: BorderRadius.circular(
-                                                10.r,
-                                              ),
+                                              borderRadius:
+                                                  BorderRadius.circular(10.r),
                                             ),
                                             child: ClipRRect(
-                                              borderRadius: BorderRadius.circular(
-                                                10.r,
-                                              ),
-                                              child: item.images.isNotEmpty ? Image.network(
-                                                item.images.isNotEmpty
-                                                    ? item.images[0]
-                                                    : '',
-                                                fit: BoxFit.cover,
-                                                width: double.infinity,
-                                              ) : Image.asset("assets/images/default.png", 
-                                              fit: BoxFit.cover,
-                                              width: double.infinity,),
+                                              borderRadius:
+                                                  BorderRadius.circular(10.r),
+                                              child:
+                                                  item.images.isNotEmpty
+                                                      ? Image.network(
+                                                        item.images.isNotEmpty
+                                                            ? item.images[0]
+                                                            : '',
+                                                        fit: BoxFit.cover,
+                                                        width: double.infinity,
+                                                      )
+                                                      : Image.asset(
+                                                        "assets/images/default.png",
+                                                        fit: BoxFit.cover,
+                                                        width: double.infinity,
+                                                      ),
                                             ),
                                           ),
                                         ),
@@ -523,7 +530,9 @@ class _HomeViewState extends State<HomeView> {
                                               horizontal: 8.r,
                                             ),
                                             child: Text(
-                                              _formatPrice.formatNombre(item.prix),
+                                              _formatPrice.formatNombre(
+                                                item.prix,
+                                              ),
                                               style: GoogleFonts.montserrat(
                                                 fontSize: 12.sp,
                                                 fontWeight: FontWeight.bold,
@@ -644,15 +653,20 @@ class _HomeViewState extends State<HomeView> {
                                         borderRadius: BorderRadius.circular(
                                           10.r,
                                         ),
-                                        child: item.images.isNotEmpty ? Image.network(
-                                              item.images.isNotEmpty
-                                                  ? item.images[0]
-                                                  : '',
-                                              fit: BoxFit.cover,
-                                              width: double.infinity,
-                                            ) : Image.asset("assets/images/default.png", 
-                                            fit: BoxFit.cover,
-                                            width: double.infinity,),
+                                        child:
+                                            item.images.isNotEmpty
+                                                ? Image.network(
+                                                  item.images.isNotEmpty
+                                                      ? item.images[0]
+                                                      : '',
+                                                  fit: BoxFit.cover,
+                                                  width: double.infinity,
+                                                )
+                                                : Image.asset(
+                                                  "assets/images/default.png",
+                                                  fit: BoxFit.cover,
+                                                  width: double.infinity,
+                                                ),
                                       ),
                                     ),
                                   ),
@@ -683,7 +697,7 @@ class _HomeViewState extends State<HomeView> {
                                         horizontal: 8.r,
                                       ),
                                       child: Text(
-                                       _formatPrice.formatNombre(item.prix),
+                                        _formatPrice.formatNombre(item.prix),
                                         style: GoogleFonts.montserrat(
                                           fontSize: 12.sp,
                                           fontWeight: FontWeight.bold,
