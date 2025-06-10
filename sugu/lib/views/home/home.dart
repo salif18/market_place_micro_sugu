@@ -488,12 +488,15 @@ class _HomeViewState extends State<HomeView> {
                                                   BorderRadius.circular(10.r),
                                               child:
                                                   item.images.isNotEmpty
-                                                      ? Image.network(
-                                                        item.images.isNotEmpty
-                                                            ? item.images[0]
-                                                            : '',
-                                                        fit: BoxFit.cover,
-                                                        width: double.infinity,
+                                                      ? Hero(
+                                                        tag: item,
+                                                        child: Image.network(
+                                                          item.images.isNotEmpty
+                                                              ? item.images[0]
+                                                              : '',
+                                                          fit: BoxFit.cover,
+                                                          width: double.infinity,
+                                                        ),
                                                       )
                                                       : Image.asset(
                                                         "assets/images/default.png",
@@ -655,12 +658,15 @@ class _HomeViewState extends State<HomeView> {
                                         ),
                                         child:
                                             item.images.isNotEmpty
-                                                ? Image.network(
-                                                  item.images.isNotEmpty
-                                                      ? item.images[0]
-                                                      : '',
-                                                  fit: BoxFit.cover,
-                                                  width: double.infinity,
+                                                ? Hero(
+                                                  tag: item,
+                                                  child: Image.network(
+                                                    item.images.isNotEmpty
+                                                        ? item.images[0]
+                                                        : '',
+                                                    fit: BoxFit.cover,
+                                                    width: double.infinity,
+                                                  ),
                                                 )
                                                 : Image.asset(
                                                   "assets/images/default.png",

@@ -182,15 +182,16 @@ class _ProfilViewState extends State<ProfilView> {
                                             userData["photo"]
                                                 .toString()
                                                 .isNotEmpty
-                                        ? ClipRRect(
-                                          borderRadius: BorderRadius.circular(
-                                            100.r,
-                                          ),
-                                          child: Image.network(
-                                            userData["photo"],
-                                            width: 60.w,
-                                            height: 60.h,
-                                            fit: BoxFit.contain,
+                                        ? CircleAvatar(
+                                          radius: 35.r,
+                                          backgroundColor: Colors.grey[300],
+                                          child: ClipOval(
+                                            child: Image.network(
+                                              userData["photo"],
+                                              width: 60.w,
+                                              height: 60.h,
+                                              fit: BoxFit.contain,
+                                            ),
                                           ),
                                         )
                                         : Icon(

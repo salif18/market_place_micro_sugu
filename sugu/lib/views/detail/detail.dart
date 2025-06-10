@@ -253,10 +253,13 @@ class _SingleViewState extends State<SingleView> {
                   itemBuilder: (context, index) {
                     String photo = widget.item.images[index];
                     return photo.isNotEmpty
-                        ? Image.network(
-                          photo,
-                          width: MediaQuery.of(context).size.width,
-                          fit: BoxFit.cover,
+                        ? Hero(
+                          tag: widget.item,
+                          child: Image.network(
+                            photo,
+                            width: MediaQuery.of(context).size.width,
+                            fit: BoxFit.cover,
+                          ),
                         )
                         : Image.asset(
                           "assets/images/default.png",
@@ -624,12 +627,15 @@ class _SingleViewState extends State<SingleView> {
                                       borderRadius: BorderRadius.circular(10.r),
                                       child:
                                           item.images.isNotEmpty
-                                              ? Image.network(
-                                                item.images.isNotEmpty
-                                                    ? item.images[0]
-                                                    : '',
-                                                fit: BoxFit.cover,
-                                                width: double.infinity,
+                                              ? Hero(
+                                                tag: item,
+                                                child: Image.network(
+                                                  item.images.isNotEmpty
+                                                      ? item.images[0]
+                                                      : '',
+                                                  fit: BoxFit.cover,
+                                                  width: double.infinity,
+                                                ),
                                               )
                                               : Image.asset(
                                                 "assets/images/default.png",

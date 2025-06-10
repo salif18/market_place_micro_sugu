@@ -1,5 +1,4 @@
 import 'package:intl/intl.dart';
-
 class FormatPrice {
   String formatNombre(String prixString) {
     final int? prix = int.tryParse(prixString);
