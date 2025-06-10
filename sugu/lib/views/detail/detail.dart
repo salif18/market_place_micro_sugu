@@ -581,7 +581,7 @@ class _SingleViewState extends State<SingleView> {
                             crossAxisSpacing: 1,
                             mainAxisSpacing: 1,
                             childAspectRatio:
-                                0.78, // Ajuste pour obtenir une belle carte
+                                0.8, // Ajuste pour obtenir une belle carte
                           ),
                       delegate: SliverChildBuilderDelegate((
                         BuildContext context,

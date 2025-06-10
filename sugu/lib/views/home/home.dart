@@ -438,99 +438,102 @@ class _HomeViewState extends State<HomeView> {
                           itemBuilder: (context, index) {
                             final item = articles[index];
 
-                            return InkWell(
-                              onTap: () {
-                                Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                    builder:
-                                        (context) => SingleView(item: item),
+                            return AspectRatio(
+                              aspectRatio:0.8,
+                              child: InkWell(
+                                onTap: () {
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder:
+                                          (context) => SingleView(item: item),
+                                    ),
+                                  );
+                                },
+                                child: Card(
+                                  color: Colors.white,
+                                  margin: EdgeInsets.only(right: 12.r),
+                                  shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(0.r),
                                   ),
-                                );
-                              },
-                              child: Card(
-                                color: Colors.white,
-                                margin: EdgeInsets.only(right: 12.r),
-                                shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(0.r),
-                                ),
-                                elevation: 0,
-                                child: Container(
-                                  width: 160.w,
-                                  padding: EdgeInsets.only(bottom: 8.r),
-                                  child: Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    children: [
-                                      // Image avec ratio carré
-                                      AspectRatio(
-                                        aspectRatio: 1,
-                                        child: Container(
-                                          decoration: BoxDecoration(
-                                            border: Border.all(
-                                              color:
-                                                  Colors
-                                                      .grey[200]!, // couleur de la bordure
-                                              width:
-                                                  1.r, // épaisseur de la bordure
+                                  elevation: 0,
+                                  child: Container(
+                                    width: 160.w,
+                                    padding: EdgeInsets.only(bottom: 8.r),
+                                    child: Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        // Image avec ratio carré
+                                        AspectRatio(
+                                          aspectRatio: 1,
+                                          child: Container(
+                                            decoration: BoxDecoration(
+                                              border: Border.all(
+                                                color:
+                                                    Colors
+                                                        .grey[200]!, // couleur de la bordure
+                                                width:
+                                                    1.r, // épaisseur de la bordure
+                                              ),
+                                              borderRadius: BorderRadius.circular(
+                                                10.r,
+                                              ),
                                             ),
-                                            borderRadius: BorderRadius.circular(
-                                              10.r,
-                                            ),
-                                          ),
-                                          child: ClipRRect(
-                                            borderRadius: BorderRadius.circular(
-                                              10.r,
-                                            ),
-                                            child: item.images.isNotEmpty ? Image.network(
-                                              item.images.isNotEmpty
-                                                  ? item.images[0]
-                                                  : '',
+                                            child: ClipRRect(
+                                              borderRadius: BorderRadius.circular(
+                                                10.r,
+                                              ),
+                                              child: item.images.isNotEmpty ? Image.network(
+                                                item.images.isNotEmpty
+                                                    ? item.images[0]
+                                                    : '',
+                                                fit: BoxFit.cover,
+                                                width: double.infinity,
+                                              ) : Image.asset("assets/images/default.png", 
                                               fit: BoxFit.cover,
-                                              width: double.infinity,
-                                            ) : Image.asset("assets/images/default.png", 
-                                            fit: BoxFit.cover,
-                                            width: double.infinity,),
-                                          ),
-                                        ),
-                                      ),
-                                      SizedBox(height: 8.h),
-                                      // Titre
-                                      Expanded(
-                                        child: Padding(
-                                          padding: EdgeInsets.symmetric(
-                                            horizontal: 8.r,
-                                          ),
-                                          child: Text(
-                                            item.titre,
-                                            overflow: TextOverflow.ellipsis,
-                                            maxLines: 1,
-                                            style: GoogleFonts.roboto(
-                                              fontSize: 12.sp,
-                                              fontWeight: FontWeight.w500,
-                                              color: Colors.black,
+                                              width: double.infinity,),
                                             ),
                                           ),
                                         ),
-                                      ),
-                                      SizedBox(height: 1.h),
-                                      // Prix
-                                      Expanded(
-                                        child: Padding(
-                                          padding: EdgeInsets.symmetric(
-                                            horizontal: 8.r,
-                                          ),
-                                          child: Text(
-                                            _formatPrice.formatNombre(item.prix),
-                                            style: GoogleFonts.montserrat(
-                                              fontSize: 12.sp,
-                                              fontWeight: FontWeight.bold,
-                                              color: Colors.black,
+                                        SizedBox(height: 8.h),
+                                        // Titre
+                                        Expanded(
+                                          child: Padding(
+                                            padding: EdgeInsets.symmetric(
+                                              horizontal: 8.r,
+                                            ),
+                                            child: Text(
+                                              item.titre,
+                                              overflow: TextOverflow.ellipsis,
+                                              maxLines: 1,
+                                              style: GoogleFonts.roboto(
+                                                fontSize: 12.sp,
+                                                fontWeight: FontWeight.w500,
+                                                color: Colors.black,
+                                              ),
                                             ),
                                           ),
                                         ),
-                                      ),
-                                    ],
+                                        SizedBox(height: 1.h),
+                                        // Prix
+                                        Expanded(
+                                          child: Padding(
+                                            padding: EdgeInsets.symmetric(
+                                              horizontal: 8.r,
+                                            ),
+                                            child: Text(
+                                              _formatPrice.formatNombre(item.prix),
+                                              style: GoogleFonts.montserrat(
+                                                fontSize: 12.sp,
+                                                fontWeight: FontWeight.bold,
+                                                color: Colors.black,
+                                              ),
+                                            ),
+                                          ),
+                                        ),
+                                      ],
+                                    ),
                                   ),
                                 ),
                               ),
@@ -596,7 +599,7 @@ class _HomeViewState extends State<HomeView> {
                               crossAxisSpacing: 1,
                               mainAxisSpacing: 1,
                               childAspectRatio:
-                                  0.78, // Ajuste pour obtenir une belle carte
+                                  0.8, // Ajuste pour obtenir une belle carte
                             ),
                         delegate: SliverChildBuilderDelegate((
                           BuildContext context,
