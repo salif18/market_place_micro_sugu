@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:sugu/models/categorie_model.dart';
 import 'package:sugu/views/cat%C3%A9gories/categories_view.dart';
 
 class CategoryItem extends StatelessWidget {
-  final item;
+  final CategorieModel item;
   const CategoryItem({super.key, required this.item});
 
   @override
@@ -14,7 +15,7 @@ class CategoryItem extends StatelessWidget {
         Navigator.push(
           context,
           MaterialPageRoute(
-            builder: (context) => CategoriesView(categoryName: item["name"]),
+            builder: (context) => CategoriesView(categoryName: item.name),
           ),
         );
       },
@@ -26,18 +27,18 @@ class CategoryItem extends StatelessWidget {
             height: 50.w, // carré pour une icône ronde
             padding: EdgeInsets.all(10.r),
             decoration: BoxDecoration(
-              color: item["color"],
+              color: item.color,
               border: Border.all(color: Colors.grey.shade300, width: 1.r),
               shape: BoxShape.circle,
             ),
-            child: Icon(item["icon"], color: Colors.white, size: 22.sp),
+            child: Icon(item.icon, color: Colors.white, size: 22.sp),
           ),
           SizedBox(height: 8.h),
           Expanded(
             child: SizedBox(
               height: 20.h, // hauteur fixe pour éviter les débordements
               child: Text(
-                item["name"],
+                item.name,
                 textAlign: TextAlign.center,
                 overflow: TextOverflow.ellipsis,
                 maxLines: 1,

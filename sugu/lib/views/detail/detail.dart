@@ -11,7 +11,10 @@ import 'package:provider/provider.dart';
 import 'package:sugu/components/product_item.dart';
 import 'package:sugu/models/product_model.dart';
 import 'package:sugu/provider/favorite_provider.dart';
-import 'package:sugu/utils/format_prix.dart';
+import 'package:sugu/views/detail/widgets/caracteristic_section.dart';
+import 'package:sugu/views/detail/widgets/description_section.dart';
+import 'package:sugu/views/detail/widgets/image_slider_section.dart';
+import 'package:sugu/views/detail/widgets/title_section.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:path_provider/path_provider.dart';
 
@@ -25,7 +28,7 @@ class SingleView extends StatefulWidget {
 }
 
 class _SingleViewState extends State<SingleView> {
-  FormatPrice _formatPrice = FormatPrice();
+
   // CAS 2:
   void _contactSellerOnWhatsApp({
     required BuildContext context,
@@ -50,7 +53,8 @@ class _SingleViewState extends State<SingleView> {
           final documentDirectory = await getTemporaryDirectory();
           final file = File('${documentDirectory.path}/product_image.jpg');
           await file.writeAsBytes(response.bodyBytes);
-
+         
+           message += "Lien de l'image: $productImage\n\n";
           // Partager avec le fichier image
           final whatsappUrl =
               "whatsapp://send?phone=$sellerPhone&text=${Uri.encodeComponent(message)}";
@@ -243,295 +247,29 @@ class _SingleViewState extends State<SingleView> {
                 ),
               ),
             ),
+
             SliverToBoxAdapter(
-              child: SizedBox(
-                height: 250.h,
-                child: PageView.builder(
-                  itemCount: widget.item.images.length,
-                  controller: PageController(
-                    viewportFraction: 1.0, // plein écran
-                  ),
-                  itemBuilder: (context, index) {
-                    String photo = widget.item.images[index];
-                    return photo.isNotEmpty
-                        ? Hero(
-                          tag: widget.item,
-                          child: Image.network(
-                            photo,
-                            width: MediaQuery.of(context).size.width,
-                            fit: BoxFit.cover,
-                            errorBuilder: (context, error, stackTrace) {
-                              return Image.asset(
-                                "assets/images/default.png",
-                                fit: BoxFit.cover,
-                                width: double.infinity,
-                              );
-                            },
-                          ),
-                        )
-                        : Image.asset(
-                          "assets/images/default.png",
-                          fit: BoxFit.cover,
-                          width: double.infinity,
-                        );
-                  },
-                ),
-              ),
+              child:ImageSlider(item:widget.item)
             ),
 
             SliverPadding(
               padding: EdgeInsets.symmetric(horizontal: 16.r, vertical: 8.r),
               sliver: SliverToBoxAdapter(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  children: [
-                    Text(
-                      widget.item.titre,
-                      style: GoogleFonts.roboto(
-                        fontSize: 16.sp,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-
-                    Text(
-                      _formatPrice.formatNombre(widget.item.prix) +
-                          " " +
-                          "FCFA",
-                      style: GoogleFonts.montserrat(
-                        fontSize: 18.sp,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                    if (widget.item.views! > 0)
-                      Row(
-                        children: [
-                          Icon(Mdi.eye, size: 18.sp, color: Colors.grey),
-                          SizedBox(width: 8.w),
-                          Text(
-                            widget.item.views.toString() + " " + "vues",
-                            style: GoogleFonts.roboto(
-                              fontSize: 12.sp,
-                              color: Colors.grey,
-                              fontWeight: FontWeight.w400,
-                            ),
-                          ),
-                        ],
-                      ),
-                  ],
-                ),
+                child: TitleSection(item: widget.item)
               ),
             ),
+
             SliverPadding(
-              padding: EdgeInsets.symmetric(horizontal: 16.r, vertical: 8.r),
+              padding: EdgeInsets.symmetric(horizontal: 8.r, vertical: 8.r),
               sliver: SliverToBoxAdapter(
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  children: [
-                    Icon(Mdi.mapMarker, size: 20.sp, color: Colors.blueGrey),
-                    Text(
-                      widget.item.localisation,
-                      style: GoogleFonts.roboto(
-                        fontSize: 14.sp,
-                        fontWeight: FontWeight.w400,
-                        color: Colors.blueGrey,
-                      ),
-                    ),
-                  ],
-                ),
+                child: CaracteristiQueSection(item: widget.item)
               ),
             ),
+
             SliverPadding(
-              padding: EdgeInsets.symmetric(horizontal: 16.r, vertical: 8.r),
+              padding: EdgeInsets.symmetric(horizontal: 8.r, vertical: 8.r),
               sliver: SliverToBoxAdapter(
-                child: Container(
-                  padding: EdgeInsets.symmetric(
-                    horizontal: 12.r,
-                    vertical: 8.r,
-                  ),
-                  decoration: BoxDecoration(
-                    color: Colors.grey[50],
-                    borderRadius: BorderRadius.circular(10.r),
-                  ),
-                  child: Row(
-                    children: [
-                      Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          if (widget.item.modele != null &&
-                              widget.item.modele!.isNotEmpty)
-                            Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text(
-                                  "Modèle",
-                                  style: GoogleFonts.roboto(
-                                    fontSize: 16.sp,
-                                    fontWeight: FontWeight.bold,
-                                  ),
-                                ),
-                                Text(
-                                  widget.item.modele!,
-                                  style: GoogleFonts.roboto(
-                                    fontSize: 14.sp,
-                                    fontWeight: FontWeight.w400,
-                                  ),
-                                ),
-                              ],
-                            ),
-
-                          if (widget.item.annee != null &&
-                              widget.item.modele!.isNotEmpty)
-                            Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text(
-                                  "Année",
-                                  style: GoogleFonts.roboto(
-                                    fontSize: 16.sp,
-                                    fontWeight: FontWeight.bold,
-                                  ),
-                                ),
-                                Text(
-                                  widget.item.annee!,
-                                  style: GoogleFonts.roboto(
-                                    fontSize: 14.sp,
-                                    fontWeight: FontWeight.w400,
-                                  ),
-                                ),
-                              ],
-                            ),
-
-                          Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text(
-                                "Etat",
-                                style: GoogleFonts.roboto(
-                                  fontSize: 16.sp,
-                                  fontWeight: FontWeight.bold,
-                                ),
-                              ),
-                              Text(
-                                widget.item.etat,
-                                style: GoogleFonts.roboto(
-                                  fontSize: 14.sp,
-                                  fontWeight: FontWeight.w400,
-                                ),
-                              ),
-                            ],
-                          ),
-                        ],
-                      ),
-                      SizedBox(width: 20.sp),
-                      Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          if (widget.item.typeCarburant != null &&
-                              widget.item.typeCarburant!.isNotEmpty)
-                            Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text(
-                                  "Carburant",
-                                  style: GoogleFonts.roboto(
-                                    fontSize: 16.sp,
-                                    fontWeight: FontWeight.bold,
-                                  ),
-                                ),
-                                Text(
-                                  widget.item.typeCarburant!,
-                                  style: GoogleFonts.roboto(
-                                    fontSize: 14.sp,
-                                    fontWeight: FontWeight.w400,
-                                  ),
-                                ),
-                              ],
-                            ),
-
-                          if (widget.item.transmission != null &&
-                              widget.item.transmission!.isNotEmpty)
-                            Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text(
-                                  "Transmission",
-                                  style: GoogleFonts.roboto(
-                                    fontSize: 16.sp,
-                                    fontWeight: FontWeight.bold,
-                                  ),
-                                ),
-                                Text(
-                                  widget.item.transmission!,
-                                  style: GoogleFonts.roboto(
-                                    fontSize: 14.sp,
-                                    fontWeight: FontWeight.w400,
-                                  ),
-                                ),
-                              ],
-                            ),
-
-                          if (widget.item.kilometrage != null &&
-                              widget.item.kilometrage!.isNotEmpty)
-                            Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text(
-                                  "Kilométrage",
-                                  style: GoogleFonts.roboto(
-                                    fontSize: 16.sp,
-                                    fontWeight: FontWeight.bold,
-                                  ),
-                                ),
-                                Text(
-                                  widget.item.kilometrage! + " " + "km",
-                                  style: GoogleFonts.roboto(
-                                    fontSize: 14.sp,
-                                    fontWeight: FontWeight.w400,
-                                  ),
-                                ),
-                              ],
-                            ),
-                        ],
-                      ),
-                    ],
-                  ),
-                ),
-              ),
-            ),
-            SliverPadding(
-              padding: EdgeInsets.symmetric(horizontal: 16.r, vertical: 8.r),
-              sliver: SliverToBoxAdapter(
-                child: Container(
-                  padding: EdgeInsets.symmetric(
-                    horizontal: 12.r,
-                    vertical: 8.r,
-                  ),
-                  decoration: BoxDecoration(
-                    color: Colors.grey[50],
-                    borderRadius: BorderRadius.circular(10.r),
-                  ),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    children: [
-                      Text(
-                        "Description",
-                        style: GoogleFonts.roboto(
-                          fontSize: 16.sp,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                      Text(
-                        widget.item.description,
-                        style: GoogleFonts.roboto(
-                          fontSize: 14.sp,
-                          fontWeight: FontWeight.normal,
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
+                child: DescriptionSection(item: widget.item)
               ),
             ),
 

@@ -66,7 +66,7 @@ class ProductCard extends StatelessWidget {
               ),
             ),
             // Espace
-            SizedBox(height: 8.h),
+            SizedBox(height: 4.h),
             // Titre
             Expanded(
               child: Padding(

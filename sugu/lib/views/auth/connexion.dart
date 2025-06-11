@@ -396,21 +396,23 @@ class _ConnexionViewState extends State<ConnexionView> {
                         color: Colors.black,
                       ),
                     ),
-                    TextButton(
-                      onPressed: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => InscriptionView(),
+                    Expanded(
+                      child: TextButton(
+                        onPressed: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => InscriptionView(),
+                            ),
+                          );
+                        },
+                        child: Text(
+                          "Créer",
+                          style: GoogleFonts.roboto(
+                            fontSize: 12.sp,
+                            fontWeight: FontWeight.bold,
+                            color: Colors.blue,
                           ),
-                        );
-                      },
-                      child: Text(
-                        "Créer un compte",
-                        style: GoogleFonts.roboto(
-                          fontSize: 14.sp,
-                          fontWeight: FontWeight.bold,
-                          color: Colors.blue,
                         ),
                       ),
                     ),

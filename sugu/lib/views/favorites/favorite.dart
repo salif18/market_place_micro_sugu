@@ -1,12 +1,10 @@
-import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
+import 'package:sugu/components/favorite_item.dart';
 import 'package:sugu/models/product_model.dart';
 import 'package:sugu/provider/favorite_provider.dart';
-import 'package:sugu/utils/format_prix.dart';
-import 'package:sugu/views/detail/detail.dart';
 import 'package:sugu/views/home/home.dart';
 
 class FavoriteView extends StatefulWidget {
@@ -17,7 +15,6 @@ class FavoriteView extends StatefulWidget {
 }
 
 class _FavoriteViewState extends State<FavoriteView> {
-  FormatPrice _formatPrice = FormatPrice();
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -45,6 +42,7 @@ class _FavoriteViewState extends State<FavoriteView> {
                 ),
               ),
             ),
+
             SliverPadding(
               padding: EdgeInsets.all(8.0.r),
               sliver: SliverToBoxAdapter(
@@ -68,132 +66,12 @@ class _FavoriteViewState extends State<FavoriteView> {
                     ? SliverList(
                       delegate: SliverChildBuilderDelegate((context, index) {
                         ProductModel item = myFavorites[index];
-                        return GestureDetector(
-                          onTap: () {
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                builder:
-                                    (context) =>
-                                        SingleView(item: myFavorites[index]),
-                              ),
-                            );
-                          },
-                          child: Container(
-                            padding: EdgeInsets.all(8.r),
-                            decoration: BoxDecoration(
-                              color: Colors.white,
-                              border: Border(
-                                bottom: BorderSide(
-                                  color: Colors.grey[200]!,
-                                  width: 1,
-                                ), // bordure en bas
-                              ),
-                            ),
-                            child: ListTile(
-                              leading:
-                                  item.images.isNotEmpty
-                                      ? AspectRatio(
-                                        aspectRatio: 1,
-                                        child: Container(
-                                          decoration: BoxDecoration(
-                                            border: Border.all(
-                                              color:
-                                                  Colors
-                                                      .grey[200]!, // couleur de la bordure
-                                              width:
-                                                  1.r, // épaisseur de la bordure
-                                            ),
-                                            borderRadius: BorderRadius.circular(
-                                              10.r,
-                                            ),
-                                          ),
-                                          child: ClipRRect(
-                                            borderRadius: BorderRadius.circular(
-                                              10.r,
-                                            ),
-                                            child: Image.network(
-                                              item.images[0],
-                                              // width: 50.w,
-                                              // height: 50.h,
-                                              fit: BoxFit.cover,
-                                              errorBuilder: (
-                                                context,
-                                                error,
-                                                stackTrace,
-                                              ) {
-                                                return Image.asset(
-                                                  "assets/images/default.png",
-                                                  fit: BoxFit.cover,
-                                                  width: double.infinity,
-                                                );
-                                              },
-                                            ),
-                                          ),
-                                        ),
-                                      )
-                                      : null,
-                              title: Text(
-                                item.titre,
-                                style: GoogleFonts.roboto(fontSize: 12.sp),
-                              ),
-                              subtitle: Text(
-                                _formatPrice.formatNombre(item.prix),
-                                style: GoogleFonts.montserrat(
-                                  fontWeight: FontWeight.bold,
-                                  fontSize: 12.sp,
-                                ),
-                              ),
-                              trailing: Consumer<FavoriteProvider>(
-                                builder: (context, favoriteProvider, child) {
-                                  List<ProductModel> favorites =
-                                      favoriteProvider.getFavorites;
-                                  return SizedBox(
-                                    child: IconButton(
-                                      onPressed: () {
-                                        favoriteProvider.addMyFavorites(item);
-                                      },
-                                      icon:
-                                          favorites.firstWhereOrNull(
-                                                    (item) =>
-                                                        item.id == item.id,
-                                                  ) ==
-                                                  null
-                                              ? Icon(
-                                                Icons.bookmark_border_outlined,
-                                                size: 20.sp,
-                                                color: Colors.black54,
-                                              )
-                                              : Icon(
-                                                Icons.bookmark,
-                                                size: 20.sp,
-                                                color: Colors.black,
-                                              ),
-                                    ),
-                                  );
-                                },
-                              ),
-                              onTap: () {
-                                // Naviguer vers la page de détails
-                                Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                    builder:
-                                        (context) => SingleView(item: item),
-                                  ),
-                                );
-                              },
-                            ),
-                          ),
-                        );
+                        return FavoriteCard(item: item);
                       }, childCount: myFavorites.length),
                     )
                     : SliverToBoxAdapter(
                       child: Container(
                         padding: EdgeInsets.all(15.r),
-                        // height:
-                        //     constraints.maxWidth *
-                        //     AppSizes.responsiveValue(context, 360),
                         child: Column(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
