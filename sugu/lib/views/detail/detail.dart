@@ -260,6 +260,13 @@ class _SingleViewState extends State<SingleView> {
                             photo,
                             width: MediaQuery.of(context).size.width,
                             fit: BoxFit.cover,
+                            errorBuilder: (context, error, stackTrace) {
+                              return Image.asset(
+                                "assets/images/default.png",
+                                fit: BoxFit.cover,
+                                width: double.infinity,
+                              );
+                            },
                           ),
                         )
                         : Image.asset(
@@ -288,7 +295,9 @@ class _SingleViewState extends State<SingleView> {
                     ),
 
                     Text(
-                      _formatPrice.formatNombre(widget.item.prix) + " " + "FCFA",
+                      _formatPrice.formatNombre(widget.item.prix) +
+                          " " +
+                          "FCFA",
                       style: GoogleFonts.montserrat(
                         fontSize: 18.sp,
                         fontWeight: FontWeight.bold,

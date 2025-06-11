@@ -204,6 +204,17 @@ class _VosAnnonceViewState extends State<VosAnnonceView> {
                                                     : '',
                                                 fit: BoxFit.cover,
                                                 width: double.infinity,
+                                                errorBuilder: (
+                                                  context,
+                                                  error,
+                                                  stackTrace,
+                                                ) {
+                                                  return Image.asset(
+                                                    "assets/images/default.png",
+                                                    fit: BoxFit.cover,
+                                                    width: double.infinity,
+                                                  );
+                                                },
                                               )
                                               : Image.asset(
                                                 "assets/images/default.png",
@@ -238,7 +249,7 @@ class _VosAnnonceViewState extends State<VosAnnonceView> {
                                       horizontal: 8.r,
                                     ),
                                     child: Text(
-                                       _formatPrice.formatNombre(item.prix),
+                                      _formatPrice.formatNombre(item.prix),
                                       style: GoogleFonts.montserrat(
                                         fontSize: 12.sp,
                                         fontWeight: FontWeight.bold,

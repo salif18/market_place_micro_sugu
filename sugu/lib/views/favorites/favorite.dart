@@ -117,6 +117,17 @@ class _FavoriteViewState extends State<FavoriteView> {
                                               // width: 50.w,
                                               // height: 50.h,
                                               fit: BoxFit.cover,
+                                              errorBuilder: (
+                                                context,
+                                                error,
+                                                stackTrace,
+                                              ) {
+                                                return Image.asset(
+                                                  "assets/images/default.png",
+                                                  fit: BoxFit.cover,
+                                                  width: double.infinity,
+                                                );
+                                              },
                                             ),
                                           ),
                                         ),
