@@ -3,11 +3,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_mdi_icons/flutter_mdi_icons.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:sugu/components/categorie_item.dart';
+import 'package:sugu/components/product_item.dart';
 import 'package:sugu/models/product_model.dart';
-import 'package:sugu/utils/format_prix.dart';
 import 'package:sugu/views/cat%C3%A9gories/categories_list.dart';
-import 'package:sugu/views/cat%C3%A9gories/categories_view.dart';
-import 'package:sugu/views/detail/detail.dart';
 
 class HomeView extends StatefulWidget {
   const HomeView({super.key});
@@ -17,8 +16,6 @@ class HomeView extends StatefulWidget {
 }
 
 class _HomeViewState extends State<HomeView> {
-  FormatPrice _formatPrice = FormatPrice();
-
   List<Map<String, dynamic>> categories = [
     {
       "id": 1,
@@ -328,59 +325,8 @@ class _HomeViewState extends State<HomeView> {
                     BuildContext context,
                     int index,
                   ) {
-                    final item =
-                        sortedCategories[index]; // Donnée de la catégorie
-
-                    return GestureDetector(
-                      onTap: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder:
-                                (context) =>
-                                    CategoriesView(categoryName: item["name"]),
-                          ),
-                        );
-                      },
-                      child: Column(
-                        children: [
-                          // Conteneur de l’icône avec bordure circulaire
-                          Container(
-                            width: 50.w,
-                            height: 50.w, // carré pour une icône ronde
-                            padding: EdgeInsets.all(10.r),
-                            decoration: BoxDecoration(
-                              color: item["color"],
-                              border: Border.all(
-                                color: Colors.grey.shade300,
-                                width: 1.r,
-                              ),
-                              shape: BoxShape.circle,
-                            ),
-                            child: Icon(
-                              item["icon"],
-                              color: Colors.white,
-                              size: 22.sp,
-                            ),
-                          ),
-                          SizedBox(height: 8.h),
-                          SizedBox(
-                            height:
-                                20.h, // hauteur fixe pour éviter les débordements
-                            child: Text(
-                              item["name"],
-                              textAlign: TextAlign.center,
-                              overflow: TextOverflow.ellipsis,
-                              maxLines: 1,
-                              style: GoogleFonts.roboto(
-                                fontSize: 12.sp,
-                                fontWeight: FontWeight.w600,
-                              ),
-                            ),
-                          ),
-                        ],
-                      ),
-                    );
+                    final item = sortedCategories[index]; // Donnée de la catégorie
+                    return CategoryItem(item: item);
                   }, childCount: 12),
                 ),
               ),
@@ -444,111 +390,7 @@ class _HomeViewState extends State<HomeView> {
 
                             return AspectRatio(
                               aspectRatio: 0.8,
-                              child: InkWell(
-                                onTap: () {
-                                  Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                      builder:
-                                          (context) => SingleView(item: item),
-                                    ),
-                                  );
-                                },
-                                child: Card(
-                                  color: Colors.white,
-                                  margin: EdgeInsets.only(right: 12.r),
-                                  shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(0.r),
-                                  ),
-                                  elevation: 0,
-                                  child: Container(
-                                    width: 160.w,
-                                    padding: EdgeInsets.only(bottom: 8.r),
-                                    child: Column(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
-                                      children: [
-                                        // Image avec ratio carré
-                                        AspectRatio(
-                                          aspectRatio: 1,
-                                          child: Container(
-                                            decoration: BoxDecoration(
-                                              border: Border.all(
-                                                color:
-                                                    Colors
-                                                        .grey[200]!, // couleur de la bordure
-                                                width:
-                                                    1.r, // épaisseur de la bordure
-                                              ),
-                                              borderRadius:
-                                                  BorderRadius.circular(10.r),
-                                            ),
-                                            child: ClipRRect(
-                                              borderRadius:
-                                                  BorderRadius.circular(10.r),
-                                              child:
-                                                  item.images.isNotEmpty
-                                                      ? Hero(
-                                                        tag: item,
-                                                        child: Image.network(
-                                                          item.images.isNotEmpty
-                                                              ? item.images[0]
-                                                              : '',
-                                                          fit: BoxFit.cover,
-                                                          width: double.infinity,
-                                                        ),
-                                                      )
-                                                      : Image.asset(
-                                                        "assets/images/default.png",
-                                                        fit: BoxFit.cover,
-                                                        width: double.infinity,
-                                                      ),
-                                            ),
-                                          ),
-                                        ),
-                                        SizedBox(height: 8.h),
-                                        // Titre
-                                        Expanded(
-                                          child: Padding(
-                                            padding: EdgeInsets.symmetric(
-                                              horizontal: 8.r,
-                                            ),
-                                            child: Text(
-                                              item.titre,
-                                              overflow: TextOverflow.ellipsis,
-                                              maxLines: 1,
-                                              style: GoogleFonts.roboto(
-                                                fontSize: 12.sp,
-                                                fontWeight: FontWeight.w500,
-                                                color: Colors.black,
-                                              ),
-                                            ),
-                                          ),
-                                        ),
-                                        SizedBox(height: 1.h),
-                                        // Prix
-                                        Expanded(
-                                          child: Padding(
-                                            padding: EdgeInsets.symmetric(
-                                              horizontal: 8.r,
-                                            ),
-                                            child: Text(
-                                              _formatPrice.formatNombre(
-                                                item.prix,
-                                              ),
-                                              style: GoogleFonts.montserrat(
-                                                fontSize: 12.sp,
-                                                fontWeight: FontWeight.bold,
-                                                color: Colors.black,
-                                              ),
-                                            ),
-                                          ),
-                                        ),
-                                      ],
-                                    ),
-                                  ),
-                                ),
-                              ),
+                              child: ProductCard(item: item),
                             );
                           },
                         ),
@@ -618,104 +460,7 @@ class _HomeViewState extends State<HomeView> {
                           int index,
                         ) {
                           ProductModel item = articles[index];
-
-                          return GestureDetector(
-                            onTap: () {
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (context) => SingleView(item: item),
-                                ),
-                              );
-                            },
-                            child: Card(
-                              elevation: 0,
-                              color: Colors.white,
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(0.r),
-                              ),
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  // Image produit
-                                  AspectRatio(
-                                    aspectRatio: 1,
-                                    child: Container(
-                                      decoration: BoxDecoration(
-                                        border: Border.all(
-                                          color:
-                                              Colors
-                                                  .grey[200]!, // couleur de la bordure
-                                          width: 1.r, // épaisseur de la bordure
-                                        ),
-                                        borderRadius: BorderRadius.circular(
-                                          10.r,
-                                        ),
-                                      ),
-                                      child: ClipRRect(
-                                        borderRadius: BorderRadius.circular(
-                                          10.r,
-                                        ),
-                                        child:
-                                            item.images.isNotEmpty
-                                                ? Hero(
-                                                  tag: item,
-                                                  child: Image.network(
-                                                    item.images.isNotEmpty
-                                                        ? item.images[0]
-                                                        : '',
-                                                    fit: BoxFit.cover,
-                                                    width: double.infinity,
-                                                  ),
-                                                )
-                                                : Image.asset(
-                                                  "assets/images/default.png",
-                                                  fit: BoxFit.cover,
-                                                  width: double.infinity,
-                                                ),
-                                      ),
-                                    ),
-                                  ),
-                                  // Espace
-                                  SizedBox(height: 8.h),
-                                  // Titre
-                                  Expanded(
-                                    child: Padding(
-                                      padding: EdgeInsets.symmetric(
-                                        horizontal: 8.r,
-                                      ),
-                                      child: Text(
-                                        item.titre,
-                                        maxLines: 1,
-                                        overflow: TextOverflow.ellipsis,
-                                        style: GoogleFonts.roboto(
-                                          fontSize: 12.sp,
-                                          fontWeight: FontWeight.w500,
-                                        ),
-                                      ),
-                                    ),
-                                  ),
-                                  SizedBox(height: 1.h),
-                                  // Prix
-                                  Expanded(
-                                    child: Padding(
-                                      padding: EdgeInsets.symmetric(
-                                        horizontal: 8.r,
-                                      ),
-                                      child: Text(
-                                        _formatPrice.formatNombre(item.prix),
-                                        style: GoogleFonts.montserrat(
-                                          fontSize: 12.sp,
-                                          fontWeight: FontWeight.bold,
-                                          color: Colors.black87,
-                                        ),
-                                      ),
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ),
-                          );
+                          return ProductCard(item: item);
                         }, childCount: articles.length),
                       ),
                     );

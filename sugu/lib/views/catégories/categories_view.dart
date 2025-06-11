@@ -2,9 +2,8 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:sugu/components/product_item.dart';
 import 'package:sugu/models/product_model.dart';
-import 'package:sugu/utils/format_prix.dart';
-import 'package:sugu/views/detail/detail.dart';
 
 class CategoriesView extends StatefulWidget {
   // ignore: prefer_typing_uninitialized_variables
@@ -16,8 +15,6 @@ class CategoriesView extends StatefulWidget {
 }
 
 class _CategoriesViewState extends State<CategoriesView> {
-  FormatPrice _formatPrice = FormatPrice();
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -38,7 +35,7 @@ class _CategoriesViewState extends State<CategoriesView> {
               ),
               flexibleSpace: FlexibleSpaceBar(
                 centerTitle: true,
-                background: Container(color: Colors.white,),
+                background: Container(color: Colors.white),
                 title: Text(
                   widget.categoryName,
                   style: GoogleFonts.roboto(
@@ -49,11 +46,11 @@ class _CategoriesViewState extends State<CategoriesView> {
                 ),
               ),
             ),
-             StreamBuilder(
+            StreamBuilder(
               stream:
                   FirebaseFirestore.instance
                       .collection('articles')
-                      .where('categorie', isEqualTo: widget.categoryName)          
+                      .where('categorie', isEqualTo: widget.categoryName)
                       .snapshots(),
               builder: (context, snapshot) {
                 if (snapshot.connectionState == ConnectionState.waiting) {
@@ -78,120 +75,29 @@ class _CategoriesViewState extends State<CategoriesView> {
                         return ProductModel.fromJson(doc.data(), doc.id);
                       }).toList();
                   return SliverPadding(
-                      padding: EdgeInsets.symmetric(
-                        vertical: 8.r,
-                        horizontal: 10.r,
-                      ),
-                      sliver: SliverGrid(
-                        gridDelegate:
-                            const SliverGridDelegateWithFixedCrossAxisCount(
-                              crossAxisCount: 2,
-                              crossAxisSpacing: 1,
-                              mainAxisSpacing: 1,
-                              childAspectRatio:
-                                  0.8, // Ajuste pour obtenir une belle carte
-                            ),
-                        delegate: SliverChildBuilderDelegate((
-                          BuildContext context,
-                          int index,
-                        ) {
-                          ProductModel item = articles[index];
+                    padding: EdgeInsets.symmetric(
+                      vertical: 8.r,
+                      horizontal: 10.r,
+                    ),
+                    sliver: SliverGrid(
+                      gridDelegate:
+                          const SliverGridDelegateWithFixedCrossAxisCount(
+                            crossAxisCount: 2,
+                            crossAxisSpacing: 1,
+                            mainAxisSpacing: 1,
+                            childAspectRatio:
+                                0.8, // Ajuste pour obtenir une belle carte
+                          ),
+                      delegate: SliverChildBuilderDelegate((
+                        BuildContext context,
+                        int index,
+                      ) {
+                        ProductModel item = articles[index];
 
-                          return GestureDetector(
-                            onTap: () {
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (context) => SingleView(item: item),
-                                ),
-                              );
-                            },
-                            child: Card(
-                              elevation: 0,
-                              color: Colors.white,
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(0.r),
-                              ),
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  // Image produit
-                                  AspectRatio(
-                                    aspectRatio: 1,
-                                    child: Container(
-                                      decoration: BoxDecoration(
-                                            border: Border.all(
-                                              color:
-                                                  Colors.grey[200]!, // couleur de la bordure
-                                              width:
-                                                  1.r, // épaisseur de la bordure
-                                            ),
-                                            borderRadius: BorderRadius.circular(
-                                              10.r,
-                                            ),
-                                          ),
-                                      child: ClipRRect(
-                                        borderRadius: BorderRadius.circular(
-                                        10.r,
-                                        ),
-                                        child: item.images.isNotEmpty ? Hero(
-                                           tag: item,
-                                          child: Image.network(
-                                                item.images.isNotEmpty
-                                                    ? item.images[0]
-                                                    : '',
-                                                fit: BoxFit.cover,
-                                                width: double.infinity,
-                                              ),
-                                        ) : Image.asset("assets/images/default.png", 
-                                            fit: BoxFit.cover,
-                                            width: double.infinity,),
-                                      ),
-                                    ),
-                                  ),
-                                  // Espace
-                                  SizedBox(height: 8.h),
-                                  // Titre
-                                  Expanded(
-                                    child: Padding(
-                                      padding: EdgeInsets.symmetric(
-                                        horizontal: 8.r,
-                                      ),
-                                      child: Text(
-                                        item.titre,
-                                        maxLines: 1,
-                                        overflow: TextOverflow.ellipsis,
-                                        style: GoogleFonts.roboto(
-                                          fontSize: 12.sp,
-                                          fontWeight: FontWeight.w500,
-                                        ),
-                                      ),
-                                    ),
-                                  ),
-                                  SizedBox(height: 1.h),
-                                  // Prix
-                                  Expanded(
-                                    child: Padding(
-                                      padding: EdgeInsets.symmetric(
-                                        horizontal: 8.r,
-                                      ),
-                                      child: Text(
-                                         _formatPrice.formatNombre(item.prix),
-                                        style: GoogleFonts.montserrat(
-                                          fontSize: 12.sp,
-                                          fontWeight: FontWeight.bold,
-                                          color: Colors.black87,
-                                        ),
-                                      ),
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ),
-                          );
-                        }, childCount: articles.length),
-                      ),
-                    );
+                        return ProductCard(item: item);
+                      }, childCount: articles.length),
+                    ),
+                  );
                 }
               },
             ),

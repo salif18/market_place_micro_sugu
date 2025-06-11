@@ -17,7 +17,7 @@ class FavoriteView extends StatefulWidget {
 }
 
 class _FavoriteViewState extends State<FavoriteView> {
-   FormatPrice _formatPrice = FormatPrice();
+  FormatPrice _formatPrice = FormatPrice();
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -33,7 +33,7 @@ class _FavoriteViewState extends State<FavoriteView> {
               pinned: true,
               floating: true,
               flexibleSpace: FlexibleSpaceBar(
-                 background: Container(color: Colors.white,),
+                background: Container(color: Colors.white),
                 centerTitle: true,
                 title: Text(
                   "Mes favoris",
@@ -60,7 +60,7 @@ class _FavoriteViewState extends State<FavoriteView> {
                 ),
               ),
             ),
-        
+
             Consumer<FavoriteProvider>(
               builder: (context, favoriteProvider, child) {
                 List<ProductModel> myFavorites = favoriteProvider.getFavorites;
@@ -96,7 +96,7 @@ class _FavoriteViewState extends State<FavoriteView> {
                                       ? AspectRatio(
                                         aspectRatio: 1,
                                         child: Container(
-                                           decoration: BoxDecoration(
+                                          decoration: BoxDecoration(
                                             border: Border.all(
                                               color:
                                                   Colors
@@ -109,7 +109,9 @@ class _FavoriteViewState extends State<FavoriteView> {
                                             ),
                                           ),
                                           child: ClipRRect(
-                                            borderRadius: BorderRadius.circular(10.r),
+                                            borderRadius: BorderRadius.circular(
+                                              10.r,
+                                            ),
                                             child: Image.network(
                                               item.images[0],
                                               // width: 50.w,
@@ -142,18 +144,19 @@ class _FavoriteViewState extends State<FavoriteView> {
                                       },
                                       icon:
                                           favorites.firstWhereOrNull(
-                                                    (item) => item.id == item.id,
+                                                    (item) =>
+                                                        item.id == item.id,
                                                   ) ==
                                                   null
                                               ? Icon(
-                                                Icons.star_border_outlined,
-                                                size: 24.sp,
+                                                Icons.bookmark_border_outlined,
+                                                size: 20.sp,
                                                 color: Colors.black54,
                                               )
                                               : Icon(
-                                                Icons.star,
-                                                size: 24.sp,
-                                                color: Colors.amber,
+                                                Icons.bookmark,
+                                                size: 20.sp,
+                                                color: Colors.black,
                                               ),
                                     ),
                                   );
@@ -164,7 +167,8 @@ class _FavoriteViewState extends State<FavoriteView> {
                                 Navigator.push(
                                   context,
                                   MaterialPageRoute(
-                                    builder: (context) => SingleView(item: item),
+                                    builder:
+                                        (context) => SingleView(item: item),
                                   ),
                                 );
                               },
