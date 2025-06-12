@@ -54,7 +54,7 @@ class _AddVehiculesState extends State<AddVehicules> {
     final dio = Dio();
 
     final response = await dio.post(
-      'http://10.0.2.2:8080/api/notify-annonce',
+      'https://service-notification-micro-sugu.vercel.app/api/notify-annonce',
       data: {'title': title, 'body': body, if (data != null) 'data': data},
     );
 
