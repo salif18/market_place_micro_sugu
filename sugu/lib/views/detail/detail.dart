@@ -8,12 +8,12 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:http/http.dart' as http;
 import 'package:provider/provider.dart';
-import 'package:sugu/components/product_item.dart';
 import 'package:sugu/models/product_model.dart';
 import 'package:sugu/provider/favorite_provider.dart';
 import 'package:sugu/views/detail/widgets/caracteristic_section.dart';
 import 'package:sugu/views/detail/widgets/description_section.dart';
 import 'package:sugu/views/detail/widgets/image_slider_section.dart';
+import 'package:sugu/views/detail/widgets/similar_product.dart';
 import 'package:sugu/views/detail/widgets/title_section.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:path_provider/path_provider.dart';
@@ -28,7 +28,6 @@ class SingleView extends StatefulWidget {
 }
 
 class _SingleViewState extends State<SingleView> {
-
   // CAS 2:
   void _contactSellerOnWhatsApp({
     required BuildContext context,
@@ -53,8 +52,8 @@ class _SingleViewState extends State<SingleView> {
           final documentDirectory = await getTemporaryDirectory();
           final file = File('${documentDirectory.path}/product_image.jpg');
           await file.writeAsBytes(response.bodyBytes);
-         
-           message += "Lien de l'image: $productImage\n\n";
+
+          message += "Lien de l'image: $productImage\n\n";
           // Partager avec le fichier image
           final whatsappUrl =
               "whatsapp://send?phone=$sellerPhone&text=${Uri.encodeComponent(message)}";
@@ -102,70 +101,6 @@ class _SingleViewState extends State<SingleView> {
       ).showSnackBar(SnackBar(content: Text("Erreur: ${e.toString()}")));
     }
   }
-  // CAS 1:
-  // void _contactSellerOnWhatsApp({
-  //   required BuildContext context,
-  //   required String productTitle,
-  //   required String productPrice,
-  //   required String sellerPhone,
-  //   String? productImage,
-  // }) async {
-
-  //   // Message pré-rempli
-  //   String message =
-  //       "Bonjour, je suis intéressé par votre produit:\n"
-  //       "*$productTitle*\n"
-  //       "Prix: $productPrice FCFA\n\n";
-
-  //   if (productImage != null) {
-  //     message += "Lien de l'image: $productImage\n\n";
-  //   }
-
-  //   message += "Merci de me contacter pour plus d'informations.";
-
-  //   // Encodage du message pour URL
-  //   final encodedMessage = Uri.encodeComponent(message);
-
-  //   // URL WhatsApp
-  //   final whatsappUrl = "https://wa.me/$sellerPhone?text=$encodedMessage";
-  //   final whatsappBusinessUrl =
-  //       "whatsapp://send?phone=$sellerPhone&text=$encodedMessage";
-
-  //   // Vérification si WhatsApp est installé
-  //   try {
-  //     // Essayer WhatsApp Business d'abord
-  //     // ignore: deprecated_member_use
-  //     if (await canLaunch(whatsappBusinessUrl)) {
-  //       // ignore: deprecated_member_use
-  //       await launch(whatsappBusinessUrl);
-  //       // ignore: deprecated_member_use
-  //     } else if (await canLaunch(whatsappUrl)) {
-  //       // ignore: deprecated_member_use
-  //       await launch(whatsappUrl);
-  //     } else {
-  //       // ignore: use_build_context_synchronously
-  //       ScaffoldMessenger.of(
-  //         // ignore: use_build_context_synchronously
-  //         context,
-  //       ).showSnackBar(SnackBar(content: Text("WhatsApp n'est pas installé")));
-
-  //       // Ouvrir le Play Store pour installation
-  //       final playStoreUrl =
-  //           "https://play.google.com/store/apps/details?id=com.whatsapp.w4b";
-  //       // ignore: deprecated_member_use
-  //       if (await canLaunch(playStoreUrl)) {
-  //         // ignore: deprecated_member_use
-  //         await launch(playStoreUrl);
-  //       }
-  //     }
-  //   } catch (e) {
-  //     // ignore: use_build_context_synchronously
-  //     ScaffoldMessenger.of(
-  //       // ignore: use_build_context_synchronously
-  //       context,
-  //     ).showSnackBar(SnackBar(content: Text("Erreur: ${e.toString()}")));
-  //   }
-  // }
 
   List<ProductModel> fakeVehiculeData = ProductModel.getProducts();
 
@@ -248,104 +183,12 @@ class _SingleViewState extends State<SingleView> {
               ),
             ),
 
-            SliverToBoxAdapter(
-              child:ImageSlider(item:widget.item)
-            ),
-
-            SliverPadding(
-              padding: EdgeInsets.symmetric(horizontal: 16.r, vertical: 8.r),
-              sliver: SliverToBoxAdapter(
-                child: TitleSection(item: widget.item)
-              ),
-            ),
-
-            SliverPadding(
-              padding: EdgeInsets.symmetric(horizontal: 8.r, vertical: 8.r),
-              sliver: SliverToBoxAdapter(
-                child: CaracteristiQueSection(item: widget.item)
-              ),
-            ),
-
-            SliverPadding(
-              padding: EdgeInsets.symmetric(horizontal: 8.r, vertical: 8.r),
-              sliver: SliverToBoxAdapter(
-                child: DescriptionSection(item: widget.item)
-              ),
-            ),
-
-            SliverPadding(
-              padding: EdgeInsets.symmetric(vertical: 8.r, horizontal: 16.r),
-              sliver: SliverToBoxAdapter(
-                child: Text(
-                  "Autres versions",
-                  style: GoogleFonts.roboto(
-                    fontSize: 14.sp,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-              ),
-            ),
-
-            StreamBuilder(
-              stream:
-                  FirebaseFirestore.instance
-                      .collection('articles')
-                      .where(
-                        Filter.or(
-                          Filter('categorie', isEqualTo: widget.item.categorie),
-                          Filter('titre', isEqualTo: widget.item.titre),
-                        ),
-                      )
-                      .snapshots(),
-              builder: (context, snapshot) {
-                if (snapshot.connectionState == ConnectionState.waiting) {
-                  return SliverFillRemaining(
-                    child: const Center(child: CircularProgressIndicator()),
-                  );
-                } else if (snapshot.hasError) {
-                  return SliverFillRemaining(
-                    child: const Center(
-                      child: Text("Une erreur s'est produite"),
-                    ),
-                  );
-                } else if (!snapshot.hasData || snapshot.data!.docs.isEmpty) {
-                  return SliverFillRemaining(
-                    child: const Center(
-                      child: Text("Aucun donnés disponibles"),
-                    ),
-                  );
-                } else {
-                  List<ProductModel> articles =
-                      snapshot.data!.docs.map((doc) {
-                        return ProductModel.fromJson(doc.data(), doc.id);
-                      }).toList();
-
-                  return SliverPadding(
-                    padding: EdgeInsets.symmetric(
-                      vertical: 8.r,
-                      horizontal: 10.r,
-                    ),
-                    sliver: SliverGrid(
-                      gridDelegate:
-                          const SliverGridDelegateWithFixedCrossAxisCount(
-                            crossAxisCount: 2,
-                            crossAxisSpacing: 1,
-                            mainAxisSpacing: 1,
-                            childAspectRatio:
-                                0.8, // Ajuste pour obtenir une belle carte
-                          ),
-                      delegate: SliverChildBuilderDelegate((
-                        BuildContext context,
-                        int index,
-                      ) {
-                        ProductModel item = articles[index];
-                        return ProductCard(item: item);
-                      }, childCount: articles.length),
-                    ),
-                  );
-                }
-              },
-            ),
+            ImageSlider(item: widget.item),
+            TitleSection(item: widget.item),
+            CaracteristiQueSection(item: widget.item),
+            DescriptionSection(item: widget.item),
+            _buildTitleSection(context, "Autres versions"),
+            BuildSimilarProduct(item: widget.item),
           ],
         ),
       ),
@@ -365,4 +208,84 @@ class _SingleViewState extends State<SingleView> {
       ),
     );
   }
+
+  Widget _buildTitleSection(BuildContext context, String title) {
+    return SliverPadding(
+      padding: EdgeInsets.symmetric(vertical: 8.r, horizontal: 16.r),
+      sliver: SliverToBoxAdapter(
+        child: Text(
+          title,
+          style: GoogleFonts.roboto(
+            fontSize: 14.sp,
+            fontWeight: FontWeight.bold,
+          ),
+        ),
+      ),
+    );
+  }
 }
+
+ // CAS 1:
+  // void _contactSellerOnWhatsApp({
+  //   required BuildContext context,
+  //   required String productTitle,
+  //   required String productPrice,
+  //   required String sellerPhone,
+  //   String? productImage,
+  // }) async {
+
+  //   // Message pré-rempli
+  //   String message =
+  //       "Bonjour, je suis intéressé par votre produit:\n"
+  //       "*$productTitle*\n"
+  //       "Prix: $productPrice FCFA\n\n";
+
+  //   if (productImage != null) {
+  //     message += "Lien de l'image: $productImage\n\n";
+  //   }
+
+  //   message += "Merci de me contacter pour plus d'informations.";
+
+  //   // Encodage du message pour URL
+  //   final encodedMessage = Uri.encodeComponent(message);
+
+  //   // URL WhatsApp
+  //   final whatsappUrl = "https://wa.me/$sellerPhone?text=$encodedMessage";
+  //   final whatsappBusinessUrl =
+  //       "whatsapp://send?phone=$sellerPhone&text=$encodedMessage";
+
+  //   // Vérification si WhatsApp est installé
+  //   try {
+  //     // Essayer WhatsApp Business d'abord
+  //     // ignore: deprecated_member_use
+  //     if (await canLaunch(whatsappBusinessUrl)) {
+  //       // ignore: deprecated_member_use
+  //       await launch(whatsappBusinessUrl);
+  //       // ignore: deprecated_member_use
+  //     } else if (await canLaunch(whatsappUrl)) {
+  //       // ignore: deprecated_member_use
+  //       await launch(whatsappUrl);
+  //     } else {
+  //       // ignore: use_build_context_synchronously
+  //       ScaffoldMessenger.of(
+  //         // ignore: use_build_context_synchronously
+  //         context,
+  //       ).showSnackBar(SnackBar(content: Text("WhatsApp n'est pas installé")));
+
+  //       // Ouvrir le Play Store pour installation
+  //       final playStoreUrl =
+  //           "https://play.google.com/store/apps/details?id=com.whatsapp.w4b";
+  //       // ignore: deprecated_member_use
+  //       if (await canLaunch(playStoreUrl)) {
+  //         // ignore: deprecated_member_use
+  //         await launch(playStoreUrl);
+  //       }
+  //     }
+  //   } catch (e) {
+  //     // ignore: use_build_context_synchronously
+  //     ScaffoldMessenger.of(
+  //       // ignore: use_build_context_synchronously
+  //       context,
+  //     ).showSnackBar(SnackBar(content: Text("Erreur: ${e.toString()}")));
+  //   }
+  // }
