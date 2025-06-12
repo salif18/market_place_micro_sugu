@@ -17,7 +17,7 @@ class AddMaisons extends StatefulWidget {
 }
 
 class _AddMaisonsState extends State<AddMaisons> {
-     // CLE KEY POUR LE FORMULAIRE
+  // CLE KEY POUR LE FORMULAIRE
   final GlobalKey<FormState> _globalKey = GlobalKey<FormState>();
   // Contrôleurs pour les champs de formulaire
   final TextEditingController _titreController = TextEditingController();
@@ -42,6 +42,25 @@ class _AddMaisonsState extends State<AddMaisons> {
       "icon": Mdi.homeRoof, // Icône pour locations
     },
   ];
+
+  Future<void> sendNotificationToTopic({
+    required String title,
+    required String body,
+    Map<String, String>? data,
+  }) async {
+    final dio = Dio();
+
+    final response = await dio.post(
+      'http://10.0.2.2:8080/api/notify-annonce',
+      data: {'title': title, 'body': body, if (data != null) 'data': data},
+    );
+
+    if (response.statusCode == 200) {
+      print('✅ Notification envoyée avec succès');
+    } else {
+      print('❌ Erreur (${response.statusCode}): ${response.data}');
+    }
+  }
 
   // configuration de selection image depuis gallerie
   final ImagePicker _picker = ImagePicker();
@@ -110,63 +129,76 @@ class _AddMaisonsState extends State<AddMaisons> {
 
   // ✅ 3. Soumettre le formulaire à firebase
   void _submitForm() async {
-    if (_globalKey.currentState!.validate() ||  _selectedCategory != null ||
+    if (_globalKey.currentState!.validate() ||
+        _selectedCategory != null ||
         _selectedEtat != null) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text("Veuillez remplir tous les champs obligatoires"),
-        ),
-      );
+      try {
+        // Upload vers Cloudinary
+        List<String> imageUrls = await uploadImagesToCloudinary(gallerieImages);
+        print(imageUrls);
 
-    try {
-      // Upload vers Cloudinary
-      List<String> imageUrls = await uploadImagesToCloudinary(gallerieImages);
-      print(imageUrls);
+        // Création du document Firestore
+        final vehiculeData = {
+          'titre': _titreController.text,
+          'prix': _prixController.text,
+          'description': _descriptionController.text,
+          'localisation': _localisationController.text,
+          'groupe': "maisons",
+          'categorie': _selectedCategory,
+          'etat': _selectedEtat,
+          'images': imageUrls,
+          'modele': null,
+          'annee': null,
+          'kilometrage': null,
+          'typeCarburant': null,
+          'transmission': null,
+          'numero': _numeroController.text,
+          'createdAt': FieldValue.serverTimestamp(),
+          'userId': FirebaseAuth.instance.currentUser?.uid,
+          "views": 0,
+        };
+        showDialog(
+          context: context,
+          builder: (context) {
+            return const Center(child: CircularProgressIndicator());
+          },
+        );
 
-      // Création du document Firestore
-      final vehiculeData = {
-        'titre': _titreController.text,
-        'prix': _prixController.text,
-        'description': _descriptionController.text,
-        'localisation': _localisationController.text,
-        'groupe': "maisons",
-        'categorie': _selectedCategory,
-        'etat': _selectedEtat,
-        'images': imageUrls,
-        'modele': null,
-        'annee': null,
-        'kilometrage': null,
-        'typeCarburant': null,
-        'transmission': null,
-        'numero': _numeroController.text,
-        'createdAt': FieldValue.serverTimestamp(),
-        'userId': FirebaseAuth.instance.currentUser?.uid,
-        "views": 0,
-      };
-      showDialog(
-        context: context,
-        builder: (context) {
-          return const Center(child: CircularProgressIndicator());
-        },
-      );
+        await FirebaseFirestore.instance
+            .collection('articles')
+            .add(vehiculeData);
 
-      await FirebaseFirestore.instance.collection('articles').add(vehiculeData);
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            backgroundColor: Colors.deepOrangeAccent,
+            content: Text(
+              "Article publié avec succès",
+              style: GoogleFonts.roboto(fontSize: 14.sp, color: Colors.white),
+            ),
+          ),
+        );
 
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          backgroundColor: Colors.deepOrangeAccent,
-          content: Text("Article publié avec succès",style:GoogleFonts.roboto(fontSize: 14.sp,color: Colors.white))),
-      );
+        await sendNotificationToTopic(
+          title: "Nouvelle annonce disponible !",
+          body: "Découvrez la dernière annonce ajoutée rien que pour vous.",
+        );
 
-       Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => AddMaisons()));
-    } catch (e) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text("Erreur lors de la publication : $e")),
-      );
-      print("Erreur lors de la publication : $e");
+        Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(builder: (context) => AddMaisons()),
+        );
+      } catch (e) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text("Erreur lors de la publication : $e")),
+        );
+        print("Erreur lors de la publication : $e");
+      }
     }
-        }
-        return ;
+    ScaffoldMessenger.of(context).showSnackBar(
+      const SnackBar(
+        content: Text("Veuillez remplir tous les champs obligatoires"),
+      ),
+    );
   }
 
   @override

@@ -18,7 +18,7 @@ class NotificationService {
 
     // 2. INITIALISATION DES NOTIFICATIONS LOCALES
     const AndroidInitializationSettings androidSettings =
-        AndroidInitializationSettings('@mipmap/ic_launcher');
+        AndroidInitializationSettings('@mipmap/launcher_icon');
 
     const InitializationSettings initSettings = InitializationSettings(
       android: androidSettings,

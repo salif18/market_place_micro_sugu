@@ -4,7 +4,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:sugu/models/categorie_model.dart';
 import 'package:sugu/views/cat%C3%A9gories/categories_list.dart';
 import 'package:sugu/views/home/widgets/app_bar.dart';
-import 'package:sugu/views/home/widgets/banner_section.dart';
+import 'package:sugu/views/home/widgets/build_banner_section.dart';
 import 'package:sugu/views/home/widgets/build_categori_list.dart';
 import 'package:sugu/views/home/widgets/build_product_annonce.dart';
 import 'package:sugu/views/home/widgets/build_product_list.dart';
@@ -36,9 +36,8 @@ class _HomeViewState extends State<HomeView> {
           color: Colors.white,
           child: CustomScrollView(
             slivers: [
-              // AppBar
               BuildAppBar(),
-              BannerSection(),
+              BuildBannerSection(),
               _buildAllCategory(context),
               BuildCategoriList(sortedCategories: categories),
               _buildTitleSection(context, "Annonces récentes"),
@@ -52,7 +51,7 @@ class _HomeViewState extends State<HomeView> {
     );
   }
 
-  Widget _buildAllCategory(BuildContext context) {
+  Widget _buildAllCategory(BuildContext context,) {
     return SliverPadding(
       padding: EdgeInsets.symmetric(vertical: 8.r, horizontal: 16.r),
       sliver: SliverToBoxAdapter(

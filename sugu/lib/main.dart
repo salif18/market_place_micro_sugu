@@ -29,7 +29,7 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
 
-  // FirebaseMessaging.instance.subscribeToTopic('all_users');
+  FirebaseMessaging.instance.subscribeToTopic('notify_all_users');
 
   // lire la notification en arriere plan
   FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);

@@ -46,6 +46,25 @@ class _AddVehiculesState extends State<AddVehicules> {
     {"id": 8, "name": "Autres", "icon": Mdi.flagOutline},
   ];
 
+  Future<void> sendNotificationToTopic({
+    required String title,
+    required String body,
+    Map<String, String>? data,
+  }) async {
+    final dio = Dio();
+
+    final response = await dio.post(
+      'http://10.0.2.2:8080/api/notify-annonce',
+      data: {'title': title, 'body': body, if (data != null) 'data': data},
+    );
+
+    if (response.statusCode == 200) {
+      print('✅ Notification envoyée avec succès');
+    } else {
+      print('❌ Erreur (${response.statusCode}): ${response.data}');
+    }
+  }
+
   // configuration de selection image depuis gallerie
   final ImagePicker _picker = ImagePicker();
   List<XFile> gallerieImages = [];
@@ -116,12 +135,6 @@ class _AddVehiculesState extends State<AddVehicules> {
     if (_globalKey.currentState!.validate() ||
         _selectedCategory != null ||
         _selectedEtat != null) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text("Veuillez remplir tous les champs obligatoires"),
-        ),
-      );
-
       try {
         // Upload vers Cloudinary
         List<String> imageUrls = await uploadImagesToCloudinary(gallerieImages);
@@ -168,6 +181,11 @@ class _AddVehiculesState extends State<AddVehicules> {
           ),
         );
 
+        await sendNotificationToTopic(
+          title: "Nouvelle annonce disponible !",
+          body: "Découvrez la dernière annonce ajoutée rien que pour vous.",
+        );
+
         // Réinitialiser ou rediriger
         Navigator.pushReplacement(
           context,
@@ -180,7 +198,11 @@ class _AddVehiculesState extends State<AddVehicules> {
         print("Erreur lors de la publication : $e");
       }
     }
-    return;
+    ScaffoldMessenger.of(context).showSnackBar(
+      const SnackBar(
+        content: Text("Veuillez remplir tous les champs obligatoires"),
+      ),
+    );
   }
 
   @override

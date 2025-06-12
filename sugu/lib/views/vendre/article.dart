@@ -4,12 +4,10 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:dio/dio.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
-// import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mdi_icons/flutter_mdi_icons.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_fonts/google_fonts.dart';
-// import 'package:http/http.dart' as http;
 import 'package:image_picker/image_picker.dart';
 
 class AddArticles extends StatefulWidget {
@@ -53,27 +51,24 @@ class _AddArticlesState extends State<AddArticles> {
     {"id": 18, "name": "Pièces automobiles", "icon": Mdi.carWrench},
   ];
 
-  // Future<void> sendNotificationToTopic({
-  //   required String token,
-  //   required String title,
-  //   required String body,
-  //   Map<String, String>? data,
-  // }) async {
-  //   final response = await http.post(
-  //     Uri.parse('https://fcm.googleapis.com/fcm/send'),
-  //     headers: {
-  //       'Content-Type': 'application/json',
-  //       'Authorization':
-  //           'key=BK8lTGiGSidRsbjrn4_9cfUEzShX2jgu2s-NEb4xDIVVDoDK7glz9mMXP63ej3HgTPPTktxzUIWQ9A5S1LM-xk0',
-  //     },
-  //     body: jsonEncode({
-  //       'to': token,
-  //       'notification': {'title': title, 'body': body},
-  //     }),
-  //   );
+  Future<void> sendNotificationToTopic({
+    required String title,
+    required String body,
+    Map<String, String>? data,
+  }) async {
+    final dio = Dio();
 
-  //   print('Réponse du serveur: ${response.body}');
-  // }
+    final response = await dio.post(
+      'http://10.0.2.2:8080/api/notify-annonce',
+      data: {'title': title, 'body': body, if (data != null) 'data': data},
+    );
+
+    if (response.statusCode == 200) {
+      print('✅ Notification envoyée avec succès');
+    } else {
+      print('❌ Erreur (${response.statusCode}): ${response.data}');
+    }
+  }
 
   // configuration de selection image depuis gallerie
   final ImagePicker _picker = ImagePicker();
@@ -172,12 +167,6 @@ class _AddArticlesState extends State<AddArticles> {
     if (_globalKey.currentState!.validate() ||
         _selectedCategory != null ||
         _selectedEtat != null) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text("Veuillez remplir tous les champs obligatoires"),
-        ),
-      );
-
       try {
         showDialog(
           context: context,
@@ -217,19 +206,10 @@ class _AddArticlesState extends State<AddArticles> {
             .collection('articles')
             .add(vehiculeData);
 
-        // final usersSnapshot =
-        //     await FirebaseFirestore.instance.collection("users").get();
-
-        // for (var doc in usersSnapshot.docs) {
-        //   final user = doc.data();
-        //   if (user["fcmToken"] != null) {
-        //     await sendNotificationToTopic(
-        //       token: user["fcmToken"],
-        //       title: "Nouvelle annonce disponible !",
-        //       body: "Découvrez la dernière annonce ajoutée rien que pour vous.",
-        //     );
-        //   }
-        // }
+        await sendNotificationToTopic(
+          title: "Nouvelle annonce disponible !",
+          body: "Découvrez la dernière annonce ajoutée rien que pour vous.",
+        );
 
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
@@ -252,7 +232,11 @@ class _AddArticlesState extends State<AddArticles> {
         print("Erreur lors de la publication : $e");
       }
     }
-    return;
+    ScaffoldMessenger.of(context).showSnackBar(
+      const SnackBar(
+        content: Text("Veuillez remplir tous les champs obligatoires"),
+      ),
+    );
   }
 
   @override
