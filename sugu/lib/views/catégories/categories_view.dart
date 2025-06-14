@@ -57,7 +57,7 @@ class _CategoriesViewState extends State<CategoriesView> {
                 ),
               ),
             ),
-            _builTitle(context, "La liste catégories"),
+            _builTitle(context, "Les catégories"),
             SliverToBoxAdapter(
               child: SizedBox(
                 height: 40.h,

@@ -15,11 +15,13 @@ class BuildAppBar extends StatelessWidget {
       floating: true,
       actions: [
         Container(
+          height: 35.h,width: 40.w,
             decoration: BoxDecoration(
               border: Border.all(color: Colors.grey.shade300),
               color: Colors.white,
-              borderRadius: BorderRadius.circular(50.r),
+              borderRadius: BorderRadius.circular(20.r),
             ),
+            alignment: Alignment.topCenter,
             child: IconButton(
                 onPressed: () {
             Navigator.push(

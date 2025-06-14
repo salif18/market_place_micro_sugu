@@ -32,17 +32,17 @@ class _CategoryItemState extends State<CategoryItem> {
         children: [
           // Conteneur de l’icône avec bordure circulaire
           Container(
-            width: 50.w,
-            height: 50.w, // carré pour une icône ronde
-            padding: EdgeInsets.all(10.r),
+            width: 45.w,
+            height: 45.h, // carré pour une icône ronde
+           alignment: Alignment.center,
             decoration: BoxDecoration(
               color: widget.item.color,
               border: Border.all(color: Colors.grey.shade300, width: 1.r),
               shape: BoxShape.circle,
             ),
-            child: Icon(widget.item.icon, color: Colors.white, size: 22.sp),
+            child: Icon(widget.item.icon, color: Colors.white, size: 20.sp),
           ),
-          SizedBox(height: 8.h),
+          SizedBox(height: 4.h),
           Expanded(
             child: SizedBox(
               height: 20.h, // hauteur fixe pour éviter les débordements

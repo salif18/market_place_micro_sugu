@@ -132,6 +132,13 @@ class _SearchViewState extends State<SearchView> {
     });
   }
 
+  void _removeAllRecenteSearch() {
+    setState(() {
+      recentSearches.clear();
+      _saveRecentSearches();
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -177,13 +184,13 @@ class _SearchViewState extends State<SearchView> {
                   child: TextFormField(
                     controller: searchValue,
                     decoration: InputDecoration(
-                     isDense: true,
+                      isDense: true,
                       filled: true,
                       fillColor: Colors.grey[100],
                       prefixIcon: Icon(
                         Icons.search,
-                        color: Colors.black,
-                        size: 30.sp,
+                        color: Colors.black54,
+                        size: 28.sp,
                       ),
                       hintText: "Que voulez-vous acheter ?",
                       hintStyle: GoogleFonts.roboto(fontSize: 15.sp),
@@ -195,6 +202,47 @@ class _SearchViewState extends State<SearchView> {
                     onFieldSubmitted: _handleSearch,
                   ),
                 ),
+              ),
+            ),
+            SliverPadding(
+              padding: EdgeInsets.symmetric(horizontal: 16.r, vertical: 8.r),
+              sliver: SliverToBoxAdapter(
+                child:
+                    searchValue.text.isEmpty
+                        ? Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Text(
+                              "Recherches récentes (${recentSearches.length})",
+                              style: GoogleFonts.roboto(
+                                fontWeight: FontWeight.bold,
+                                fontSize: 14.sp,
+                                color: Colors.black,
+                              ),
+                            ),
+                            TextButton(
+                              onPressed: () => _removeAllRecenteSearch(),
+                              child: Text(
+                                "Clear All",
+                                style: GoogleFonts.roboto(
+                                  fontWeight: FontWeight.w400,
+                                  fontSize: 14.sp,
+                                  color: Colors.black45,
+                                ),
+                              ),
+                            ),
+                          ],
+                        )
+                        : Text(
+                          searchValue.text.isEmpty
+                              ? "Les recherches récentes"
+                              : "Resultats de la recherche (${resultOfSearch.length})",
+                          style: GoogleFonts.roboto(
+                            fontWeight: FontWeight.bold,
+                            fontSize: 14.sp,
+                            color: Colors.black,
+                          ),
+                        ),
               ),
             ),
             SliverList(

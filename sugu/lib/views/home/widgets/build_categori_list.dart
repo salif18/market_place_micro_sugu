@@ -15,13 +15,13 @@ class BuildCategoriList extends StatelessWidget {
         gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
           crossAxisCount: 4,
           crossAxisSpacing: 8,
-          mainAxisSpacing: 8,
-          childAspectRatio: 0.9,
+          mainAxisSpacing: 2,
+          childAspectRatio: 1,
         ),
         delegate: SliverChildBuilderDelegate((BuildContext context, int index) {
           final item = sortedCategories[index]; // Donnée de la catégorie
           return CategoryItem(item: item);
-        }, childCount: numberViewCategory ? 28 : 4),
+        }, childCount: numberViewCategory ? 28 : 8),
       ),
     );
   }
