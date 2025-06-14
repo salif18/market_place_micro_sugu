@@ -15,9 +15,8 @@ class BuildAppBar extends StatelessWidget {
       floating: true,
       actions: [
         Container(
-          //  padding: EdgeInsets.all(2.r),
             decoration: BoxDecoration(
-              border: Border.all(color: Colors.grey[200]!),
+              border: Border.all(color: Colors.grey.shade300),
               color: Colors.white,
               borderRadius: BorderRadius.circular(50.r),
             ),
@@ -28,7 +27,7 @@ class BuildAppBar extends StatelessWidget {
               MaterialPageRoute(builder: (context) => const SearchView()),
             );
           },
-              icon: Icon(Icons.search, size: 24.sp, color: Colors.grey[400])),
+              icon: Icon(Icons.search, size: 24.sp, color: Colors.orange)),
           ),
         SizedBox(width: 16.w)
       ],

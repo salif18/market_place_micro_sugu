@@ -77,7 +77,7 @@ class ProductCard extends StatelessWidget {
                   overflow: TextOverflow.ellipsis,
                   style: GoogleFonts.roboto(
                     fontSize: 12.sp,
-                    fontWeight: FontWeight.normal,
+                    fontWeight: FontWeight.w500,
                   ),
                 ),
               ),

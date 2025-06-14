@@ -51,7 +51,7 @@ class _CategoryItemState extends State<CategoryItem> {
                 textAlign: TextAlign.center,
                 overflow: TextOverflow.ellipsis,
                 maxLines: 1,
-                style: GoogleFonts.montserrat(
+                style: GoogleFonts.roboto(
                   fontSize: 12.sp,
                   fontWeight: FontWeight.normal,
                 ),

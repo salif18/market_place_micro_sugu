@@ -146,11 +146,29 @@ class _SearchViewState extends State<SearchView> {
               pinned: true,
               floating: true,
               toolbarHeight: 65.h,
-              leading: IconButton(
-               padding: EdgeInsets.symmetric(horizontal: 16.r),
-                onPressed: ()=> Navigator.pop(context), 
-                icon: Icon(Icons.arrow_back_ios_rounded, size: 18.sp,)
+              leading: Padding(
+                padding: EdgeInsets.symmetric(horizontal: 8.r, vertical: 16.r),
+                child: InkWell(
+                  onTap: () => Navigator.pop(context),
+                  borderRadius: BorderRadius.circular(
+                    5.r,
+                  ), // pour l'effet ripple bien arrondi
+                  child: Container(
+                    alignment:
+                        Alignment.center, // Centrer l'icône dans le carré
+                    decoration: BoxDecoration(
+                      color: Colors.orange.shade700,
+                      borderRadius: BorderRadius.circular(5.r),
+                    ),
+                    child: Icon(
+                      Icons.arrow_back_ios_rounded,
+                      size: 18.sp,
+                      color: Colors.white,
+                    ),
+                  ),
                 ),
+              ),
+
               flexibleSpace: FlexibleSpaceBar(
                 background: Container(color: Colors.white),
                 centerTitle: false,
@@ -159,7 +177,7 @@ class _SearchViewState extends State<SearchView> {
                   child: TextFormField(
                     controller: searchValue,
                     decoration: InputDecoration(
-                      isDense: true,
+                     isDense: true,
                       filled: true,
                       fillColor: Colors.grey[100],
                       prefixIcon: Icon(
@@ -170,7 +188,7 @@ class _SearchViewState extends State<SearchView> {
                       hintText: "Que voulez-vous acheter ?",
                       hintStyle: GoogleFonts.roboto(fontSize: 15.sp),
                       border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(50.r),
+                        borderRadius: BorderRadius.circular(10.r),
                         borderSide: BorderSide.none,
                       ),
                     ),
@@ -237,18 +255,15 @@ class _SearchViewState extends State<SearchView> {
                                 ? AspectRatio(
                                   aspectRatio: 1,
                                   child: Container(
-                                     decoration: BoxDecoration(
-                                              border: Border.all(
-                                                color:
-                                                    Colors
-                                                        .grey[200]!, // couleur de la bordure
-                                                width:
-                                                    1.r, // épaisseur de la bordure
-                                              ),
-                                              borderRadius: BorderRadius.circular(
-                                                10.r,
-                                              ),
-                                            ),
+                                    decoration: BoxDecoration(
+                                      border: Border.all(
+                                        color:
+                                            Colors
+                                                .grey[200]!, // couleur de la bordure
+                                        width: 1.r, // épaisseur de la bordure
+                                      ),
+                                      borderRadius: BorderRadius.circular(10.r),
+                                    ),
                                     child: ClipRRect(
                                       borderRadius: BorderRadius.circular(10.r),
                                       child: Image.network(
@@ -270,7 +285,7 @@ class _SearchViewState extends State<SearchView> {
                           style: GoogleFonts.montserrat(
                             fontWeight: FontWeight.bold,
                             fontSize: 12.sp,
-                            color: Colors.orange.shade700
+                            color: Colors.orange.shade700,
                           ),
                         ),
                         onTap: () {

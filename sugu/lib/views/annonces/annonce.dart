@@ -237,7 +237,7 @@ class _VosAnnonceViewState extends State<VosAnnonceView> {
                                       maxLines: 1,
                                       style: GoogleFonts.roboto(
                                         fontSize: 12.sp,
-                                        fontWeight: FontWeight.normal,
+                                        fontWeight: FontWeight.w500,
                                         color: Colors.black,
                                       ),
                                     ),

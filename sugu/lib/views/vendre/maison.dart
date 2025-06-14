@@ -194,11 +194,6 @@ class _AddMaisonsState extends State<AddMaisons> {
         print("Erreur lors de la publication : $e");
       }
     }
-    ScaffoldMessenger.of(context).showSnackBar(
-      const SnackBar(
-        content: Text("Veuillez remplir tous les champs obligatoires"),
-      ),
-    );
   }
 
   @override

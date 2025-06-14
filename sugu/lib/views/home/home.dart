@@ -24,7 +24,7 @@ class _HomeViewState extends State<HomeView> {
   void initState() {
     super.initState();
     categories =
-        CategorieModel.getCategory()..sort((a, b) => b.name.compareTo(a.name));
+        CategorieModel.getCategory()..sort((a, b) => a.name.compareTo(b.name));
   }
 
   @override

@@ -76,7 +76,7 @@ class _CategorieViewState extends State<CategorieListView> {
                         icon: Container(
                           padding: EdgeInsets.all(8.r),
                           decoration: BoxDecoration(
-                            color: Colors.grey[300],
+                            color: Colors.grey[200],
                             borderRadius: BorderRadius.circular(100.r),
                           ),
                           child: Icon(

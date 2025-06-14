@@ -17,7 +17,7 @@ class BuildProfilInfos extends StatelessWidget {
           color: Colors.white,
           borderRadius: BorderRadius.circular(10.r),
           border: Border(
-            bottom: BorderSide(width: 1, color: Colors.grey[200]!),
+            bottom: BorderSide(width: 1, color: Colors.orange.shade700),
           ),
         ),
         child:
@@ -42,7 +42,7 @@ class BuildProfilInfos extends StatelessWidget {
                                 userData["photo"].toString().isNotEmpty
                             ? CircleAvatar(
                               radius: 35.r,
-                              backgroundColor: Colors.grey[300],
+                              backgroundColor: Colors.orange.shade600,
                               child: ClipOval(
                                 child: Image.network(
                                   userData["photo"],
