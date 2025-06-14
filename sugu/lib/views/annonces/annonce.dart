@@ -116,6 +116,7 @@ class _VosAnnonceViewState extends State<VosAnnonceView> {
                 ),
               ),
             ),
+            _buildTitleSection(context, "Vos marchandises"),
             StreamBuilder(
               stream:
                   FirebaseFirestore.instance
@@ -236,7 +237,7 @@ class _VosAnnonceViewState extends State<VosAnnonceView> {
                                       maxLines: 1,
                                       style: GoogleFonts.roboto(
                                         fontSize: 12.sp,
-                                        fontWeight: FontWeight.w500,
+                                        fontWeight: FontWeight.normal,
                                         color: Colors.black,
                                       ),
                                     ),
@@ -253,7 +254,7 @@ class _VosAnnonceViewState extends State<VosAnnonceView> {
                                       style: GoogleFonts.montserrat(
                                         fontSize: 12.sp,
                                         fontWeight: FontWeight.bold,
-                                        color: Colors.black,
+                                        color: Colors.orange.shade700,
                                       ),
                                     ),
                                   ),
@@ -295,6 +296,21 @@ class _VosAnnonceViewState extends State<VosAnnonceView> {
               },
             ),
           ],
+        ),
+      ),
+    );
+  }
+
+  Widget _buildTitleSection(BuildContext context, String title) {
+    return SliverPadding(
+      padding: EdgeInsets.symmetric(vertical: 8.r, horizontal: 16.r),
+      sliver: SliverToBoxAdapter(
+        child: Text(
+          title,
+          style: GoogleFonts.roboto(
+            fontSize: 16.sp,
+            fontWeight: FontWeight.bold,
+          ),
         ),
       ),
     );

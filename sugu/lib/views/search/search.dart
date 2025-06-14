@@ -146,9 +146,14 @@ class _SearchViewState extends State<SearchView> {
               pinned: true,
               floating: true,
               toolbarHeight: 65.h,
+              leading: IconButton(
+               padding: EdgeInsets.symmetric(horizontal: 16.r),
+                onPressed: ()=> Navigator.pop(context), 
+                icon: Icon(Icons.arrow_back_ios_rounded, size: 18.sp,)
+                ),
               flexibleSpace: FlexibleSpaceBar(
                 background: Container(color: Colors.white),
-                centerTitle: true,
+                centerTitle: false,
                 title: Padding(
                   padding: EdgeInsets.symmetric(horizontal: 16.sp),
                   child: TextFormField(
@@ -265,6 +270,7 @@ class _SearchViewState extends State<SearchView> {
                           style: GoogleFonts.montserrat(
                             fontWeight: FontWeight.bold,
                             fontSize: 12.sp,
+                            color: Colors.orange.shade700
                           ),
                         ),
                         onTap: () {

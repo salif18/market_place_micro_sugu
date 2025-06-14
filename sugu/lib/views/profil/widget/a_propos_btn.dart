@@ -14,13 +14,12 @@ class BuildAboutBouton extends StatelessWidget {
       child: Container(
         decoration: BoxDecoration(
           color: Colors.white,
-          borderRadius: BorderRadius.circular(10.r),
           border: Border(
             bottom: BorderSide(width: 1, color: Colors.grey[200]!),
           ),
         ),
         child: ListTile(
-          leading: Icon(Mdi.informationOutline, size: 20.sp),
+          leading: Icon(Mdi.informationOutline, size: 20.sp,color: Colors.orange.shade700),
           title: Text(
             "A propos de Micro Sugu",
             style: GoogleFonts.roboto(
@@ -29,7 +28,7 @@ class BuildAboutBouton extends StatelessWidget {
               color: Colors.black,
             ),
           ),
-          trailing: Icon(Icons.arrow_forward_ios_rounded, size: 18.sp),
+          trailing: Icon(Icons.arrow_forward_ios_rounded, size: 18.sp,),
           onTap:
               () => Navigator.push(
                 context,

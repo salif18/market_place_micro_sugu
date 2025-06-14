@@ -128,7 +128,7 @@ class _AddMaisonsState extends State<AddMaisons> {
   }
 
   // ✅ 3. Soumettre le formulaire à firebase
-  void _submitForm() async {
+  void _submitForm(BuildContext context) async {
     if (_globalKey.currentState!.validate() ||
         _selectedCategory != null ||
         _selectedEtat != null) {
@@ -540,7 +540,7 @@ class _AddMaisonsState extends State<AddMaisons> {
                         ),
                         child: ElevatedButton(
                           onPressed: () {
-                            _submitForm();
+                            _submitForm(context);
                           },
                           style: ElevatedButton.styleFrom(
                             backgroundColor: Colors.deepOrangeAccent,

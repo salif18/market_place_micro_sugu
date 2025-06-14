@@ -81,6 +81,7 @@ class _FavoriteCardState extends State<FavoriteCard> {
             style: GoogleFonts.montserrat(
               fontWeight: FontWeight.bold,
               fontSize: 12.sp,
+              color: Colors.orange.shade700
             ),
           ),
           trailing: Consumer<FavoriteProvider>(

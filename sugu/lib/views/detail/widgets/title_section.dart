@@ -32,6 +32,7 @@ class TitleSection extends StatelessWidget {
               style: GoogleFonts.montserrat(
                 fontSize: 16.sp,
                 fontWeight: FontWeight.bold,
+                color: Colors.orange.shade700
               ),
             ),
             if (item.views! > 0)

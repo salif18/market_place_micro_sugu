@@ -4,7 +4,8 @@ import 'package:sugu/components/categorie_item.dart';
 
 class BuildCategoriList extends StatelessWidget {
   final sortedCategories;
-  const BuildCategoriList({super.key, required this.sortedCategories});
+  final bool numberViewCategory;
+  const BuildCategoriList({super.key, required this.sortedCategories , required this.numberViewCategory});
 
   @override
   Widget build(BuildContext context) {
@@ -20,7 +21,7 @@ class BuildCategoriList extends StatelessWidget {
         delegate: SliverChildBuilderDelegate((BuildContext context, int index) {
           final item = sortedCategories[index]; // Donnée de la catégorie
           return CategoryItem(item: item);
-        }, childCount: 12),
+        }, childCount: numberViewCategory ? 28 : 4),
       ),
     );
   }

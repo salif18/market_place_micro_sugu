@@ -31,10 +31,6 @@ class _CategorieViewState extends State<CategorieListView> {
               toolbarHeight: 40.h,
               pinned: true,
               floating: true,
-              leading: IconButton(
-                onPressed: () => Navigator.pop(context),
-                icon: Icon(Icons.arrow_back_ios_rounded, size: 18.sp),
-              ),
               flexibleSpace: FlexibleSpaceBar(
                  background: Container(color: Colors.white,),
                 centerTitle: true,

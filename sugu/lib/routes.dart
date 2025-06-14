@@ -1,15 +1,16 @@
 
 import 'package:flutter/material.dart';
+import 'package:flutter_mdi_icons/flutter_mdi_icons.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 import 'package:sugu/provider/favorite_provider.dart';
+import 'package:sugu/views/cat%C3%A9gories/categories_list.dart';
 
 
 import 'package:sugu/views/favorites/favorite.dart';
 import 'package:sugu/views/home/home.dart';
 import 'package:sugu/views/profil/profil.dart';
-import 'package:sugu/views/search/search.dart';
 import 'package:sugu/views/vendre/vendre.dart';
 
 class MyRoots extends StatefulWidget {
@@ -31,7 +32,7 @@ class _MyRootsState extends State<MyRoots> {
           <Widget>[
             HomeView(),
             FavoriteView(),
-            SearchView(),
+            CategorieListView(),
             AnnonceView(),
             ProfilView()
           ][_currentIndex],
@@ -55,7 +56,7 @@ class _MyRootsState extends State<MyRoots> {
         },
         backgroundColor: Colors.white,
         elevation: 20,
-        selectedItemColor: Colors.black,
+        selectedItemColor: Colors.orange.shade700,
         unselectedItemColor: Colors.grey[400],
         iconSize: 25.sp,
         selectedLabelStyle: GoogleFonts.roboto(fontSize: 12.sp),
@@ -78,8 +79,8 @@ class _MyRootsState extends State<MyRoots> {
                         child: Badge.count(
                           count: provider.getFavorites.length,
                           // largeSize: 40.sp / 2,
-                          backgroundColor: Colors.amber,
-                          textColor: Colors.black87,
+                          backgroundColor: Colors.orange.shade700,
+                          textColor: Colors.white,
                           textStyle: GoogleFonts.roboto(
                             fontSize: 11.sp,
                             fontWeight: FontWeight.w500,
@@ -93,8 +94,8 @@ class _MyRootsState extends State<MyRoots> {
             label: "Mes favoris",
           ),
           const BottomNavigationBarItem(
-            icon: Icon(Icons.search_rounded),
-            label: "Rechercher",
+            icon: Icon(Mdi.googleAssistant),
+            label: "Catégories",
           ),
           const BottomNavigationBarItem(
             icon: Icon(Icons.add_business_outlined),

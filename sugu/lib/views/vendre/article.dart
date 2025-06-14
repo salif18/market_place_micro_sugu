@@ -163,7 +163,7 @@ class _AddArticlesState extends State<AddArticles> {
   }
 
   // ✅ 3. Soumettre le formulaire
-  void _submitForm() async {
+  void _submitForm(BuildContext context) async {
     if (_globalKey.currentState!.validate() ||
         _selectedCategory != null ||
         _selectedEtat != null) {
@@ -581,7 +581,7 @@ class _AddArticlesState extends State<AddArticles> {
                         ),
                         child: ElevatedButton(
                           onPressed: () {
-                            _submitForm();
+                            _submitForm(context);
                           },
                           style: ElevatedButton.styleFrom(
                             backgroundColor: Colors.deepOrangeAccent,

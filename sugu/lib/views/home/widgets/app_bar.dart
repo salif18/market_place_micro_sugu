@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:sugu/views/search/search.dart';
 
 class BuildAppBar extends StatelessWidget {
   const BuildAppBar({super.key});
@@ -12,12 +13,32 @@ class BuildAppBar extends StatelessWidget {
       toolbarHeight: 45.h,
       pinned: true,
       floating: true,
+      actions: [
+        Container(
+          //  padding: EdgeInsets.all(2.r),
+            decoration: BoxDecoration(
+              border: Border.all(color: Colors.grey[200]!),
+              color: Colors.white,
+              borderRadius: BorderRadius.circular(50.r),
+            ),
+            child: IconButton(
+                onPressed: () {
+            Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) => const SearchView()),
+            );
+          },
+              icon: Icon(Icons.search, size: 24.sp, color: Colors.grey[400])),
+          ),
+        SizedBox(width: 16.w)
+      ],
       flexibleSpace: FlexibleSpaceBar(
         background: Container(color: Colors.white),
         titlePadding: EdgeInsets.zero,
+        // centerTitle: true,
         title: Image.asset(
           "assets/logos/logo.png",
-          width: 120.w,
+          width: 140.w,
           height: 60.h,
           fit: BoxFit.cover,
         ),

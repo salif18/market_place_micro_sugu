@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:sugu/models/categorie_model.dart';
-import 'package:sugu/views/cat%C3%A9gories/categories_list.dart';
 import 'package:sugu/views/home/widgets/app_bar.dart';
 import 'package:sugu/views/home/widgets/build_banner_section.dart';
 import 'package:sugu/views/home/widgets/build_categori_list.dart';
@@ -17,7 +16,9 @@ class HomeView extends StatefulWidget {
 }
 
 class _HomeViewState extends State<HomeView> {
+  
   late List<CategorieModel> categories;
+  bool  numberViewCategory = false ;
 
   @override
   void initState() {
@@ -39,7 +40,7 @@ class _HomeViewState extends State<HomeView> {
               BuildAppBar(),
               BuildBannerSection(),
               _buildAllCategory(context),
-              BuildCategoriList(sortedCategories: categories),
+              BuildCategoriList(sortedCategories: categories, numberViewCategory: numberViewCategory,),
               _buildTitleSection(context, "Annonces récentes"),
               BuildProductAnnonce(),
               _buildTitleSection(context, "À vendre"),
@@ -67,27 +68,24 @@ class _HomeViewState extends State<HomeView> {
             ),
             TextButton(
               onPressed: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => const CategorieListView(),
-                  ),
-                );
+                setState(() {
+                  numberViewCategory =! numberViewCategory;
+                });
               },
               child: Row(
                 // mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Text(
-                    "Voir tout ",
+                    numberViewCategory ? "Voir moins " : "Voir tout ",
                     style: GoogleFonts.roboto(
-                      color: Colors.deepOrange,
+                      color: Colors.orange.shade700,
                       fontSize: 14.sp,
                       fontWeight: FontWeight.bold,
                     ),
                   ),
                   Icon(
-                    Icons.arrow_forward_rounded,
-                    color: Colors.deepOrange,
+                   numberViewCategory ? Icons.arrow_circle_up: Icons.arrow_circle_down ,
+                    color: Colors.orange.shade700,
                     size: 20.sp,
                   ),
                 ],

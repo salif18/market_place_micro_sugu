@@ -14,13 +14,12 @@ class BuildHelpBouton extends StatelessWidget {
       child: Container(
         decoration: BoxDecoration(
           color: Colors.white,
-          borderRadius: BorderRadius.circular(10.r),
           border: Border(
             bottom: BorderSide(width: 1, color: Colors.grey[200]!),
           ),
         ),
         child: ListTile(
-          leading: Icon(Mdi.help, size: 20.sp),
+          leading: Icon(Mdi.help, size: 20.sp,color: Colors.orange.shade700),
           title: Text(
             "Aide",
             style: GoogleFonts.roboto(
