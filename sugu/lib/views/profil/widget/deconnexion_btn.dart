@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mdi_icons/flutter_mdi_icons.dart';
@@ -9,6 +10,21 @@ class BuildLogoutBouton extends StatelessWidget {
   const BuildLogoutBouton({super.key});
 
   Future<void> signOut(BuildContext context) async {
+    final user = FirebaseAuth.instance.currentUser;
+
+    if (user != null) {
+      try {
+        // Supprimer le fcmToken de Firestore
+        await FirebaseFirestore.instance
+            .collection('users')
+            .doc(user.uid)
+            .update({'fcmToken': FieldValue.delete()});
+
+        print('fcmToken supprimé avec succès.');
+      } catch (e) {
+        print("Erreur lors de la suppression du fcmToken : $e");
+      }
+    }
     try {
       await FirebaseAuth.instance.signOut();
       Navigator.pushAndRemoveUntil(
@@ -33,7 +49,7 @@ class BuildLogoutBouton extends StatelessWidget {
           ),
         ),
         child: ListTile(
-          leading: Icon(Mdi.logout, size: 20.sp,color: Colors.orange.shade700),
+          leading: Icon(Mdi.logout, size: 20.sp, color: Colors.orange.shade700),
           title: Text(
             "Se déconnecter",
             style: GoogleFonts.roboto(
