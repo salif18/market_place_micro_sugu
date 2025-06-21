@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:flutter_mdi_icons/flutter_mdi_icons.dart';
+import 'package:sugu/utils/acces_premium_features.dart';
+import 'package:sugu/views/abonnement/abonement_view.dart';
 import 'package:sugu/views/auth/connexion.dart';
 import 'package:sugu/views/vendre/article.dart';
 import 'package:sugu/views/vendre/maison.dart';
@@ -97,8 +99,22 @@ class _AnnonceViewState extends State<AnnonceView> {
                   child: Container(
                     padding: EdgeInsets.all(10.r),
                     child: IconButton(
-                      onPressed: () {
-                        _buildAlertDialog(context);
+                      onPressed: () async {
+                        final hasAccess =
+                            await UserService().canAccessPremiumFeatures();
+                        if (!hasAccess) {
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            SnackBar(
+                              content: Text(
+                                "Accès refusé. Abonnez-vous pour continuer.",
+                              ),
+                            ),
+                          );
+                          Navigator.push(context, MaterialPageRoute(builder: (context)=> AbonnementPage()));
+                        }else{
+                          _buildAlertDialog(context);
+                        }
+                        
                       },
 
                       style: IconButton.styleFrom(
@@ -130,9 +146,7 @@ class _AnnonceViewState extends State<AnnonceView> {
                         Navigator.push(
                           context,
                           MaterialPageRoute(
-                            builder:
-                                (context) =>
-                                    ConnexionView(),
+                            builder: (context) => ConnexionView(),
                           ),
                         );
                       },
@@ -168,8 +182,8 @@ class _AnnonceViewState extends State<AnnonceView> {
       isScrollControlled: true,
       context: context,
       shape: RoundedRectangleBorder(
-    borderRadius: BorderRadius.vertical(top: Radius.circular(20.r)),
-  ),
+        borderRadius: BorderRadius.vertical(top: Radius.circular(20.r)),
+      ),
       builder: (BuildContext context) {
         return SingleChildScrollView(
           padding: EdgeInsets.only(

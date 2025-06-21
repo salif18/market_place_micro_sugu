@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:sugu/views/profil/widget/a_propos_btn.dart';
+import 'package:sugu/views/profil/widget/abonnement_btn.dart';
 import 'package:sugu/views/profil/widget/aide_btn.dart';
 import 'package:sugu/views/profil/widget/annonces_btn.dart';
 import 'package:sugu/views/profil/widget/connexion_btn.dart';
@@ -11,6 +12,7 @@ import 'package:sugu/views/profil/widget/copyrigth.dart';
 import 'package:sugu/views/profil/widget/deconnexion_btn.dart';
 import 'package:sugu/views/profil/widget/delete_btn.dart';
 import 'package:sugu/views/profil/widget/infos_profil.dart';
+import 'package:sugu/views/profil/widget/notification_btn.dart';
 import 'package:sugu/views/profil/widget/security_btn.dart';
 import 'package:sugu/views/profil/widget/share_btn.dart';
 
@@ -56,7 +58,9 @@ class _ProfilViewState extends State<ProfilView> {
               delegate: SliverChildListDelegate([
                 BuildProfilInfos(user: user),
                 SizedBox(height: 10.h),
+                 if (user != null) BuildAbonementBouton(),
                 BuildAnnonceBouton(),
+                BuildNotificationBtn(),
                 BuildHelpBouton(),
                 BuildAboutBouton(),
                 BuildShareBouton(),

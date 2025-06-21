@@ -6,6 +6,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:sugu/routes.dart';
+import 'package:sugu/views/abonnement/abonement_view.dart';
 import 'package:sugu/views/auth/forget_pass.dart';
 import 'package:sugu/views/auth/inscription.dart';
 
@@ -107,6 +108,9 @@ class _ConnexionViewState extends State<ConnexionView> {
           'email': user.email,
           'numero': user.phoneNumber ?? "",
           'photo': user.photoURL ?? "",
+          'role':'vendeur',
+          'isPremium': false,
+          'subscriptionUntil':'',
           'createdAt': Timestamp.now(),
           'provider': 'google',
         });
@@ -114,7 +118,7 @@ class _ConnexionViewState extends State<ConnexionView> {
 
       if (user != null) {
        
-        Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (context)=> MyRoots()),(route)=> false);
+        Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (context)=> AbonnementPage()),(route)=> false);
       }
 
       print('Connexion réussie avec Google : ${user?.email}');
