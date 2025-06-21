@@ -46,12 +46,11 @@ class _PayementViewState extends State<PayementView> {
 
     // Paiement selon la méthode choisie
     if (selectedMethod == 'Orange Money') {
-        await _orangeApi.payer(amount: widget.amount, orderId: user!.uid);
-        activerAbonnement(); // Active l’abonnement
-     
+      await _orangeApi.payer(amount: widget.amount, orderId: user!.uid);
+      activerAbonnement(); // Active l’abonnement
     } else if (selectedMethod == "MobiCash") {
-        await _mobicashApi.payer(amount: widget.amount, orderId: user!.uid);
-        activerAbonnement();
+      await _mobicashApi.payer(amount: widget.amount, orderId: user!.uid);
+      activerAbonnement();
     }
   }
 

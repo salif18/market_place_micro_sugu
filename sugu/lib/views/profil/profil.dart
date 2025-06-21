@@ -58,7 +58,7 @@ class _ProfilViewState extends State<ProfilView> {
               delegate: SliverChildListDelegate([
                 BuildProfilInfos(user: user),
                 SizedBox(height: 10.h),
-                 if (user != null) BuildAbonementBouton(),
+                if (user != null) BuildAbonementBouton(),
                 BuildAnnonceBouton(),
                 BuildNotificationBtn(),
                 BuildHelpBouton(),

@@ -110,11 +110,15 @@ class _AnnonceViewState extends State<AnnonceView> {
                               ),
                             ),
                           );
-                          Navigator.push(context, MaterialPageRoute(builder: (context)=> AbonnementPage()));
-                        }else{
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => AbonnementPage(),
+                            ),
+                          );
+                        } else {
                           _buildAlertDialog(context);
                         }
-                        
                       },
 
                       style: IconButton.styleFrom(

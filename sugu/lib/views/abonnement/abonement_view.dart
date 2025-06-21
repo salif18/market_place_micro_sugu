@@ -162,9 +162,7 @@ class _AbonnementPageState extends State<AbonnementPage> {
                               context,
                               MaterialPageRoute(
                                 builder:
-                                    (context) => PayementView(
-                                      amount: 10000,
-                                    ),
+                                    (context) => PayementView(amount: 10000),
                               ),
                             ),
                         icon: Icon(

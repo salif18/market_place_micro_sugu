@@ -10,7 +10,6 @@ import 'package:sugu/views/abonnement/abonement_view.dart';
 import 'package:sugu/views/auth/forget_pass.dart';
 import 'package:sugu/views/auth/inscription.dart';
 
-
 class ConnexionView extends StatefulWidget {
   const ConnexionView({super.key});
 
@@ -46,23 +45,31 @@ class _ConnexionViewState extends State<ConnexionView> {
 
         final user = userCredential.user;
         if (user != null) {
-          Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (context)=> MyRoots()),(Route)=> false);
+          Navigator.pushAndRemoveUntil(
+            context,
+            MaterialPageRoute(builder: (context) => MyRoots()),
+            (Route) => false,
+          );
         }
       } on FirebaseAuthException catch (e) {
         String message = '';
-         if (e.code == 'invalid-email') {
+        if (e.code == 'invalid-email') {
           message = 'Adresse email invalide.';
         } else if (e.code == 'invalid-credential') {
           message = 'Vérifiez votre email ou mot de passe.';
         } else {
           message = 'Erreur inconnue (${e.code}) : ${e.message}';
         }
-        ScaffoldMessenger.of(
-          context,
-        ).showSnackBar(SnackBar(
-          backgroundColor: Colors.deepOrangeAccent,
-          content: Text(message,style: GoogleFonts.roboto(fontSize: 14.sp, color: Colors.white),)));
-         Navigator.pop(context);
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            backgroundColor: Colors.deepOrangeAccent,
+            content: Text(
+              message,
+              style: GoogleFonts.roboto(fontSize: 14.sp, color: Colors.white),
+            ),
+          ),
+        );
+        Navigator.pop(context);
       }
     }
   }
@@ -108,17 +115,20 @@ class _ConnexionViewState extends State<ConnexionView> {
           'email': user.email,
           'numero': user.phoneNumber ?? "",
           'photo': user.photoURL ?? "",
-          'role':'vendeur',
+          'role': 'vendeur',
           'isPremium': false,
-          'subscriptionUntil':'',
+          'subscriptionUntil': '',
           'createdAt': Timestamp.now(),
           'provider': 'google',
         });
       }
 
       if (user != null) {
-       
-        Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (context)=> AbonnementPage()),(route)=> false);
+        Navigator.pushAndRemoveUntil(
+          context,
+          MaterialPageRoute(builder: (context) => AbonnementPage()),
+          (route) => false,
+        );
       }
 
       print('Connexion réussie avec Google : ${user?.email}');
@@ -262,12 +272,18 @@ class _ConnexionViewState extends State<ConnexionView> {
                               borderSide: BorderSide.none,
                             ),
                             suffixIcon: IconButton(
-                              onPressed: (){
+                              onPressed: () {
                                 setState(() {
                                   view_password = !view_password;
                                 });
                               },
-                              icon: Icon( view_password ? Mdi.eyeOffOutline : Mdi.eyeOutline, size: 22.sp)),
+                              icon: Icon(
+                                view_password
+                                    ? Mdi.eyeOffOutline
+                                    : Mdi.eyeOutline,
+                                size: 22.sp,
+                              ),
+                            ),
                           ),
                         ),
                       ),
