@@ -148,7 +148,7 @@ class _AbonnementPageState extends State<AbonnementPage> {
                       ),
                       SizedBox(height: 20.h),
                       Text(
-                        "Tarif : 10 000 FCFA / mois",
+                        "Tarif : 10 000 FCFA / 3 mois",
                         style: GoogleFonts.poppins(
                           fontSize: 16.sp,
                           color: Colors.orange.shade700,
@@ -195,7 +195,7 @@ class _AbonnementPageState extends State<AbonnementPage> {
                                   color: Colors.white,
                                 ),
                                 label: Text(
-                                  "Passer à l’essai de 1 jour",
+                                  "Mode d’Essai 1 jour",
                                   style: GoogleFonts.poppins(
                                     fontSize: 14.sp,
                                     color: Colors.white,
