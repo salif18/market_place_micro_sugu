@@ -4,15 +4,15 @@ import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:provider/provider.dart';
+import 'package:sugu/globale.dart';
 import 'package:sugu/provider/notification_provider.dart';
 
 class NotificationService {
   FirebaseMessaging messaging = FirebaseMessaging.instance;
-  final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
 
   final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
       FlutterLocalNotificationsPlugin();
-
+  
   User? user = FirebaseAuth.instance.currentUser;
 
   Future<void> initialize(BuildContext context) async {
@@ -61,14 +61,13 @@ class NotificationService {
     FirebaseMessaging.onMessage.listen((RemoteMessage message) {
       RemoteNotification? notification = message.notification;
       AndroidNotification? android = message.notification?.android;
-
-      // Récupère le controller dans le contexte global
+        // Récupère le controller dans le contexte global
+        // pour activation desactivation de notification soit pris en compte navigatorkey
       final controller = Provider.of<NotificationController>(
         navigatorKey.currentContext!,
         listen: false,
       );
-
-      if (notification != null && android != null && controller.isEnabled) {
+      if ( controller.isEnabled && notification != null && android != null) {
         flutterLocalNotificationsPlugin.show(
           notification.hashCode,
           notification.title,

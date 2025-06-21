@@ -1,6 +1,7 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:sugu/components/notification.dart';
+import 'package:sugu/globale.dart';
 import 'package:sugu/provider/notification_provider.dart';
 import 'firebase_options.dart';
 import 'package:flutter/material.dart';
@@ -71,6 +72,7 @@ class _MyAppState extends State<MyApp> {
       splitScreenMode: true,
       builder: (context, child) {
         return MaterialApp(
+          navigatorKey: navigatorKey, // pour activation desactivation de notification soit pris en compte navigatorkey
           title: 'Micro Sugu',
           debugShowCheckedModeBanner: false,
           home: SafeArea(
