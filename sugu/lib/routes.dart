@@ -1,4 +1,5 @@
-
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mdi_icons/flutter_mdi_icons.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -6,7 +7,6 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 import 'package:sugu/provider/favorite_provider.dart';
 import 'package:sugu/views/cat%C3%A9gories/categories_list.dart';
-
 
 import 'package:sugu/views/favorites/favorite.dart';
 import 'package:sugu/views/home/home.dart';
@@ -22,7 +22,31 @@ class MyRoots extends StatefulWidget {
 
 class _MyRootsState extends State<MyRoots> {
   int _currentIndex = 0;
+  User? user = FirebaseAuth.instance.currentUser;
+  bool isAdmin = false;
+  Map<String, dynamic> userData = {};
+  @override
+  void initState() {
+    super.initState();
+    checkIfAdmin();
+  }
 
+  Future<void> checkIfAdmin() async {
+    final user = FirebaseAuth.instance.currentUser;
+    if (user != null) {
+      final doc =
+          await FirebaseFirestore.instance
+              .collection('users')
+              .doc(user.uid)
+              .get();
+
+      final isUserAdmin = doc.data()?['role'] == 'admin';
+      setState(() {
+        isAdmin = isUserAdmin;
+        userData = doc.data()!;
+      });
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -34,7 +58,7 @@ class _MyRootsState extends State<MyRoots> {
             FavoriteView(),
             CategorieListView(),
             AnnonceView(),
-            ProfilView()
+            ProfilView(user: user, isAdmin: isAdmin, userData: userData),
           ][_currentIndex],
       bottomNavigationBar: _buildBottomNavigation(),
     );

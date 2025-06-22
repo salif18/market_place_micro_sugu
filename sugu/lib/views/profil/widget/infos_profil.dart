@@ -42,7 +42,7 @@ class BuildProfilInfos extends StatelessWidget {
                                 userData["photo"].toString().isNotEmpty
                             ? CircleAvatar(
                               radius: 35.r,
-                              backgroundColor: Colors.orange.shade600,
+                              backgroundColor: Colors.grey[200],
                               child: ClipOval(
                                 child: Image.network(
                                   userData["photo"],

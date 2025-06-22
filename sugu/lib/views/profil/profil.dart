@@ -1,4 +1,3 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
@@ -20,37 +19,21 @@ import 'package:sugu/views/profil/widget/share_btn.dart';
 import 'package:sugu/views/profil/widget/stats_btn.dart';
 
 class ProfilView extends StatefulWidget {
-  const ProfilView({super.key});
+  final User? user;
+  final bool isAdmin;
+  final Map<String, dynamic> userData;
+  const ProfilView({
+    super.key,
+    required this.user,
+    required this.isAdmin,
+    required this.userData,
+  });
 
   @override
   State<ProfilView> createState() => _ProfilViewState();
 }
 
 class _ProfilViewState extends State<ProfilView> {
-  User? user = FirebaseAuth.instance.currentUser;
-  bool isAdmin = false;
-
-  @override
-  void initState() {
-    super.initState();
-    checkIfAdmin();
-  }
-
-  Future<void> checkIfAdmin() async {
-    final user = FirebaseAuth.instance.currentUser;
-    if (user != null) {
-      final doc = await FirebaseFirestore.instance
-          .collection('users')
-          .doc(user.uid)
-          .get();
-
-      final isUserAdmin = doc.data()?['role'] == 'admin';
-      setState(() {
-        isAdmin = isUserAdmin;
-      });
-    }
-  }
-
   @override
   Widget build(BuildContext context) {
     final user = FirebaseAuth.instance.currentUser;
@@ -82,11 +65,17 @@ class _ProfilViewState extends State<ProfilView> {
             ),
             SliverList(
               delegate: SliverChildListDelegate([
-                BuildProfilInfos(user: user),    
-                if (user != null) BuildAbonementBouton(),
-                if (user != null)BuildBoostBouton(),
+                BuildProfilInfos(user: user),
+                if (user != null &&
+                    widget.userData.isNotEmpty &&
+                    (widget.userData['isPremium'] != true))
+                  BuildAbonementBouton(),
+                if (user != null &&
+                    widget.userData.isNotEmpty &&
+                    (widget.userData['boostActive'] != true))
+                  BuildBoostBouton(),
                 BuildAnnonceBouton(),
-                if(isAdmin) BuildStatBouton(),
+                if (widget.isAdmin) BuildStatBouton(),
                 BuildNotificationBtn(),
                 BuildHelpBouton(),
                 BuildAboutBouton(),
