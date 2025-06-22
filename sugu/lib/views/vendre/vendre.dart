@@ -103,13 +103,13 @@ class _AnnonceViewState extends State<AnnonceView> {
                         final hasAccess =
                             await UserService().canAccessPremiumFeatures();
                         if (!hasAccess) {
-                          ScaffoldMessenger.of(context).showSnackBar(
-                            SnackBar(
-                              content: Text(
-                                "Accès refusé. Abonnez-vous pour continuer.",
-                              ),
-                            ),
-                          );
+                          // ScaffoldMessenger.of(context).showSnackBar(
+                          //   SnackBar(
+                          //     content: Text(
+                          //       "Accès refusé. Abonnez-vous pour continuer.",
+                          //     ),
+                          //   ),
+                          // );
                           Navigator.push(
                             context,
                             MaterialPageRoute(

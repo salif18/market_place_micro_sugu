@@ -127,7 +127,7 @@ class _ConnexionViewState extends State<ConnexionView> {
       if (user != null) {
         Navigator.pushAndRemoveUntil(
           context,
-          MaterialPageRoute(builder: (context) => AbonnementPage()),
+          MaterialPageRoute(builder: (context) => MyRoots()),
           (route) => false,
         );
       }

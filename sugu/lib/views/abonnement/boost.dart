@@ -70,6 +70,13 @@ class _BoostPageState extends State<BoostPage> {
         'boostExpiry': finBoost.toIso8601String(), // date d'expiration du boost
       });
 
+      // enregistrer la trace de la trasanction
+      await FirebaseFirestore.instance.collection('transactions').add({
+        'type': 'boost', // ou 'boost'
+        'montant': widget.amount, // ou 100
+        'createdAt': FieldValue.serverTimestamp(),
+      });
+
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
           content: Text(

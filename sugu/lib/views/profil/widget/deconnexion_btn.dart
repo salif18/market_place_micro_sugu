@@ -9,29 +9,29 @@ import 'package:sugu/routes.dart';
 class BuildLogoutBouton extends StatelessWidget {
   const BuildLogoutBouton({super.key});
 
-  Future<void> signOut(BuildContext context) async {
-    final user = FirebaseAuth.instance.currentUser;
+  Future<void> signOutAndRedirect(BuildContext context) async {
+    try {
+      final user = FirebaseAuth.instance.currentUser;
 
-    if (user != null) {
-      try {
-        // Supprimer le fcmToken de Firestore
+      // Déconnecte
+      await FirebaseAuth.instance.signOut();
+
+      // Vérifie que le contexte est toujours valide avant la navigation
+      if (context.mounted) {
+        await Navigator.pushAndRemoveUntil(
+          context,
+          MaterialPageRoute(builder: (context) => MyRoots()),
+          (route) => false,
+        );
+      }
+      // Supprimer le fcmToken si possible
+      if (user != null) {
         await FirebaseFirestore.instance
             .collection('users')
             .doc(user.uid)
             .update({'fcmToken': FieldValue.delete()});
-
         print('fcmToken supprimé avec succès.');
-      } catch (e) {
-        print("Erreur lors de la suppression du fcmToken : $e");
       }
-    }
-    try {
-      await FirebaseAuth.instance.signOut();
-      Navigator.pushAndRemoveUntil(
-        context,
-        MaterialPageRoute(builder: (context) => MyRoots()),
-        (route) => false,
-      );
     } catch (e) {
       print("Erreur lors de la déconnexion : $e");
     }
@@ -130,8 +130,10 @@ class BuildLogoutBouton extends StatelessWidget {
                             padding: EdgeInsets.symmetric(vertical: 14.r),
                           ),
                           onPressed: () {
-                            signOut(context);
-                            Navigator.pop(context, true);
+                            Navigator.pop(context, true); // Ferme le dialog
+                            signOutAndRedirect(
+                              context,
+                            ); // Supprime fcmToken + déconnexion
                           },
                           child: Text(
                             "Oui",

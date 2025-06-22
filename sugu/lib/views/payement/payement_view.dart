@@ -71,6 +71,12 @@ class _PayementViewState extends State<PayementView> {
             'subscriptionUntil': finAbonnement.toIso8601String(),
             'startTrial': DateTime.now().toIso8601String(),
           });
+      // enregistrer la trace de la trasanction
+      await FirebaseFirestore.instance.collection('transactions').add({
+        'type': 'abonnement', // ou 'boost'
+        'montant': widget.amount, // ou 100
+        'createdAt': FieldValue.serverTimestamp(),
+      });
 
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
@@ -135,7 +141,7 @@ class _PayementViewState extends State<PayementView> {
                     crossAxisAlignment: CrossAxisAlignment.center,
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                       Text(
+                      Text(
                         "Activer votre abonnement",
                         style: GoogleFonts.poppins(
                           fontSize: 22.sp,

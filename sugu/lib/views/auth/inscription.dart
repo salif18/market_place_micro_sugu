@@ -3,6 +3,7 @@ import 'package:flutter_mdi_icons/flutter_mdi_icons.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:google_sign_in/google_sign_in.dart';
+import 'package:sugu/routes.dart';
 import 'package:sugu/views/abonnement/abonement_view.dart';
 import 'package:sugu/views/auth/connexion.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -69,7 +70,7 @@ class _InscriptionViewState extends State<InscriptionView> {
         print("Connecté : ${userCred.user!.email}");
         Navigator.pushReplacement(
           context,
-          MaterialPageRoute(builder: (_) => AbonnementPage()),
+          MaterialPageRoute(builder: (_) => MyRoots()),
         );
       }
       } else {
@@ -146,7 +147,7 @@ class _InscriptionViewState extends State<InscriptionView> {
         print("Connecté : ${user.email}");
         Navigator.pushReplacement(
           context,
-          MaterialPageRoute(builder: (_) => AbonnementPage()),
+          MaterialPageRoute(builder: (_) => MyRoots()),
         );
       }
 

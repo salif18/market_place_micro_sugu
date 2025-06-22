@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
@@ -16,6 +17,7 @@ import 'package:sugu/views/profil/widget/infos_profil.dart';
 import 'package:sugu/views/profil/widget/notification_btn.dart';
 import 'package:sugu/views/profil/widget/security_btn.dart';
 import 'package:sugu/views/profil/widget/share_btn.dart';
+import 'package:sugu/views/profil/widget/stats_btn.dart';
 
 class ProfilView extends StatefulWidget {
   const ProfilView({super.key});
@@ -26,10 +28,33 @@ class ProfilView extends StatefulWidget {
 
 class _ProfilViewState extends State<ProfilView> {
   User? user = FirebaseAuth.instance.currentUser;
+  bool isAdmin = false;
+
+  @override
+  void initState() {
+    super.initState();
+    checkIfAdmin();
+  }
+
+  Future<void> checkIfAdmin() async {
+    final user = FirebaseAuth.instance.currentUser;
+    if (user != null) {
+      final doc = await FirebaseFirestore.instance
+          .collection('users')
+          .doc(user.uid)
+          .get();
+
+      final isUserAdmin = doc.data()?['role'] == 'admin';
+      setState(() {
+        isAdmin = isUserAdmin;
+      });
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
     final user = FirebaseAuth.instance.currentUser;
+
     return Scaffold(
       resizeToAvoidBottomInset: true,
       backgroundColor: Colors.white,
@@ -61,6 +86,7 @@ class _ProfilViewState extends State<ProfilView> {
                 if (user != null) BuildAbonementBouton(),
                 if (user != null)BuildBoostBouton(),
                 BuildAnnonceBouton(),
+                if(isAdmin) BuildStatBouton(),
                 BuildNotificationBtn(),
                 BuildHelpBouton(),
                 BuildAboutBouton(),

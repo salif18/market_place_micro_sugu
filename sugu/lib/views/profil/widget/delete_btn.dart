@@ -8,11 +8,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter_mdi_icons/flutter_mdi_icons.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:sugu/routes.dart';
 
 class BuildDeleteBouton extends StatelessWidget {
   const BuildDeleteBouton({super.key});
 
-  Future<void> deleteUserAndData(String userId) async {
+  Future<void> deleteUserAndData(BuildContext context, String userId) async {
     try {
       // 1. Cloudinary infos
       const String cloudName = 'dm4qhqazr';
@@ -81,6 +82,13 @@ class BuildDeleteBouton extends StatelessWidget {
       }
 
       print('✅ Suppression complète effectuée');
+      if (context.mounted) {
+        await Navigator.pushAndRemoveUntil(
+          context,
+          MaterialPageRoute(builder: (context) => MyRoots()),
+          (route) => false,
+        );
+      }
     } catch (e) {
       print('❌ Erreur pendant la suppression : $e');
     }
@@ -188,7 +196,7 @@ class BuildDeleteBouton extends StatelessWidget {
                             padding: EdgeInsets.symmetric(vertical: 16.r),
                           ),
                           onPressed: () {
-                            deleteUserAndData(user!.uid.toString());
+                            deleteUserAndData(context,user!.uid.toString());
                             Navigator.pop(context, true);
                           },
                           child: Text(

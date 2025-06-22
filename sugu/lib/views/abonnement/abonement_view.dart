@@ -169,7 +169,7 @@ class _AbonnementPageState extends State<AbonnementPage> {
                           color: Colors.white,
                         ),
                         label: Text(
-                          "Activer maintenant",
+                          "S'abonner",
                           style: GoogleFonts.poppins(
                             fontSize: 14.sp,
                             color: Colors.white,
