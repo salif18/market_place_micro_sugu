@@ -9,7 +9,7 @@ import 'package:sugu/views/profil/widget/aide_btn.dart';
 import 'package:sugu/views/profil/widget/annonces_btn.dart';
 import 'package:sugu/views/profil/widget/boost_btn.dart';
 import 'package:sugu/views/profil/widget/connexion_btn.dart';
-import 'package:sugu/views/profil/widget/copyrigth.dart';
+// import 'package:sugu/views/profil/widget/copyrigth.dart';
 import 'package:sugu/views/profil/widget/deconnexion_btn.dart';
 import 'package:sugu/views/profil/widget/delete_btn.dart';
 import 'package:sugu/views/profil/widget/infos_profil.dart';
@@ -57,10 +57,9 @@ class _ProfilViewState extends State<ProfilView> {
             ),
             SliverList(
               delegate: SliverChildListDelegate([
-                BuildProfilInfos(user: user),
-                SizedBox(height: 10.h),
+                BuildProfilInfos(user: user),    
                 if (user != null) BuildAbonementBouton(),
-                 if (user != null)BuildBoostBouton(),
+                if (user != null)BuildBoostBouton(),
                 BuildAnnonceBouton(),
                 BuildNotificationBtn(),
                 BuildHelpBouton(),

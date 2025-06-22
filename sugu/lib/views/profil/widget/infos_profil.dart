@@ -12,7 +12,7 @@ class BuildProfilInfos extends StatelessWidget {
     return Padding(
       padding: EdgeInsets.symmetric(horizontal: 16.r, vertical: 16.r),
       child: Container(
-        padding: EdgeInsets.symmetric(horizontal: 16.r, vertical: 16.r),
+        padding: EdgeInsets.symmetric(horizontal: 16.r),
         decoration: BoxDecoration(
           color: Colors.white,
           borderRadius: BorderRadius.circular(10.r),
