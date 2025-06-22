@@ -121,10 +121,8 @@ class _VosAnnonceViewState extends State<VosAnnonceView> {
               stream:
                   FirebaseFirestore.instance
                       .collection('articles')
-                      .where(
-                        'userId',
-                        isEqualTo: FirebaseAuth.instance.currentUser!.uid,
-                      )
+                      .where('userId',isEqualTo: FirebaseAuth.instance.currentUser!.uid)
+                      .orderBy('createdAt', descending: true)
                       .snapshots(),
               builder: (context, snapshot) {
                 if (snapshot.connectionState == ConnectionState.waiting) {

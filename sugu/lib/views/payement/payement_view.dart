@@ -127,6 +127,7 @@ class _PayementViewState extends State<PayementView> {
                   ),
                 ),
               ),
+
               SliverPadding(
                 padding: EdgeInsets.symmetric(horizontal: 16.r, vertical: 16.r),
                 sliver: SliverToBoxAdapter(
@@ -134,6 +135,24 @@ class _PayementViewState extends State<PayementView> {
                     crossAxisAlignment: CrossAxisAlignment.center,
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
+                       Text(
+                        "Activer votre abonnement",
+                        style: GoogleFonts.poppins(
+                          fontSize: 22.sp,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.black,
+                        ),
+                      ),
+                      SizedBox(height: 12.h),
+                      Text(
+                        "✅ Créez un nombre illimité d'annonces sur 3mois\n"
+                        "✅ Accès à des statistiques : nombres de vues\n",
+                        style: GoogleFonts.poppins(
+                          fontSize: 14.sp,
+                          color: Colors.black,
+                        ),
+                      ),
+                      SizedBox(height: 20.h),
                       Text(
                         "Choisissez une méthode de paiement",
                         style: GoogleFonts.poppins(

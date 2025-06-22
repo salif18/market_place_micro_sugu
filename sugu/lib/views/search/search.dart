@@ -26,6 +26,7 @@ class _SearchViewState extends State<SearchView> {
       final snapshot =
           await FirebaseFirestore.instance
               .collection('articles')
+              .orderBy('boost', descending: true)
               .orderBy('createdAt', descending: true)
               .get();
 

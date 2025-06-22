@@ -133,6 +133,33 @@ class _BoostPageState extends State<BoostPage> {
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       Text(
+                        "Booster 5 produits durants 3 jours",
+                        style: GoogleFonts.poppins(
+                          fontSize: 22.sp,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.black,
+                        ),
+                      ),
+                      SizedBox(height: 12.h),
+                      Text(
+                        "✅Affichage prioritaire dans les listes récentes \n"
+                        "✅Affichage prioritaire dans les listes \n",
+                        style: GoogleFonts.poppins(
+                          fontSize: 14.sp,
+                          color: Colors.black,
+                        ),
+                      ),
+                      SizedBox(height: 20.h),
+                      Text(
+                        "Tarif : 100 FCFA / 3 jours",
+                        style: GoogleFonts.poppins(
+                          fontSize: 16.sp,
+                          color: Colors.orange.shade700,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                      SizedBox(height: 20.h),
+                      Text(
                         "Choisissez une méthode de paiement",
                         style: GoogleFonts.poppins(
                           fontSize: 14.sp,

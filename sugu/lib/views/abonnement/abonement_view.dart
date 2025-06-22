@@ -23,7 +23,7 @@ class _AbonnementPageState extends State<AbonnementPage> {
 
     try {
       final user = FirebaseAuth.instance.currentUser;
-      final finAbonnement = DateTime.now().add(Duration(days: 1));
+      final finAbonnement = DateTime.now().add(Duration(days: 7));
 
       // ⚠️ À décommenter si tu veux enregistrer dans Firestore
       await FirebaseFirestore.instance
@@ -137,10 +137,8 @@ class _AbonnementPageState extends State<AbonnementPage> {
                       ),
                       SizedBox(height: 12.h),
                       Text(
-                        "✅ Créez un nombre illimité d'événements\n"
-                        "✅ Suivi des ventes et des revenus\n"
-                        "✅ Statistiques avancées\n"
-                        "✅ Priorité dans l'affichage",
+                        "✅ Créez un nombre illimité d'annonces\n"
+                        "✅ Accès à des statistiques : nombres de vues\n",
                         style: GoogleFonts.poppins(
                           fontSize: 14.sp,
                           color: Colors.black,
@@ -148,7 +146,7 @@ class _AbonnementPageState extends State<AbonnementPage> {
                       ),
                       SizedBox(height: 20.h),
                       Text(
-                        "Tarif : 10 000 FCFA / 3 mois",
+                        "Tarif : 5 000 FCFA / 3 mois",
                         style: GoogleFonts.poppins(
                           fontSize: 16.sp,
                           color: Colors.orange.shade700,
@@ -195,7 +193,7 @@ class _AbonnementPageState extends State<AbonnementPage> {
                                   color: Colors.white,
                                 ),
                                 label: Text(
-                                  "Mode d’Essai 1 jour",
+                                  "Mode d’Essai 7 jour",
                                   style: GoogleFonts.poppins(
                                     fontSize: 14.sp,
                                     color: Colors.white,

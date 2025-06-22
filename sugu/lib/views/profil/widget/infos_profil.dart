@@ -16,9 +16,9 @@ class BuildProfilInfos extends StatelessWidget {
         decoration: BoxDecoration(
           color: Colors.white,
           borderRadius: BorderRadius.circular(10.r),
-          border: Border(
-            bottom: BorderSide(width: 1, color: Colors.orange.shade700),
-          ),
+          // border: Border(
+          //   bottom: BorderSide(width: 1, color: Colors.orange.shade700),
+          // ),
         ),
         child:
             user != null

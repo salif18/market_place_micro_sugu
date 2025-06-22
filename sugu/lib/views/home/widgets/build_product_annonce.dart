@@ -13,8 +13,9 @@ class BuildProductAnnonce extends StatelessWidget {
       stream:
           FirebaseFirestore.instance
               .collection('articles')
+              .orderBy('boost', descending: true)
               .orderBy('createdAt', descending: true)
-              .limit(10)
+              .limit(20)
               .snapshots(),
 
       builder: (context, snapshot) {

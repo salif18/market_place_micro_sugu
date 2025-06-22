@@ -78,7 +78,9 @@ class _CategoriesViewState extends State<CategoriesView> {
               stream:
                   FirebaseFirestore.instance
                       .collection('articles')
-                      .where('categorie', isEqualTo: widget.categoryName)
+                      .where('categorie', isEqualTo: widget.categoryName)   
+                      .orderBy('boost', descending: true)
+                      .orderBy('createdAt', descending: true)
                       .snapshots(),
               builder: (context, snapshot) {
                 if (snapshot.connectionState == ConnectionState.waiting) {
