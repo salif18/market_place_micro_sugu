@@ -56,6 +56,7 @@ class _InscriptionViewState extends State<InscriptionView> {
           "photo": '',
           'role':'vendeur',
           'isPremium': false,
+          'boostActive':false,
           'subscriptionUntil':'',
           'createdAt': Timestamp.now(),
         });
@@ -135,6 +136,7 @@ class _InscriptionViewState extends State<InscriptionView> {
           'photo': user.photoURL ?? "",
           'role':'vendeur',
           'isPremium': false,
+          'boostActive':false,
           'subscriptionUntil':'',
           'createdAt': Timestamp.now(),
           'provider': 'google',

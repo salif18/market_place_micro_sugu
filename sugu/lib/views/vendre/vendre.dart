@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:flutter_mdi_icons/flutter_mdi_icons.dart';
-import 'package:sugu/utils/acces_premium_features.dart';
+import 'package:sugu/services/acces_premium_features.dart';
 import 'package:sugu/views/abonnement/abonement_view.dart';
 import 'package:sugu/views/auth/connexion.dart';
 import 'package:sugu/views/vendre/article.dart';

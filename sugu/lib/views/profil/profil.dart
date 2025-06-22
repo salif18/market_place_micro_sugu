@@ -7,6 +7,7 @@ import 'package:sugu/views/profil/widget/a_propos_btn.dart';
 import 'package:sugu/views/profil/widget/abonnement_btn.dart';
 import 'package:sugu/views/profil/widget/aide_btn.dart';
 import 'package:sugu/views/profil/widget/annonces_btn.dart';
+import 'package:sugu/views/profil/widget/boost_btn.dart';
 import 'package:sugu/views/profil/widget/connexion_btn.dart';
 import 'package:sugu/views/profil/widget/copyrigth.dart';
 import 'package:sugu/views/profil/widget/deconnexion_btn.dart';
@@ -59,6 +60,7 @@ class _ProfilViewState extends State<ProfilView> {
                 BuildProfilInfos(user: user),
                 SizedBox(height: 10.h),
                 if (user != null) BuildAbonementBouton(),
+                 if (user != null)BuildBoostBouton(),
                 BuildAnnonceBouton(),
                 BuildNotificationBtn(),
                 BuildHelpBouton(),

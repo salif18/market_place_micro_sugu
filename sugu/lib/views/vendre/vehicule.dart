@@ -8,6 +8,7 @@ import 'package:flutter_mdi_icons/flutter_mdi_icons.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:sugu/services/publier_avec_boost.dart';
 
 class AddVehicules extends StatefulWidget {
   const AddVehicules({super.key});
@@ -140,7 +141,7 @@ class _AddVehiculesState extends State<AddVehicules> {
         List<String> imageUrls = await uploadImagesToCloudinary(gallerieImages);
 
         // Création du document Firestore
-        final vehiculeData = {
+        final _data = {
           'titre': _titreController.text,
           'prix': _prixController.text,
           'description': _descriptionController.text,
@@ -167,9 +168,9 @@ class _AddVehiculesState extends State<AddVehicules> {
           },
         );
 
-        await FirebaseFirestore.instance
-            .collection('articles')
-            .add(vehiculeData);
+        // envoyer avec boost
+        UserBoost userBoost = UserBoost();
+        await userBoost.publierArticleAvecBoost(_data);
 
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(

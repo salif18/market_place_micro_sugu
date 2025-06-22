@@ -18,6 +18,7 @@ class _BuildProductListState extends State<BuildProductList> {
       stream:
           FirebaseFirestore.instance
               .collection('articles')
+              .orderBy('boost', descending: true)
               .orderBy('createdAt', descending: true)
               .snapshots(),
       builder: (context, snapshot) {

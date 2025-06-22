@@ -117,6 +117,7 @@ class _ConnexionViewState extends State<ConnexionView> {
           'photo': user.photoURL ?? "",
           'role': 'vendeur',
           'isPremium': false,
+          'boostActive':false,
           'subscriptionUntil': '',
           'createdAt': Timestamp.now(),
           'provider': 'google',

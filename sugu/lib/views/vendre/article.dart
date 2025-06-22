@@ -9,6 +9,7 @@ import 'package:flutter_mdi_icons/flutter_mdi_icons.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:sugu/services/publier_avec_boost.dart';
 
 class AddArticles extends StatefulWidget {
   const AddArticles({super.key});
@@ -181,8 +182,8 @@ class _AddArticlesState extends State<AddArticles> {
         // List<String> imageUrls = await uploadImagesToFirebase(gallerieImages);
         // print(imageUrls);
 
-        // Création du document Firestore
-        final vehiculeData = {
+        // ✅ Prépare les données à publier sur firestore
+        final _data = {
           'titre': _titreController.text,
           'prix': _prixController.text,
           'description': _descriptionController.text,
@@ -201,10 +202,9 @@ class _AddArticlesState extends State<AddArticles> {
           'userId': FirebaseAuth.instance.currentUser?.uid,
           "views": 0,
         };
-
-        await FirebaseFirestore.instance
-            .collection('articles')
-            .add(vehiculeData);
+        // envoyer avec boost
+        UserBoost userBoost = UserBoost();
+        await userBoost.publierArticleAvecBoost(_data);
 
         await sendNotificationToTopic(
           title: "Nouvelle annonce disponible !",
