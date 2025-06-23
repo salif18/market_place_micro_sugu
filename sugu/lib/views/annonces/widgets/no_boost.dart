@@ -220,10 +220,10 @@ class NoBoosting extends StatelessWidget {
                                                         BoxShadow(
                                                           // ignore: deprecated_member_use
                                                           color: Colors.black
-                                                              // ignore: deprecated_member_use
-                                                              .withOpacity(
-                                                                0.15,
-                                                              ), // Couleur de l'ombre
+                                                          // ignore: deprecated_member_use
+                                                          .withOpacity(
+                                                            0.15,
+                                                          ), // Couleur de l'ombre
                                                           offset: Offset(
                                                             0,
                                                             4,

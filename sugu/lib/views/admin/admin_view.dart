@@ -17,6 +17,7 @@ class _AdminStatsPageState extends State<AdminStatsPage> {
   int productCount = 0;
   int transactionCount = 0;
   int totalRevenue = 0;
+  int boostedCount = 0;
 
   List<Map<String, dynamic>> recentTransactions = [];
 
@@ -48,6 +49,8 @@ class _AdminStatsPageState extends State<AdminStatsPage> {
       userCount = users.docs.length;
       premiumCount =
           users.docs.where((u) => u.data()['isPremium'] == true).length;
+      boostedCount =
+          articles.docs.where((a) => a.data()['boost'] == true).length;
       productCount = articles.docs.length;
       transactionCount = transactions.docs.length;
       totalRevenue = total;
@@ -92,7 +95,7 @@ class _AdminStatsPageState extends State<AdminStatsPage> {
             gradient: LinearGradient(
               begin: Alignment.topCenter,
               end: Alignment.bottomCenter,
-              colors: [Colors.purple.shade100, Colors.grey.shade200],
+              colors: [Colors.grey.shade200,Colors.grey.shade100,],
             ),
           ),
           child: CustomScrollView(
@@ -139,6 +142,12 @@ class _AdminStatsPageState extends State<AdminStatsPage> {
                     "$productCount",
                     Icons.store,
                     Colors.green,
+                  ),
+                  buildStatCard(
+                    "Produits boostés",
+                    "$boostedCount",
+                    Icons.rocket_launch,
+                    Colors.redAccent,
                   ),
                   buildStatCard(
                     "Transactions",
