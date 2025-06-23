@@ -21,7 +21,9 @@ class UserBoost {
     bool doitBoost = boostValide && (boostUsed < boostLimit);
 
     articleData['boost'] = doitBoost;
-
+    if (doitBoost) {
+     articleData['boostUntil'] = DateTime.now().add(Duration(days: 3)).toIso8601String(); // ✅ AJOUT
+    }   
     await FirebaseFirestore.instance.collection('articles').add(articleData);
 
     if (doitBoost) {
@@ -30,5 +32,25 @@ class UserBoost {
       });
     }
   }
+
+  // booster un produit
+Future<void> boosterProduit(String articleId, {int jours = 3}) async {
+  final expiration = DateTime.now().add(Duration(days: jours));
+
+  await FirebaseFirestore.instance.collection('articles').doc(articleId).update({
+    'boost': true,
+    'boostUntil': expiration.toIso8601String(),
+  });
+
+  // Enregistrer une transaction facultative
+  await FirebaseFirestore.instance.collection('transactions').add({
+    'type': 'boost',
+    'articleId': articleId,
+    'montant': 100,
+    'createdAt': FieldValue.serverTimestamp(),
+  });
+
+}
+
 
 }

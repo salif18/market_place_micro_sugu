@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -23,9 +24,28 @@ class _HomeViewState extends State<HomeView> {
   @override
   void initState() {
     super.initState();
+    verifierEtDesactiverBoostsExpirs();
     categories =
         CategorieModel.getCategory()..sort((a, b) => a.name.compareTo(b.name));
   }
+
+//mis ajours des boost des produit boost fini delais
+  Future<void> verifierEtDesactiverBoostsExpirs() async {
+  final now = DateTime.now().toIso8601String(); // ISO 8601 string compatible avec Firestore
+
+  final snapshot = await FirebaseFirestore.instance
+      .collection('articles')
+      .where('boost', isEqualTo: true)
+      .where('boostUntil', isLessThan: now)
+      .get();
+
+  for (var doc in snapshot.docs) {
+    await FirebaseFirestore.instance
+        .collection('articles')
+        .doc(doc.id)
+        .update({'boost': false});
+  }
+}
 
   @override
   Widget build(BuildContext context) {

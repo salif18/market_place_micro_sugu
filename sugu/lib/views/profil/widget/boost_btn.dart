@@ -32,7 +32,7 @@ class BuildBoostBouton extends StatelessWidget {
           onTap:
               () => Navigator.push(
                 context,
-                MaterialPageRoute(builder: (context) => BoostPage( amount: 100)),
+                MaterialPageRoute(builder: (context) => BoostPage( amount: 100 , type:"", articleId: "",)),
               ),
         ),
       ),

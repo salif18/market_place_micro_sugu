@@ -6,10 +6,19 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:sugu/api/mobile_money_service.dart';
 import 'package:sugu/routes.dart';
+import 'package:sugu/services/publier_avec_boost.dart';
+import 'package:sugu/views/annonces/annonce.dart';
 
 class BoostPage extends StatefulWidget {
   final int amount;
-  const BoostPage({super.key, required this.amount});
+  final String type;
+  final String articleId;
+  const BoostPage({
+    super.key,
+    required this.amount,
+    required this.type,
+    required this.articleId,
+  });
 
   @override
   State<BoostPage> createState() => _BoostPageState();
@@ -37,6 +46,7 @@ class _BoostPageState extends State<BoostPage> {
   void _pay() async {
     String amount = _amountController.text.trim();
     final user = FirebaseAuth.instance.currentUser;
+    UserBoost userBoost = UserBoost();
     Fluttertoast.showToast(
       msg: "Paiement de $amount FCFA via $selectedMethod en cours...",
       backgroundColor: Colors.deepOrange,
@@ -47,10 +57,26 @@ class _BoostPageState extends State<BoostPage> {
     // Paiement selon la méthode choisie
     if (selectedMethod == 'Orange Money') {
       await _orangeApi.payer(amount: widget.amount, orderId: user!.uid);
-      activerAbonnement(); // Active l’abonnement
+      if (widget.type == "single") {
+        await userBoost.boosterProduit(widget.articleId);
+        Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(builder: (context) => VosAnnonceView()),
+        );
+      } else {
+        activerAbonnement(); // Active l’abonnement
+      }
     } else if (selectedMethod == "MobiCash") {
       await _mobicashApi.payer(amount: widget.amount, orderId: user!.uid);
-      activerAbonnement();
+      if (widget.type == "single") {
+        await userBoost.boosterProduit(widget.articleId);
+        Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(builder: (context) => VosAnnonceView()),
+        );
+      } else {
+        activerAbonnement(); // Active l’abonnement
+      }
     }
   }
 
