@@ -166,7 +166,9 @@ class _BoostPageState extends State<BoostPage> {
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       Text(
-                        "Booster 5 produits durants 3 jours",
+                        widget.type == "single"
+                            ? "Booster le produits pour 3 jours"
+                            : "Booster 5 produits durants 3jours",
                         style: GoogleFonts.poppins(
                           fontSize: 22.sp,
                           fontWeight: FontWeight.bold,
@@ -184,7 +186,9 @@ class _BoostPageState extends State<BoostPage> {
                       ),
                       SizedBox(height: 20.h),
                       Text(
-                        "Tarif : 100 FCFA / 3 jours",
+                        widget.type == "single"
+                            ? "Tarif : 100 FCFA pour boost de 3jours"
+                            : "Tarif : 100 FCFA / 3 jours",
                         style: GoogleFonts.poppins(
                           fontSize: 16.sp,
                           color: Colors.orange.shade700,
