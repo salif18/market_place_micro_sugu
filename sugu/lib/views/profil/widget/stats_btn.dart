@@ -20,7 +20,7 @@ class BuildStatBouton extends StatelessWidget {
           ),
         ),
         child: ListTile(
-          leading: Icon(Mdi.chartBar, size: 20.sp,color: Colors.orange.shade700),
+          leading: Icon(Mdi.chartBar, size: 20.sp,color: Colors.black),
           title: Text(
             "Statistiques",
             style: GoogleFonts.roboto(

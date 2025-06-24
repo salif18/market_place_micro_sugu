@@ -21,7 +21,7 @@ class BuildAnnonceBouton extends StatelessWidget {
           ),
         ),
         child: ListTile(
-          leading: Icon(Mdi.tagOutline, size: 20.sp,color: Colors.orange.shade700),
+          leading: Icon(Mdi.tagOutline, size: 20.sp,color: Colors.black),
           title: Text(
             "Mes annonces",
             style: GoogleFonts.roboto(

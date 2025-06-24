@@ -67,12 +67,14 @@ class _VosAnnonceViewState extends State<VosAnnonceView> {
 
   Widget _buildContainer(BuildContext context) {
     return Container(
-      decoration: BoxDecoration(color: Colors.white),
+      decoration: BoxDecoration(
+        color: Colors.white,
+        ),
       child: Padding(
         padding: EdgeInsets.only(left: 8.r, right: 8.r),
         child: TabBar(
           isScrollable: false,
-          indicatorColor:Colors.deepOrange ,
+          indicatorColor:Colors.orange.shade700,
           indicatorSize: TabBarIndicatorSize.tab,
           indicatorWeight: 3,
           dividerColor:Colors.transparent, // 👈 empêche le petit trait du bas

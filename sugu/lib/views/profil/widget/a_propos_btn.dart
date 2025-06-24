@@ -19,7 +19,7 @@ class BuildAboutBouton extends StatelessWidget {
           ),
         ),
         child: ListTile(
-          leading: Icon(Mdi.informationOutline, size: 20.sp,color: Colors.orange.shade700),
+          leading: Icon(Mdi.informationOutline, size: 20.sp,color: Colors.black),
           title: Text(
             "A propos de Micro Sugu",
             style: GoogleFonts.roboto(

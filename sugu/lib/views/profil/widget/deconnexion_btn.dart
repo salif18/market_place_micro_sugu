@@ -49,7 +49,7 @@ class BuildLogoutBouton extends StatelessWidget {
           ),
         ),
         child: ListTile(
-          leading: Icon(Mdi.logout, size: 20.sp, color: Colors.orange.shade700),
+          leading: Icon(Mdi.logout, size: 20.sp, color: Colors.black),
           title: Text(
             "Se déconnecter",
             style: GoogleFonts.roboto(

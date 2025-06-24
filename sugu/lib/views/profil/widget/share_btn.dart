@@ -18,7 +18,7 @@ class BuildShareBouton extends StatelessWidget {
           ),
         ),
         child: ListTile(
-          leading: Icon(Icons.share_outlined, size: 20.sp,color: Colors.orange.shade700),
+          leading: Icon(Icons.share_outlined, size: 20.sp,color: Colors.black),
           title: Text(
             "Partager",
             style: GoogleFonts.roboto(

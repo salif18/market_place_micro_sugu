@@ -19,7 +19,7 @@ class BuildHelpBouton extends StatelessWidget {
           ),
         ),
         child: ListTile(
-          leading: Icon(Mdi.help, size: 20.sp,color: Colors.orange.shade700),
+          leading: Icon(Mdi.help, size: 20.sp,color: Colors.black),
           title: Text(
             "Aide",
             style: GoogleFonts.roboto(

@@ -106,7 +106,7 @@ class BuildDeleteBouton extends StatelessWidget {
           ),
         ),
         child: ListTile(
-          leading: Icon(Mdi.deleteOutline, size: 20.sp,color: Colors.orange.shade700),
+          leading: Icon(Mdi.deleteOutline, size: 20.sp,color: Colors.black),
           title: Text(
             "Supprimer votre compte",
             style: GoogleFonts.roboto(

@@ -19,7 +19,7 @@ class BuildConnexionBouton extends StatelessWidget {
           ),
         ),
         child: ListTile(
-          leading: Icon(Mdi.login, size: 20.sp,color: Colors.orange.shade700),
+          leading: Icon(Mdi.login, size: 20.sp,color: Colors.black),
           title: Text(
             "Se connecter",
             style: GoogleFonts.roboto(

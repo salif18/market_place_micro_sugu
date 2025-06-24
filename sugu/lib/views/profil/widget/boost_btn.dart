@@ -19,7 +19,7 @@ class BuildBoostBouton extends StatelessWidget {
           ),
         ),
         child: ListTile(
-          leading: Icon(Mdi.rocketLaunchOutline, size: 20.sp,color: Colors.orange.shade700),
+          leading: Icon(Mdi.rocketLaunchOutline, size: 20.sp,color: Colors.black),
           title: Text(
             "Booster mes produits",
             style: GoogleFonts.roboto(

@@ -12,101 +12,97 @@ class BuildProfilInfos extends StatelessWidget {
     return Padding(
       padding: EdgeInsets.symmetric(horizontal: 16.r, vertical: 8.r),
       child: Container(
-        padding: EdgeInsets.symmetric(horizontal: 16.r),
+        padding: EdgeInsets.symmetric(horizontal: 16.r, vertical: 12.r),
         decoration: BoxDecoration(
           color: Colors.white,
           borderRadius: BorderRadius.circular(10.r),
-          // border: Border(
-          //   bottom: BorderSide(width: 1, color: Colors.orange.shade700),
-          // ),
         ),
-        child:
-            user != null
-                ? StreamBuilder(
-                  stream:
-                      FirebaseFirestore.instance
-                          .collection('users')
-                          .doc(user.uid)
-                          .snapshots(),
-                  builder: (context, snapshot) {
-                    if (!snapshot.hasData || !snapshot.data!.exists) {
-                      return Text('Profil utilisateur introuvable.');
-                    }
+        child: user != null
+            ? StreamBuilder(
+                stream: FirebaseFirestore.instance
+                    .collection('users')
+                    .doc(user.uid)
+                    .snapshots(),
+                builder: (context, snapshot) {
+                  if (!snapshot.hasData || !snapshot.data!.exists) {
+                    return Text('Profil utilisateur introuvable.');
+                  }
 
-                    final userData =
-                        snapshot.data!.data() as Map<String, dynamic>;
-                    return Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        userData["photo"] != null &&
-                                userData["photo"].toString().isNotEmpty
-                            ? CircleAvatar(
+                  final userData =
+                      snapshot.data!.data() as Map<String, dynamic>;
+                  return Row(
+                    crossAxisAlignment: CrossAxisAlignment.end,
+                    children: [
+                      userData["photo"] != null &&
+                              userData["photo"].toString().isNotEmpty
+                          ? CircleAvatar(
                               radius: 35.r,
                               backgroundColor: Colors.grey[200],
-                              child: ClipOval(
-                                child: Image.network(
-                                  userData["photo"],
-                                  width: 60.w,
-                                  height: 60.h,
-                                  fit: BoxFit.contain,
-                                ),
-                              ),
+                              backgroundImage:
+                                  NetworkImage(userData["photo"]),
                             )
-                            : Icon(Icons.person_outline_rounded, size: 50.sp),
-                        userData["name"] != null &&
-                                userData["name"].toString().isNotEmpty
-                            ? Text(
-                              userData["name"],
+                          : Icon(Icons.person_outline_rounded,
+                              size: 60.sp, color: Colors.grey),
+                      SizedBox(width: 16.w),
+                      Expanded(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              userData["name"]?.toString().isNotEmpty == true
+                                  ? userData["name"]
+                                  : "Mon Micro Sugu",
                               style: GoogleFonts.roboto(
-                                fontSize: 14.sp,
-                                fontWeight: FontWeight.bold,
-                                color: Colors.black,
-                              ),
-                            )
-                            : Text(
-                              "Mon Micro Sugu",
-                              style: GoogleFonts.roboto(
-                                fontSize: 14.sp,
+                                fontSize: 16.sp,
                                 fontWeight: FontWeight.bold,
                                 color: Colors.black,
                               ),
                             ),
-
+                            SizedBox(height: 4.h),
+                            Text(
+                              userData["email"] ?? "",
+                              style: GoogleFonts.roboto(
+                                fontSize: 14.sp,
+                                color: Colors.grey[700],
+                              ),
+                            ),
+                          ],
+                        ),
+                      )
+                    ],
+                  );
+                },
+              )
+            : Row(
+                children: [
+                  Icon(Icons.person_outline_rounded,
+                      size: 60.sp, color: Colors.grey),
+                  SizedBox(width: 16.w),
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
                         Text(
-                          userData["email"],
+                          "Mon Micro Sugu",
                           style: GoogleFonts.roboto(
-                            fontSize: 14.sp,
-                            fontWeight: FontWeight.normal,
+                            fontSize: 16.sp,
+                            fontWeight: FontWeight.bold,
                             color: Colors.black,
                           ),
                         ),
+                        SizedBox(height: 4.h),
+                        Text(
+                          "example@gmail.com",
+                          style: GoogleFonts.roboto(
+                            fontSize: 14.sp,
+                            color: Colors.grey[700],
+                          ),
+                        ),
                       ],
-                    );
-                  },
-                )
-                : Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Icon(Icons.person_outline_rounded, size: 50.sp),
-                    Text(
-                      "Mon Micro Sugu",
-                      style: GoogleFonts.roboto(
-                        fontSize: 16.sp,
-                        fontWeight: FontWeight.bold,
-                        color: Colors.black,
-                      ),
                     ),
-
-                    Text(
-                      "example@gmail.com",
-                      style: GoogleFonts.roboto(
-                        fontSize: 14.sp,
-                        fontWeight: FontWeight.normal,
-                        color: Colors.black,
-                      ),
-                    ),
-                  ],
-                ),
+                  )
+                ],
+              ),
       ),
     );
   }

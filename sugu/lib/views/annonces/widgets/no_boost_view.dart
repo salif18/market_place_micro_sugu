@@ -214,15 +214,15 @@ class NoBoosting extends StatelessWidget {
                                                       color: Colors.white,
                                                       borderRadius:
                                                           BorderRadius.circular(
-                                                            50.r,
+                                                            100.r,
                                                           ),
                                                       boxShadow: [
                                                         BoxShadow(
                                                           // ignore: deprecated_member_use
-                                                          color: Colors.black
+                                                          color: Colors.deepOrange
                                                           // ignore: deprecated_member_use
                                                           .withOpacity(
-                                                            0.15,
+                                                            0.45,
                                                           ), // Couleur de l'ombre
                                                           offset: Offset(
                                                             0,
@@ -237,7 +237,7 @@ class NoBoosting extends StatelessWidget {
                                                     ),
                                                     child: Icon(
                                                       Mdi.rocketLaunch,
-                                                      size: 20.sp,
+                                                      size: 22.sp,
                                                       color: Colors.deepOrange,
                                                     ),
                                                   ),

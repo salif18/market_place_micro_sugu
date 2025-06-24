@@ -41,7 +41,7 @@ class _BuildNotificationBtnState extends State<BuildNotificationBtn> {
                         ? Icons.notifications_none
                         : Icons.notifications_off_outlined,
                     size: 22.sp,
-                    color: Colors.orange.shade700,
+                    color: Colors.black
                   );
                 },
               ),
