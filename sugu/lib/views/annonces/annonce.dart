@@ -45,7 +45,7 @@ class _VosAnnonceViewState extends State<VosAnnonceView> {
                 ),
               ),
               SliverPadding(
-                padding: EdgeInsets.symmetric(horizontal: 8.r, vertical: 18.r),
+                padding: EdgeInsets.symmetric(horizontal: 8.r, vertical: 5.r),
                 sliver: SliverPersistentHeader(
                   pinned: true,
                   floating: true,
@@ -70,48 +70,27 @@ class _VosAnnonceViewState extends State<VosAnnonceView> {
       decoration: BoxDecoration(color: Colors.white),
       child: Padding(
         padding: EdgeInsets.only(left: 8.r, right: 8.r),
-        child: Material(
-          color: Colors.white,
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.horizontal(
-              left: Radius.circular(2.r),
-              right: Radius.circular(2.r),
-            ),
-          ),
-          child: TabBar(
-            indicator: BoxDecoration(
-              color: Colors.orange.shade700,
-              borderRadius: BorderRadius.horizontal(
-                left: Radius.circular(2.r),
-                right: Radius.circular(2.r),
+        child: TabBar(
+          isScrollable: false,
+          indicatorColor:Colors.deepOrange ,
+          indicatorSize: TabBarIndicatorSize.tab,
+          indicatorWeight: 3,
+          dividerColor:Colors.transparent, // 👈 empêche le petit trait du bas
+          labelColor: Colors.black,
+          labelStyle: GoogleFonts.roboto(fontSize:14.sp , fontWeight: FontWeight.w500),
+          unselectedLabelColor: Colors.black,
+          tabs: [
+            Tab(
+              child: Text(
+                "Produits",
               ),
             ),
-            indicatorSize: TabBarIndicatorSize.tab,
-            dividerColor:
-                Colors.transparent, // 👈 empêche le petit trait du bas
-            labelColor: Colors.white,
-            unselectedLabelColor: Colors.black,
-            tabs: [
-              Tab(
-                child: Text(
-                  "Produits",
-                  style: GoogleFonts.roboto(
-                    fontSize: 14.sp,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
+            Tab(
+              child: Text(
+                "Produits boostés",
               ),
-              Tab(
-                child: Text(
-                  "Produits boostés",
-                  style: GoogleFonts.roboto(
-                    fontSize: 14.sp,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-              ),
-            ],
-          ),
+            ),
+          ],
         ),
       ),
     );

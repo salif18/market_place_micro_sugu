@@ -10,7 +10,7 @@ class BuildProfilInfos extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: EdgeInsets.symmetric(horizontal: 16.r, vertical: 16.r),
+      padding: EdgeInsets.symmetric(horizontal: 16.r, vertical: 8.r),
       child: Container(
         padding: EdgeInsets.symmetric(horizontal: 16.r),
         decoration: BoxDecoration(
