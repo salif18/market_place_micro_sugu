@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:sugu/views/annonces/widgets/no_boost.dart';
+import 'package:sugu/views/annonces/widgets/no_boost_view.dart';
 import 'package:sugu/views/annonces/widgets/prod_boost_view.dart';
 
 class VosAnnonceView extends StatefulWidget {

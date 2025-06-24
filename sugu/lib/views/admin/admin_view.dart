@@ -35,7 +35,6 @@ class _AdminStatsPageState extends State<AdminStatsPage> {
         await FirebaseFirestore.instance
             .collection('transactions')
             .orderBy('createdAt', descending: true)
-            .limit(10)
             .get();
 
     int total = 0;
